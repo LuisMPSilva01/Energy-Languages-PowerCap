@@ -12,3 +12,6 @@ sudo apt-get install make
     sudo apt install build-essential
     sudo apt-get install libpcre2-dev
 
+    #C++ *precisa versao especifica*
+    sudo apt install libtbb-dev
+

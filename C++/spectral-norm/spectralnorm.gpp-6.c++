@@ -1,5 +1,5 @@
 // The Computer Language Benchmarks Game
-// http://benchmarksgame.alioth.debian.org/
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 //
 // Original C contributed by Sebastien Loisel
 // Conversion to C++ by Jon Harrop

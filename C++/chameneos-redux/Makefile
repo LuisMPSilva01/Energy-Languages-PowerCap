@@ -13,3 +13,7 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./chameneosredux.gpp-5.gpp_run 6000000
+
+clean:
+	rm -f *.gpp_run
+	rm -f *.o
