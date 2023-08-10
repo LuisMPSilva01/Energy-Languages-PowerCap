@@ -1,16 +1,17 @@
 compile:
 	gnatchop -r -w spectralnorm.gnat-4.gnat
-	gnatmake -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp -f spectralnorm.adb -o spectralnorm.gnat-4.gnat_run 
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp spectralnorm.adb
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp division.ads
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp division-d.adb
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp division-s.ads
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp spectral_utils.adb
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp spectral_utils-d.adb
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp spectral_utils-dist.adb
-	gcc-6 -c -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -gnatNp spectral_utils-s.adb
-	gnatbind-6 -x spectralnorm.ali
-	gnatlink-6 spectralnorm.ali -O3 -fomit-frame-pointer -march=native -msse3 -mfpmath=sse -o spectralnorm.gnat-4.gnat_run
+	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f spectralnorm.adb -o spectralnorm.gnat-4.gnat_run 
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectralnorm.adb
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp division.ads
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp division-d.adb
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp division-s.ads
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils.adb
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils-d.adb
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils-dist.adb
+	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils-s.adb
+	x86_64-linux-gnu-gnatbind-11 -x spectralnorm.ali
+	x86_64-linux-gnu-gnatlink-11 spectralnorm.ali -O3 -fomit-frame-pointer -march=ivybridge -o spectralnorm.gnat-4.gnat_run
+
 
 measure:
 	sudo modprobe msr
@@ -24,3 +25,10 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./spectralnorm.gnat-4.gnat_run 5500	
+
+clean:
+	rm -f *.gnat_run 
+	rm -f *.adb
+	rm -f *.ads
+	rm -f *.ali
+	rm -f *.o

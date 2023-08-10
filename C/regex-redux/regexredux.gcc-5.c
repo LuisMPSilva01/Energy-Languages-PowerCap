@@ -1,16 +1,19 @@
 // The Computer Language Benchmarks Game
-// http://benchmarksgame.alioth.debian.org/
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 //
-// Contributed by Jeremy Zerfas
+// contributed by Jeremy Zerfas 
+// modified by Zoltan Herczeg
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <pcre.h>
+
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include "pcre2.h"
 
 typedef struct {
-    char * data;
-    int capacity, size;
+    PCRE2_UCHAR *data;
+    PCRE2_SIZE capacity, size;
 } string;
 
 
@@ -18,20 +21,22 @@ typedef struct {
 // specified replacement, and storing the result in dst_String.
 static void replace(char const * const pattern, char const * const replacement
   , string const * const src_String, string * const dst_String
-  , pcre_jit_stack * const stack){
+  , pcre2_match_context * const mcontext, pcre2_match_data * mdata){
 
-    char const * error;
-    int offset, pos=0, match[3];
+    int errorcode;
+    PCRE2_SIZE erroroffset, pos=0;
     int const replacement_Size=strlen(replacement);
+    PCRE2_SIZE *match=pcre2_get_ovector_pointer(mdata);
 
     // Compile and study pattern.
-    pcre * regex=pcre_compile(pattern, 0, &error, &offset, NULL);
-    pcre_extra * aid=pcre_study(regex, PCRE_STUDY_JIT_COMPILE, &error);
+    pcre2_code * regex=pcre2_compile((PCRE2_SPTR)pattern, PCRE2_ZERO_TERMINATED
+      , 0, &errorcode, &erroroffset, NULL);
+    pcre2_jit_compile(regex, PCRE2_JIT_COMPLETE);
 
     // Find each match of the pattern in src_String and append the characters
     // preceding each match and the replacement text to dst_String.
-    while(pcre_jit_exec(regex, aid, src_String->data, src_String->size
-      , pos, 0, match, 3, stack)>=0){
+    while(pcre2_jit_match(regex, src_String->data, src_String->size, pos, 0
+      , mdata, mcontext)>=0){
 
         // Allocate more memory for dst_String if there is not enough space for
         // the characters preceding the match and the replacement text.
@@ -51,8 +56,7 @@ static void replace(char const * const pattern, char const * const replacement
         pos=match[1];
     }
 
-    pcre_free_study(aid);
-    pcre_free(regex);
+    pcre2_code_free(regex);
 
     // Allocate more memory for dst_String if there is not enough space for
     // the characters following the last match (or the entire src_String if
@@ -104,14 +108,17 @@ int main(void){
 
     #pragma omp parallel
     {
-        pcre_jit_stack * const stack=pcre_jit_stack_alloc(16384, 16384);
+        pcre2_match_context * mcontext=pcre2_match_context_create(NULL);
+        pcre2_jit_stack * const stack=pcre2_jit_stack_create(16384, 16384, NULL);
+        pcre2_jit_stack_assign(mcontext, NULL, stack);
 
+        pcre2_match_data * mdata=pcre2_match_data_create(16, NULL);
 
         // Find all sequence descriptions and new lines in input, replace them
         // with empty strings, and store the result in the sequences string.
         #pragma omp single
         {
-            replace(">.*\\n|\\n", "", &input, &sequences, stack);
+            replace(">.*\\n|\\n", "", &input, &sequences, mcontext, mdata);
 
             free(input.data);
         }
@@ -140,7 +147,7 @@ int main(void){
             for(int i=0; i<sizeof(replace_Info)/sizeof(char * [2]); i++){
 
                 replace(replace_Info[i][0], replace_Info[i][1]
-                  , &prereplace_String, &postreplace_String, stack);
+                  , &prereplace_String, &postreplace_String, mcontext, mdata);
 
                 // Swap prereplace_String and postreplace_String in preparation
                 // for the next iteration.
@@ -166,17 +173,19 @@ int main(void){
         #pragma omp for schedule(dynamic) ordered
         for(int i=0; i<sizeof(count_Info)/sizeof(char *); i++){
 
-            char const * error;
-            int offset, pos=0, match[3], count=0;
+            int errorcode, count=0;
+            PCRE2_SIZE erroroffset, pos=0;
+            PCRE2_SIZE *match=pcre2_get_ovector_pointer(mdata);
 
             // Compile and study pattern.
-            pcre * regex=pcre_compile(count_Info[i], 0, &error, &offset, NULL);
-            pcre_extra * aid=pcre_study(regex, PCRE_STUDY_JIT_COMPILE, &error);
+            pcre2_code * regex=pcre2_compile((PCRE2_SPTR)count_Info[i]
+              , PCRE2_ZERO_TERMINATED, 0, &errorcode, &erroroffset, NULL);
+            pcre2_jit_compile(regex, PCRE2_JIT_COMPLETE);
 
             // Find each match of the pattern in the sequences string and
             // increment count for each match.
-            while(pcre_jit_exec(regex, aid, sequences.data, sequences.size
-              , pos, 0, match, 3, stack)>=0){
+            while(pcre2_jit_match(regex, sequences.data, sequences.size
+              , pos, 0, mdata, mcontext)>=0){
 
                 count++;
 
@@ -184,8 +193,7 @@ int main(void){
                 pos=match[1];
             }
 
-            pcre_free_study(aid);
-            pcre_free(regex);
+            pcre2_code_free(regex);
 
             // Print the count for each pattern in the correct order.
             #pragma omp ordered
@@ -193,7 +201,9 @@ int main(void){
         }
 
 
-        pcre_jit_stack_free(stack);
+        pcre2_match_context_free(mcontext);
+        pcre2_jit_stack_free(stack);
+        pcre2_match_data_free(mdata);
     }
 
 
@@ -202,7 +212,7 @@ int main(void){
     // Print the size of the original input, the size of the input without the
     // sequence descriptions & new lines, and the size after having made all the
     // replacements.
-    printf("\n%d\n%d\n%d\n", input.size, sequences.size, postreplace_Size);
+    printf("\n%d\n%d\n%d\n", (int)input.size, (int)sequences.size
+      , postreplace_Size);
     return 0;
 }
-    

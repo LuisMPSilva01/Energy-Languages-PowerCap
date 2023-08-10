@@ -9,3 +9,6 @@ run:
 	./chameneosredux.gcc-5.gcc_run 6000000
 mem:
 	/usr/bin/time -v ./chameneosredux.gcc-5.gcc_run 6000000
+
+clean:
+	rm -f *.gcc_run
