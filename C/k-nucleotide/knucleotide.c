@@ -1,5 +1,5 @@
 // The Computer Language Benchmarks Game
-// http://benchmarksgame.alioth.debian.org/
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 //
 // Contributed by Jeremy Zerfas
 
@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <htslib/khash.h>
+#include <khash.h>
 
 // Define a custom hash function to use instead of khash's default hash
 // function. This custom hash function uses a simpler bit shift and XOR which
