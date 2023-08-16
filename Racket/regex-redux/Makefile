@@ -1,15 +1,18 @@
 compile:
-	/usr/local/src/racket-6.8/bin/raco make regexredux.racket
+	raco make regexredux.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/local/src/racket-6.8/bin/racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt" Racket regex-redux
+	sudo ../../RAPL/main "racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt" Racket regex-redux
 
 run:
-	/usr/local/src/racket-6.8/bin/racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt
+	racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt
 
 mem:
-	/usr/bin/time -v /usr/local/src/racket-6.8/bin/racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt
+	/usr/bin/time -v racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/local/src/racket-6.8/bin/racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt
+	valgrind --tool=massif --stacks=yes racket ./compiled/regexredux_racket.zo 0 < ../../regexredux-input5000000.txt
+
+clean:
+	rm -rf compiled/

@@ -1,6 +1,6 @@
 #lang racket/base
 ;; The Computer Language Benchmarks Game
-;; http://benchmarksgame.alioth.debian.org/
+;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;; Translated from Mike Pall's Lua version.
 ;; Parallelized by Sam Tobin-Hochstadt
 

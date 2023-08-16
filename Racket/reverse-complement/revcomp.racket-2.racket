@@ -1,7 +1,7 @@
 #lang racket/base
 
 ;;; The Computer Language Benchmarks Game
-;;; http://benchmarksgame.alioth.debian.org/
+;;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;; contributed by Eli Barzilay
 
 (define translation (make-vector 128))

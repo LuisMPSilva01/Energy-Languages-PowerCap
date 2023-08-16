@@ -1,7 +1,7 @@
 #lang racket/base
 
 ;; The Computer Language Benchmarks Game
-;; http://benchmarksgame.alioth.debian.org/
+;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
 ;; Based on the Perl version of the benchmark
 ;; adapted with a GMP interface by Eli Barzilay
