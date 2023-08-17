@@ -1,5 +1,5 @@
 // The Computer Language Benchmark Game
-// http://benchmarksgame.alioth.debian.org/
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 //
 // Inspired by the gcc implementation
 // contributed by Ralph Ganszky
@@ -27,11 +27,11 @@ defer {
     __gmpz_clear(den)
     __gmpz_clear(num)
 
-    tmp1.deallocate(capacity: 1)
-    tmp2.deallocate(capacity: 1)
-    acc.deallocate(capacity: 1)
-    den.deallocate(capacity: 1)
-    num.deallocate(capacity: 1)
+    tmp1.deallocate()
+    tmp2.deallocate()
+    acc.deallocate()
+    den.deallocate()
+    num.deallocate()
 }
 
 // Initialize numbers
@@ -92,5 +92,5 @@ if n % 10 != 0 {
     for _ in 0..<(10-(n%10)) {
 	print(" ", terminator: "")
     }
-    print("\t:\(i)")
+    print("\t:\(n)")
 }

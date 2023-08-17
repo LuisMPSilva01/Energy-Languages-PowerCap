@@ -1,5 +1,5 @@
 compile:
-	/usr/local/src/swift-2017-04-13-a-ubuntu16.10/usr/bin/swiftc fannkuchredux.swift-3.swift -Ounchecked -whole-module-optimization  -o fannkuchredux.swift-3.swift_run
+	swiftc fannkuchredux.swift-3.swift -Ounchecked -whole-module-optimization  -o fannkuchredux.swift-3.swift_run
 
 measure:
 	sudo modprobe msr
@@ -13,3 +13,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./fannkuchredux.swift-3.swift_run 12
+
+clean:
+	rm *.swift_run

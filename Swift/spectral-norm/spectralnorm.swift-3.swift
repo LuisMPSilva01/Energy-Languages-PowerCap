@@ -1,5 +1,5 @@
 /* The Computer Language Benchmarks Game
- http://benchmarksgame.alioth.debian.org/
+ https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
  contributed by Ralph Ganszky
  converted to Swift 3 by Daniel Muellenborn
  */

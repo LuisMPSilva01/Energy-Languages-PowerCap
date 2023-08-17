@@ -1,120 +1,113 @@
-// The Computer Language Benchmark Game
+// The Computer Language Benchmarks Game
 // http://benchmarksgame.alioth.debian.org/
 //
-// contributed by Ralph Ganszky
+// Swift adaptation of binary-trees Go #8,
+// that in turn is based on Rust #4
+//
+// contributed by Marcel Ibes
 
 import Dispatch
 import Foundation
-import apr
 
-let nullptr = OpaquePointer(bitPattern: UInt.max)!
+indirect enum Tree {
+    case Empty
+    case Node(left: Tree, right: Tree)
+}
 
-struct Node {
-    var left: OpaquePointer
-    var right: OpaquePointer
-
-    func check() -> Int {
-	if left != nullptr {
-	    let l = UnsafeMutablePointer<Node>(left)
-	    let r = UnsafeMutablePointer<Node>(right)
-	    return l[0].check() + r[0].check() + 1
-	} else {
-	    return 1
-	}
+func itemCheck(_ tree: Tree) -> UInt32 {
+    switch tree {
+    case .Node(let left, let right):
+        switch (left, right) {
+        case (.Empty, .Empty):
+            return 1
+        default:
+            return 1 + itemCheck(left) + itemCheck(right)
+        }
+    case .Empty:
+        return 1
     }
 }
 
-func CreateTree(_ depth: Int, _ pool: OpaquePointer) -> OpaquePointer {
-    let nodePtr = OpaquePointer(apr_palloc(pool, MemoryLayout<Node>.stride))!
-    let node = UnsafeMutablePointer<Node>(nodePtr)
+func bottomUpTree(_ depth: UInt32) -> Tree {
     if depth > 0 {
-	node[0].left = CreateTree(depth-1, pool)
-	node[0].right = CreateTree(depth-1, pool)
-    } else {
-	node[0].left = nullptr
-	node[0].right = nullptr
+        return .Node(left: bottomUpTree(depth - 1),
+                     right: bottomUpTree(depth - 1))
     }
-    return nodePtr
+
+    return .Node(left: .Empty, right: .Empty)
 }
 
-let minDepth = 4
-let maxDepth: Int
+func inner(depth: UInt32, iterations: UInt32) -> String {
+    var chk = UInt32(0)
+    for _ in 0..<iterations {
+        let a = bottomUpTree(depth)
+        chk += itemCheck(a)
+    }
+
+    return "\(iterations)\t trees of depth \(depth)\t check: \(chk)"
+}
+
+let n: UInt32
+
 if CommandLine.argc > 1 {
-    let arg = Int(CommandLine.arguments[1]) ?? 10
-    maxDepth = (arg > minDepth + 2) ? arg : minDepth + 2
+    n = UInt32(CommandLine.arguments[1]) ?? UInt32(10)
 } else {
-    maxDepth = 10
+    n = 10
 }
 
-guard apr_pool_initialize() == APR_SUCCESS else {
-    print("Can't initialize apr_pool")
-    exit(1)
-}
+let minDepth = UInt32(4)
+let maxDepth = (n > minDepth + 2) ? n : minDepth + 2
+var messages: [UInt32: String] = [:]
+let depth = maxDepth + 1
 
-var pool: OpaquePointer? = nil
-guard apr_pool_create_unmanaged_ex(&pool, nil, nil) == APR_SUCCESS  else {
-    apr_pool_terminate()
-    print("Can't create unmanaged pool")
-    exit(1)
-}
+let group = DispatchGroup()
 
-// Create big tree in first pool
-let treePtr = CreateTree(maxDepth+1, pool!)
-let tree = UnsafeMutablePointer<Node>(treePtr) 
-print("stretch tree of depth \(maxDepth+1)\t check: \(tree[0].check())")
+let workerQueue = DispatchQueue(label: "workerQueue", qos: .userInteractive, attributes: .concurrent)
+let messageQueue = DispatchQueue(label: "messageQueue", qos: .background)
 
-// Release big tree
-apr_pool_clear(pool!);
+group.enter()
+workerQueue.async {
+    let tree = bottomUpTree(depth)
 
-// Create long living tree
-let longLivingTreePtr = CreateTree(maxDepth, pool!)
-
-// Allocate trees of increasing depth up to maxDepth depth
-let depths = (maxDepth-minDepth)/2+1
-var results = [String](repeating: "", count: depths)
-let rQueue = DispatchQueue(label: "Result", attributes: [])
-let queue = DispatchQueue(label: "Worker", attributes: .concurrent)
-DispatchQueue.concurrentPerform(iterations: depths) {
-    idx in
-
-    // Create depth pool
-    var depthPool: OpaquePointer? = nil
-    guard apr_pool_create_unmanaged_ex(&depthPool, nil, nil) == APR_SUCCESS  else {
-	apr_pool_terminate()
-	print("Can't create unmanaged depth pool")
-	exit(1)
-    }
-
-    let currentDepth = minDepth + idx * 2
-    let iterations = 1 << (maxDepth - currentDepth + minDepth)
-    var totalCheckSum = 0
-    for _ in 1...iterations {
-	let tree1Ptr = CreateTree(currentDepth, depthPool!)
-	let tree1 = UnsafeMutablePointer<Node>(tree1Ptr)
-	totalCheckSum += tree1[0].check()
-	apr_pool_clear(depthPool!);
-    }
-
-    // Release depth pool
-    apr_pool_destroy(depthPool!)
-
-    // Store result string
-    rQueue.async {
-	results[idx] = "\(iterations)\t trees of depth \(currentDepth)\t check: \(totalCheckSum)"
+    messageQueue.async {
+        messages[0] = "stretch tree of depth \(depth)\t check: \(itemCheck(tree))"
+        group.leave()
     }
 }
 
-// Print output in correnct order
-rQueue.sync {
-    for result in results {
-	print(result)
+group.enter()
+workerQueue.async {
+    let longLivedTree = bottomUpTree(maxDepth)
+
+    messageQueue.async {
+        messages[UINT32_MAX] = "long lived tree of depth \(maxDepth)\t check: \(itemCheck(longLivedTree))"
+        group.leave()
     }
 }
 
-let longLivingTree = UnsafeMutablePointer<Node>(longLivingTreePtr)
-print("long lived tree of depth \(maxDepth)\t check: \(longLivingTree[0].check())")
+group.enter()
+workerQueue.async {
+    for halfDepth in (minDepth / 2)..<(maxDepth / 2 + 1) {
+        let depth = halfDepth * 2
+        let iterations = UInt32(1 << (maxDepth - depth + minDepth))
 
-// Release long living tree
-apr_pool_destroy(pool!);
+        group.enter()
+        workerQueue.async {
+            let msg = inner(depth: depth, iterations: iterations)
+            messageQueue.async {
+                messages[depth] = msg
+                group.leave()
+            }
+        }
+    }
 
-apr_pool_terminate()
+    messageQueue.async {
+        group.leave()
+    }
+}
+
+group.wait()
+
+for msg in messages.sorted(by: { $0.0 < $1.0 }) {
+    print(msg.value)
+}

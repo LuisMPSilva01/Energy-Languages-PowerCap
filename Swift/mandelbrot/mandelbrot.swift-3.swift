@@ -1,179 +1,130 @@
 /* The Computer Language Benchmarks Game
- http://benchmarksgame.alioth.debian.org/
- contributed by Ralph Ganszky
- modified for Swift 3.0 by Daniel Muellenborn
+ https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
+
+ direct transliteration of Greg Buchholz's C program
+ contributed by Isaac Gouy, fix by David Turnbull
+ dispatching to multiple cores, use SIMD operationn, early break
+ depending on previous depth by Patrick Stein
  */
 
-import Glibc
+import Foundation
+#if os(Linux)
 import Dispatch
+#endif
 
-let Iter = 50
+guard   CommandLine.argc > 1,
+        let width = Int(CommandLine.arguments[1]), width > 0
+else    {
+            print("usage: \(CommandLine.arguments[0]) <size>")
+            exit(EXIT_FAILURE)
+        }
+let height      = width
+let iterations  = 50
+let depth       = 4.0
+let startPoint  = (x:-1.5, i:-1.0)
+let endPoint    = (x:0.5,  i:1.0)
 
-// Declare Vec8 as a tuple of 8 double
-typealias Vec8 = (Double, Double, Double, Double,
-   Double, Double, Double, Double)
+let linecount   = height
+let linesize    = (width + 7) / 8
+let pixelheight = abs(endPoint.x-startPoint.x) / Double(height)
+let pixelwidth  = abs(endPoint.i-startPoint.i) / Double(width)
+let pixelwidth8 = pixelwidth * 8.0
 
-let zero: Vec8 = (0.0, 0.0, 0.0, 0.0,
-                  0.0, 0.0, 0.0, 0.0)
+let outputsize  = linecount * linesize
+let pixelBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: outputsize)
+var Ci0         = startPoint.i
+let Cr0         = (SIMD8<Double>(0,1,2,3,4,5,6,7) * pixelwidth) + startPoint.x
 
-// Declare some basic operators on Vec8
-func +(lhs: Vec8, rhs: Double) -> Vec8 {
-   var res = lhs
-   res.0 += rhs
-   res.1 += rhs
-   res.2 += rhs
-   res.3 += rhs
-   res.4 += rhs
-   res.5 += rhs
-   res.6 += rhs
-   res.7 += rhs
-   return res
+let Cr0Array = ContiguousArray<SIMD8<Double>>.init(unsafeUninitializedCapacity: linesize)
+    {
+        buffer, initializedCount in
+
+        let safeBuffer = buffer
+        DispatchQueue.concurrentPerform(iterations: linesize)
+        {
+            x in
+            safeBuffer[x] = Cr0 + ( Double(x) * pixelwidth8 )
+        }
+
+        initializedCount = linesize
+    }
+
+DispatchQueue.concurrentPerform(iterations: linecount)
+{
+    y in
+
+    let lineaddress = pixelBuffer + (y * linesize)
+    let Ci = Ci0 + (Double(y) * pixelheight)
+    var pixel:UInt8 = 0
+
+    for x in 0..<linesize
+    {
+        mandelbrot(Cr: Cr0Array[x],Ci: Ci,pixel:&pixel)
+        lineaddress[x] = pixel
+    }
 }
 
-func +(lhs: Vec8, rhs: Vec8) -> Vec8 {
-   var res = lhs
-   res.0 += rhs.0
-   res.1 += rhs.1
-   res.2 += rhs.2
-   res.3 += rhs.3
-   res.4 += rhs.4
-   res.5 += rhs.5
-   res.6 += rhs.6
-   res.7 += rhs.7
-   return res
+let stdout  = FileHandle.standardOutput
+    stdout.write("P4\n\(width) \(height)\n".data(using:.utf8)!)
+    stdout.write(Data(bytesNoCopy: pixelBuffer,
+                            count: outputsize,
+                      deallocator: .none))
+
+
+// SIMD mandelbrot calculation for 8 points in parallel
+
+@inline(__always) func onepixel(Cr:SIMD8<Double>,Ci:Double,
+                                Zr:inout SIMD8<Double>,Zi:inout SIMD8<Double>,
+                                Tr:inout SIMD8<Double>,Ti:inout SIMD8<Double>)
+{
+    Zi = 2.0 * Zr * Zi + Ci
+    Zr = Tr - Ti + Cr
+    Tr = Zr * Zr
+    Ti = Zi * Zi
 }
 
-func -(lhs: Vec8, rhs: Vec8) -> Vec8 {
-   var res = lhs
-   res.0 -= rhs.0
-   res.1 -= rhs.1
-   res.2 -= rhs.2
-   res.3 -= rhs.3
-   res.4 -= rhs.4
-   res.5 -= rhs.5
-   res.6 -= rhs.6
-   res.7 -= rhs.7
-   return res
+// one pixel calculation stepping 8 points at a time
+
+@inline(__always)
+func mandelbrot(Cr:SIMD8<Double>,Ci:Double, pixel:inout UInt8)
+{
+    var Zr:SIMD8<Double> = .zero
+    var Zi:SIMD8<Double> = .zero
+    var Tr:SIMD8<Double> = .zero
+    var Ti:SIMD8<Double> = .zero
+
+    let thresholds  = SIMD8<Double>(repeating:depth)
+    let isFalse     = SIMDMask<SIMD8<Double.SIMDMaskScalar>>(repeating: false)
+    let ramp        = SIMD8<Int64>([128,64,32,16,8,4,2,1])
+
+    if pixel == 0
+    {
+        for _ in 0..<iterations/5
+        {
+            for _ in 0..<5
+            {
+                onepixel(Cr:Cr,Ci:Ci,Zr:&Zr,Zi:&Zi,Tr:&Tr,Ti:&Ti)
+            }
+
+            let result = Tr + Ti .< thresholds
+
+            if result == isFalse
+            {
+                return
+            }
+        }
+    }
+    else
+    {
+        for _ in 0..<iterations
+        {
+            onepixel(Cr:Cr,Ci:Ci,Zr:&Zr,Zi:&Zi,Tr:&Tr,Ti:&Ti)
+        }
+    }
+    let cmpresult = Tr + Ti .< thresholds
+
+    let reduced: SIMD8<Int64> = unsafeBitCast(cmpresult,to: SIMD8<Int64>.self)
+    let summask: SIMD8<Int64> = ramp & reduced
+
+    pixel = UInt8(summask.wrappedSum())
 }
-
-func *(lhs: Vec8, rhs: Vec8) -> Vec8 {
-   var res = lhs
-   res.0 *= rhs.0
-   res.1 *= rhs.1
-   res.2 *= rhs.2
-   res.3 *= rhs.3
-   res.4 *= rhs.4
-   res.5 *= rhs.5
-   res.6 *= rhs.6
-   res.7 *= rhs.7
-   return res
-}
-
-func *(lhs: Double, rhs: Vec8) -> Vec8 {
-   var res = rhs
-   res.0 *= lhs
-   res.1 *= lhs
-   res.2 *= lhs
-   res.3 *= lhs
-   res.4 *= lhs
-   res.5 *= lhs
-   res.6 *= lhs
-   res.7 *= lhs
-   return res
-}
-
-func *(lhs: Vec8, rhs: Double) -> Vec8 {
-   return rhs * lhs
-}
-
-func >(lhs: Vec8, rhs: Double) -> Bool {
-   if lhs.0 > rhs &&
-      lhs.1 > rhs &&
-      lhs.2 > rhs &&
-      lhs.3 > rhs &&
-      lhs.4 > rhs &&
-      lhs.5 > rhs &&
-      lhs.6 > rhs &&
-      lhs.7 > rhs {
-      return true
-   } else {
-      return false
-   }
-}
-
-// Calculate mandelbrot set for one Vec8 into one byte
-func mand8(_ cr: Vec8, _ ci: Double) -> UInt8 {
-   var Zr = zero
-   var Zi = zero
-   var Tr = zero
-   var Ti = zero
-   
-   for _ in 0 ..< Iter {
-      Zi = 2 * Zr * Zi + ci
-      Zr = Tr - Ti + cr
-      Tr = Zr * Zr
-      Ti = Zi * Zi
-      if Tr + Ti > 4.0 {
-         break
-      }
-   }
-   var byte: UInt8 = 0
-   let t = Tr+Ti
-   if t.0 <= 4.0 { byte |= 0x80 }
-   if t.1 <= 4.0 { byte |= 0x40 }
-   if t.2 <= 4.0 { byte |= 0x20 }
-   if t.3 <= 4.0 { byte |= 0x10 }
-   if t.4 <= 4.0 { byte |= 0x08 }
-   if t.5 <= 4.0 { byte |= 0x04 }
-   if t.6 <= 4.0 { byte |= 0x02 }
-   if t.7 <= 4.0 { byte |= 0x01 }
-   return byte
-}
-
-// Parse command line arguments
-let n: Int
-
-if CommandLine.arguments.count > 1 {
-   n = Int(CommandLine.arguments[1]) ?? 200
-} else {
-   n = 200
-}
-
-let N = (n + 7) & ~0x7
-let inv = 2.0 / Double(n)
-var xvals = [Double](repeating: 0.0, count: N)
-var yvals = [Double](repeating: 0.0, count: n)
-
-for i in 0..<N {
-   xvals[i] = Double(i) * inv - 1.5
-   yvals[i] = Double(i) * inv - 1.0
-}
-
-var rows = [UInt8](repeating: 0, count: n*N/8)
-
-let queue = DispatchQueue.global(qos: .default)
-DispatchQueue.concurrentPerform(iterations: n) { y in
-   let ci = yvals[y]
-   for x in stride(from: 0, to: N, by: 8) {
-      var cr = Vec8(xvals[x+0], xvals[x+1], xvals[x+2], xvals[x+3],
-                    xvals[x+4], xvals[x+5], xvals[x+6], xvals[x+7])
-      rows[y*N/8+x/8] = mand8(cr, ci)
-   }
-}
-
-let header = "P4\n\(n) \(n)\n"
-let headerStr = header.withCString { s in s }
-
-let iov = UnsafeMutablePointer<iovec>.allocate(capacity: 2)
-iov[0].iov_base = UnsafeMutableRawPointer(mutating: headerStr)
-iov[0].iov_len = header.utf8CString.count - 1
-
-let _ = rows.withUnsafeMutableBufferPointer {
-   (p: inout UnsafeMutableBufferPointer) -> Int in
-   iov[1].iov_base = UnsafeMutableRawPointer(p.baseAddress)
-   return 0
-}
-
-iov[1].iov_len = rows.count
-writev(STDOUT_FILENO, iov, 2)
-iov.deallocate(capacity: 2)

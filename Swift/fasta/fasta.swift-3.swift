@@ -1,5 +1,5 @@
 /* The Computer Language Benchmarks Game
- http://benchmarksgame.alioth.debian.org/
+ https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
  contributed by Ralph Ganszky
 
  for Swift 3.0+
@@ -72,8 +72,8 @@ for _ in 0..<nBufs {
 }
 defer {
     for i in 0..<nBufs {
-	bufs[i].deallocate(capacity: rndBufSize)
-	cBufs[i].deallocate(capacity: writeBufSize)
+	bufs[i].deallocate()
+	cBufs[i].deallocate()
     }
 }
 
@@ -106,7 +106,7 @@ func buildFastaBlockFromString(s: String) -> String {
     let blockUP = block.withCString{ s in s }
     var blockNl = UnsafeMutablePointer<Int8>.allocate(capacity: (block.utf16.count)+s.utf16.count*linewidth-1)
     defer {
-        blockNl.deallocate(capacity: (block.utf16.count)+s.utf16.count*linewidth-1)
+        blockNl.deallocate()
     }
     var blockIn = blockNl
     for i in 0..<s.utf16.count {

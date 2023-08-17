@@ -1,5 +1,5 @@
 // The Computer Language Benchmark Game
-// http://benchmarksgame.alioth.debian.org/
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 //
 // implementation inspired by gcc #6
 // contributed by Ralph Ganszky
@@ -35,7 +35,7 @@ final class BlockReader {
     }
     
     deinit {
-        block.deallocate(capacity: blockSize+1)
+        block.deallocate()
     }
     
     private func readBlock() {

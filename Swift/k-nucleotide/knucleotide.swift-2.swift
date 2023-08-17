@@ -1,5 +1,5 @@
 /* The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    contributed by Ralph Ganszky
 */
@@ -88,7 +88,7 @@ func readInputAndRewrite() -> [Int8] {
     // Read until sequence THREE
     let buf = UnsafeMutablePointer<Int8>.allocate(capacity: 100)
     defer {
-        buf.deallocate(capacity: 100)
+        buf.deallocate()
     }
     let three = ">THREE".utf8.map{Int8($0)}
     while let res = fgets(buf, 100, stdin) {

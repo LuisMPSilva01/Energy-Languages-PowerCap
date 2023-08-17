@@ -1,5 +1,5 @@
 compile:
-	/usr/local/src/swift-2017-04-13-a-ubuntu16.10/usr/bin/swiftc spectralnorm.swift-3.swift -Ounchecked -whole-module-optimization  -o spectralnorm.swift-3.swift_run
+	swiftc spectralnorm.swift-3.swift -Ounchecked -whole-module-optimization  -o spectralnorm.swift-3.swift_run
 
 measure:
 	sudo modprobe msr
@@ -14,3 +14,5 @@ mem:
 valgrind:
 	valgrind --tool=massif --stacks=yes ./spectralnorm.swift-3.swift_run 5500
 
+clean:
+	rm *.swift_run
