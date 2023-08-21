@@ -1,14 +1,19 @@
 compile:
+	/opt/src/dart-sdk/bin/dart analyze 
+	/opt/src/dart-sdk/bin/dart compile exe mandelbrot-dart-4.dart -o mandelbrot-dart-4.dart_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dart  mandelbrot.dart 16000" Dart mandelbrot
+	sudo ../../RAPL/main "./mandelbrot-dart-4.dart_run 16000" Dart mandelbrot
 
 run:
-	/usr/bin/dart  mandelbrot.dart 16000
+	./mandelbrot-dart-4.dart_run 16000
 
 mem:
-	/usr/bin/time -v /usr/bin/dart  mandelbrot.dart 16000
+	/usr/bin/time -v ./mandelbrot-dart-4.dart_run 16000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/bin/dart  mandelbrot.dart 16000
+	valgrind --tool=massif --stacks=yes ./mandelbrot-dart-4.dart_run 16000
+
+clean:
+	rm -r *.dart_run

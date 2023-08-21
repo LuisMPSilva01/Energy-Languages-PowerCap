@@ -1,14 +1,19 @@
 compile:
+	/opt/src/dart-sdk/bin/dart analyze 
+	/opt/src/dart-sdk/bin/dart compile exe knucleotide.dart-3.dart -o knucleotide.dart-3.dart_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dart  knucleotide.dart-2.dart 0 < knucleotide-input25000000.txt" Dart k-nucleotide
+	sudo ../../RAPL/main "./knucleotide.dart-3.dart_run 0 < knucleotide-input25000000.txt" Dart k-nucleotide
 
 run:
-	/usr/bin/dart  knucleotide.dart-2.dart 0 < knucleotide-input25000000.txt
+	./knucleotide.dart-3.dart_run 0 < knucleotide-input25000000.txt
 
 mem:
-	/usr/bin/time -v  /usr/bin/dart  knucleotide.dart-2.dart 0 < knucleotide-input25000000.txt
+	/usr/bin/time -v  ./knucleotide.dart-3.dart_run 0 < knucleotide-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/bin/dart  knucleotide.dart-2.dart 0 < knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes  ./knucleotide.dart-3.dart_run 0 < knucleotide-input25000000.txt
+
+clean:
+	rm -r *.dart_run

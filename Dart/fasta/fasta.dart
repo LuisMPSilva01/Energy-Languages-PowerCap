@@ -1,54 +1,71 @@
 /* The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    contributed by James Wendel
+   + null safety    
 */
 
 import 'dart:io';
 import 'dart:typed_data';
 
-const String ALU =
-"GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG"
-"GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA"
-"CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT"
-"ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA"
-"GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG"
-"AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC"
-"AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
+const String ALU = "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG"
+    "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA"
+    "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT"
+    "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA"
+    "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG"
+    "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC"
+    "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA";
 
-final Frequency IUB = new Frequency(
-    ['a',  'c',  'g',  't',
-     'B',  'D',  'H',  'K',
-     'M',  'N',  'R',  'S',
-     'V',  'W',  'Y'],
-     [0.27, 0.12, 0.12, 0.27,
-      0.02, 0.02, 0.02, 0.02,
-      0.02, 0.02, 0.02, 0.02,
-      0.02, 0.02, 0.02,]);
+final Frequency IUB = new Frequency([
+  'a',
+  'c',
+  'g',
+  't',
+  'B',
+  'D',
+  'H',
+  'K',
+  'M',
+  'N',
+  'R',
+  'S',
+  'V',
+  'W',
+  'Y'
+], [
+  0.27,
+  0.12,
+  0.12,
+  0.27,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+  0.02,
+]);
 
-final Frequency HOMO_SAPIENS = new Frequency(
-    [ 'a',
-      'c',
-      'g',
-      't'],
-      [ 0.3029549426680,
-        0.1979883004921,
-        0.1975473066391,
-        0.3015094502008]);
+final Frequency HOMO_SAPIENS = new Frequency(['a', 'c', 'g', 't'],
+    [0.3029549426680, 0.1979883004921, 0.1975473066391, 0.3015094502008]);
 
 const int IM = 139968;
 const int IA = 3877;
 const int IC = 29573;
 
 const int LINE_LENGTH = 60;
-const int BUFFER_SIZE = (LINE_LENGTH + 1)*1024;
+const int BUFFER_SIZE = (LINE_LENGTH + 1) * 1024;
 
-const double oneOverIM = (1.0/ IM);
+const double oneOverIM = (1.0 / IM);
 
 class Frequency {
-  Uint8List chars;
-  Float64List probs;
-  int last;
+  var chars = new Uint8List(0);
+  var probs = new Float64List(0);
+  int last = 0;
 
   double random(double max) {
     last = (last * IA + IC) % IM;
@@ -57,12 +74,12 @@ class Frequency {
 
   Frequency(List<String> charList, List<double> probList) {
     chars = new Uint8List(charList.length);
-    for (int i=0; i < chars.length; i++) {
+    for (int i = 0; i < chars.length; i++) {
       chars[i] = charList[i].codeUnitAt(0);
     }
 
     probs = new Float64List(probList.length);
-    for (int i=0; i < probList.length; i++) {
+    for (int i = 0; i < probList.length; i++) {
       probs[i] = probList[i];
     }
 
@@ -90,14 +107,15 @@ class Frequency {
         }
       }
 
-      buffer[bufferIndex++] = chars[len-1];
+      buffer[bufferIndex++] = chars[len - 1];
     }
 
     return bufferIndex;
   }
 }
 
-makeRepeatFasta(String id, String desc, String alu, int _nChars, IOSink writer) {
+makeRepeatFasta(
+    String id, String desc, String alu, int _nChars, IOSink writer) {
   writer.write(">${id} ${desc}\n");
 
   int aluIndex = 0;
@@ -118,16 +136,16 @@ makeRepeatFasta(String id, String desc, String alu, int _nChars, IOSink writer) 
     }
 
     if (aluIndex + chunkSize < aluLength) {
-      buffer.setRange(bufferIndex, bufferIndex+chunkSize, aluCode, aluIndex);
+      buffer.setRange(bufferIndex, bufferIndex + chunkSize, aluCode, aluIndex);
       bufferIndex += chunkSize;
       aluIndex += chunkSize;
     } else {
       int len = aluLength - aluIndex;
-      buffer.setRange(bufferIndex, bufferIndex+len, aluCode, aluIndex);
+      buffer.setRange(bufferIndex, bufferIndex + len, aluCode, aluIndex);
       bufferIndex += len;
       aluIndex = 0;
       len = chunkSize - len;
-      buffer.setRange(bufferIndex, bufferIndex+len, aluCode, aluIndex);
+      buffer.setRange(bufferIndex, bufferIndex + len, aluCode, aluIndex);
       bufferIndex += len;
       aluIndex += len;
     }
@@ -140,9 +158,8 @@ makeRepeatFasta(String id, String desc, String alu, int _nChars, IOSink writer) 
   writer.add(new Uint8List.view(buffer.buffer, 0, bufferIndex));
 }
 
-
-
-void makeRandomFasta(String id, String desc, Frequency fpf, int nChars, IOSink writer) {
+void makeRandomFasta(
+    String id, String desc, Frequency fpf, int nChars, IOSink writer) {
   writer.write(">${id} ${desc}\n");
 
   Uint8List buffer = new Uint8List(BUFFER_SIZE);
@@ -166,7 +183,6 @@ void makeRandomFasta(String id, String desc, Frequency fpf, int nChars, IOSink w
   writer.add(new Uint8List.view(buffer.buffer, 0, bufferIndex));
 }
 
-
 main(args) {
   IOSink writer = stdout;
 
@@ -176,5 +192,6 @@ main(args) {
   IUB.last = 42;
   makeRandomFasta("TWO", "IUB ambiguity codes", IUB, n * 3, writer);
   HOMO_SAPIENS.last = IUB.last;
-  makeRandomFasta("THREE", "Homo sapiens frequency", HOMO_SAPIENS, n * 5, writer);
+  makeRandomFasta(
+      "THREE", "Homo sapiens frequency", HOMO_SAPIENS, n * 5, writer);
 }

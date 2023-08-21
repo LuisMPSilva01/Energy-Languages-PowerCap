@@ -1,14 +1,19 @@
 compile:
+	/opt/src/dart-sdk/bin/dart analyze 
+	/opt/src/dart-sdk/bin/dart compile exe fasta.dart -o fasta.dart_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dart  fasta.dart 25000000" Dart fasta
+	sudo ../../RAPL/main "./fasta.dart_run 25000000" Dart fasta
 
 run:
-	/usr/bin/dart  fasta.dart 25000000
+	./fasta.dart_run 25000000
 
 mem:
-	/usr/bin/time -v  /usr/bin/dart  fasta.dart 25000000
+	/usr/bin/time -v  ./fasta.dart_run 25000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/bin/dart  fasta.dart 25000000
+	valgrind --tool=massif --stacks=yes  ./fasta.dart_run 25000000
+
+clean:
+	rm -r *.dart_run

@@ -1,6 +1,8 @@
 sudo apt-get update
 pip install lazyme
 sudo apt-get install make
+sudo apt-get install zip unzip
+sudo mkdir -p /opt/src
 
 ## Compilers ##
     #Ada
@@ -14,6 +16,13 @@ sudo apt-get install make
 
     #C++ *precisa versao especifica*
     sudo apt install libtbb-dev
+
+    #Dart
+    wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.6/sdk/dartsdk-linux-x64-release.zip
+    unzip dartsdk-linux-x64-release.zip
+    sudo mv dart-sdk /opt/src/dart-sdk
+    rm -r dart-sdk
+    rm dartsdk-linux-x64-release.zip
 
     #Racket
     sudo apt install racket
