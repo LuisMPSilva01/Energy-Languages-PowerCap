@@ -1,14 +1,18 @@
 compile:
-	cp fasta.hipe-2.hipe fasta.erl
-	erlc +native +"{hipe, [o3]}" fasta.erl
+	cp fasta.erlang-2.erlang fasta.erl
+	/opt/src/otp_src_25.2.1/bin/erlc fasta.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "erl -smp enable -noshell -run  fasta main 25000000" Erlang fasta
+	sudo ../../RAPL/main "/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000" Erlang fasta
 
 run:
-	erl -smp enable -noshell -run  fasta main 25000000
+	/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000
 
 mem:
-	/usr/bin/time -v erl -smp enable -noshell -run  fasta main 25000000
+	/usr/bin/time -v /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000
 valgrind:
-	valgrind --tool=massif --stacks=yes erl -smp enable -noshell -run  fasta main 25000000
+	valgrind --tool=massif --stacks=yes /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000
+
+clean:
+	rm -f *.beam
+	rm -f *.erl

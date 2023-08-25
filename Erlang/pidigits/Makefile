@@ -1,15 +1,19 @@
 compile:
-	cp pidigits.hipe pidigits.erl
-	erlc +native +"{hipe, [o3]}" pidigits.erl
+	cp pidigits.erlang-3.erlang pidigits.erl
+	/opt/src/otp_src_25.2.1/bin/erlc pidigits.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "erl -smp enable -noshell -run  pidigits main 10000" Erlang pidigits
+	sudo ../../RAPL/main "/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  pidigits main 10000" Erlang pidigits
 
 run:
-	erl -smp enable -noshell -run  pidigits main 10000
+	/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  pidigits main 10000
 
 mem:
-	/usr/bin/time -v  erl -smp enable -noshell -run  pidigits main 10000
+	/usr/bin/time -v  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  pidigits main 10000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  erl -smp enable -noshell -run  pidigits main 10000
+	valgrind --tool=massif --stacks=yes  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  pidigits main 10000
+
+clean:
+	rm -f *.beam
+	rm -f *.erl

@@ -1,15 +1,19 @@
 compile:
-	cp fannkuchredux.hipe fannkuchredux.erl
-	erlc +native +"{hipe, [o3]}" fannkuchredux.erl
+	cp fannkuchredux.erlang fannkuchredux.erl
+	/opt/src/otp_src_25.2.1/bin/erlc fannkuchredux.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "erl -smp enable -noshell -run  fannkuchredux main 12" Erlang fannkuch-redux
+	sudo ../../RAPL/main "/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fannkuchredux main 12" Erlang fannkuch-redux
 
 run:
-	erl -smp enable -noshell -run  fannkuchredux main 12
+	/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fannkuchredux main 12
 
 mem:
-	/usr/bin/time -v erl -smp enable -noshell -run  fannkuchredux main 12
+	/usr/bin/time -v /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fannkuchredux main 12
 
 valgrind:
-	valgrind --tool=massif --stacks=yes erl -smp enable -noshell -run  fannkuchredux main 12
+	valgrind --tool=massif --stacks=yes /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  fannkuchredux main 12
+
+clean:
+	rm -f *.beam
+	rm -f *.erl

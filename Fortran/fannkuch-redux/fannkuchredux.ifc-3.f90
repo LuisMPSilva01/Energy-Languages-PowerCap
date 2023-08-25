@@ -1,5 +1,5 @@
 ! The Computer Language Benchmarks Game
-! http://benchmarksgame.alioth.debian.org/
+! https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 !
 ! Code by Andrei Jirnyi; modified from my earlier submission.
 !  thanks to Gilbert Brietzke for the previous Fortran code,

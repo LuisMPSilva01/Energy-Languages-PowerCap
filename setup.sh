@@ -24,6 +24,17 @@ sudo mkdir -p /opt/src
     rm -r dart-sdk
     rm dartsdk-linux-x64-release.zip
 
+    #Erlang
+    wget https://github.com/erlang/otp/releases/download/OTP-25.2.1/otp_src_25.2.1.tar.gz
+    tar -zxvf otp_src_25.2.1.tar.gz 
+    cd otp_src_25.2.1/
+    ./configure --prefix=/opt/src/otp_src_25.2.1
+    sudo make
+    sudo make install
+    cd ..
+    rm -r otp_src_25.2.1
+    rm -r otp_src_25.2.1.tar.gz 
+
     #Racket
     sudo apt install racket
 
