@@ -3,6 +3,8 @@ pip install lazyme
 sudo apt-get install make
 sudo apt-get install zip unzip
 sudo mkdir -p /opt/src
+sudo apt-get update
+sudo apt install cmake
 
 ## Compilers ##
     #Ada
@@ -16,6 +18,31 @@ sudo mkdir -p /opt/src
 
     #C++ *precisa versao especifica*
     sudo apt install libtbb-dev
+    sudo apt-get install libboost-all-dev
+
+    #Chapel *compilador nao funciona*
+    sudo apt-get install -y gcc g++ m4 perl python3 python3-dev bash make mawk git pkg-config cmake
+    sudo apt-get install -y llvm-dev llvm clang libclang-dev libclang-cpp-dev libedit-dev
+    wget https://github.com/chapel-lang/chapel/releases/download/1.29.0/chapel-1.29.0.tar.gz
+    tar -xvzf chapel-1.29.0.tar.gz
+    sudo rm -r chapel-1.29.0.tar.gz
+    cd chapel-1.29.0/
+    sudo ./configure --prefix=/opt/src/chapel-1.29.0
+    sudo make
+    sudo make install
+    cd ..
+    sudo rm -r chapel-1.29.0/
+
+    #Csharp (.net) fasta is looking kinda weird idk
+    wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+    chmod +x ./dotnet-install.sh
+    ./dotnet-install.sh --version 7.0.200
+    rm dotnet-install.sh
+    sudo apt install aspnetcore-runtime-7.0
+    git clone https://github.com/dotnet/corefxlab.git
+    cd corefxlab/
+    ~/.dotnet/dotnet restore
+    cd ..
 
     #Dart
     wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.6/sdk/dartsdk-linux-x64-release.zip

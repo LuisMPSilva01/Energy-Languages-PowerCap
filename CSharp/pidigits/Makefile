@@ -1,16 +1,23 @@
 compile:
-	cp pidigits.csharpcore-3.csharpcore Program.cs
-	/usr/bin/dotnet build -c Release
+	~/.dotnet/dotnet new console --force
+	cp pidigits.csharpcore-5.csharpcore Program.cs
+	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 10000" CSharp pidigits
+	sudo ../../RAPL/main "./bin/Release/net7.0/pidigits 10000" CSharp pidigits
 
 run:
-	/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 10000
+	./bin/Release/net7.0/pidigits 10000
 
 mem:
-	/usr/bin/time -v  /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 10000
+	./bin/Release/net7.0/pidigits 10000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 10000
+	valgrind --tool=massif --stacks=yes ./bin/Release/net7.0/pidigits 10000
+
+clean:
+	rm -f -r bin
+	rm -f -r obj
+	rm -f Program.cs
+	rm -f *.csproj

@@ -1,16 +1,24 @@
 compile:
-	cp spectralnorm.csharpcore-3.csharpcore Program.cs
-	/usr/bin/dotnet build -c Release
+	~/.dotnet/dotnet new console --force
+	sed -i '/<\/PropertyGroup>/i \    <AllowUnsafeBlocks>true<\/AllowUnsafeBlocks>' obj/spectral-norm.csproj.nuget.g.props 
+	cp spectralnorm.csharpcore-5.csharpcore Program.cs
+	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 5500" CSharp spectral-norm
+	sudo ../../RAPL/main "./bin/Release/net7.0/spectral-norm 5500" CSharp spectral-norm
 
 run:
-	/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 5500
+	./bin/Release/net7.0/spectral-norm 5500
 
 mem:
-	/usr/bin/time -v  /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 5500
+	/usr/bin/time -v  ./bin/Release/net7.0/spectral-norm 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 5500
+	valgrind --tool=massif --stacks=yes  ./bin/Release/net7.0/spectral-norm 5500
+
+clean:
+	rm -f -r bin
+	rm -f -r obj
+	rm -f Program.cs
+	rm -f *.csproj
