@@ -51,6 +51,11 @@ sudo apt install cmake
     rm -r dart-sdk
     rm dartsdk-linux-x64-release.zip
 
+    #Intel license
+    sudo apt install net-tools
+
+    #Fortran o login nao funciona de momento
+
     #Erlang
     wget https://github.com/erlang/otp/releases/download/OTP-25.2.1/otp_src_25.2.1.tar.gz
     tar -zxvf otp_src_25.2.1.tar.gz 

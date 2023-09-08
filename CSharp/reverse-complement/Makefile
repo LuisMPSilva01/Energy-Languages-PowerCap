@@ -6,16 +6,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./bin/Release/net7.0/reverse-complement 0 < ../../revcomp-input25000000.txt" CSharp reverse-complement
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../revcomp-input25000000.txt" CSharp reverse-complement
 
 run:
-	./bin/Release/net7.0/reverse-complement 0 < ../../revcomp-input25000000.txt
+	~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v  ./bin/Release/net7.0/reverse-complement 0 < ../../revcomp-input25000000.txt
+	/usr/bin/time -v  ~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes   ./bin/Release/net7.0/reverse-complement 0 < ../../revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes   ~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../revcomp-input25000000.txt
 
 clean:
 	rm -f -r bin

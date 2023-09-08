@@ -1,16 +1,23 @@
-compile:	
-	cp nbody.fsharpcore Program.fs
-	/usr/bin/dotnet build -c Release
+compile:
+	~/.dotnet/dotnet new console -lang "F#" --force
+	cp nbody.fsharpcore-6.fsharpcore Program.fs
+	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 50000000" FSharp n-body
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000" FSharp n-body
 
 run:
-	/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 50000000
+	~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000
 
 mem:
-	/usr/bin/time -v /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 50000000
+	/usr/bin/time -v ~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 50000000
+	valgrind --tool=massif --stacks=yes ~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000
+
+clean:
+	rm -f -r bin
+	rm -f -r obj
+	rm -f Program.fs
+	rm -f *.fsproj

@@ -6,16 +6,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./bin/Release/net7.0/spectral-norm 5500" CSharp spectral-norm
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500" CSharp spectral-norm
 
 run:
-	./bin/Release/net7.0/spectral-norm 5500
+	~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500
 
 mem:
-	/usr/bin/time -v  ./bin/Release/net7.0/spectral-norm 5500
+	/usr/bin/time -v  ~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ./bin/Release/net7.0/spectral-norm 5500
+	valgrind --tool=massif --stacks=yes  ~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500
 
 clean:
 	rm -f -r bin

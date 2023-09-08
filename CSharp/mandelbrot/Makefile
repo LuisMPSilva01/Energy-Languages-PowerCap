@@ -6,16 +6,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./bin/Release/net7.0/mandelbrot 16000" CSharp mandelbrot
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll.dll 16000" CSharp mandelbrot
 
 run:
-	./bin/Release/net7.0/mandelbrot 16000
+	~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000
 
 mem:
-	/usr/bin/time -v ./bin/Release/net7.0/mandelbrot 16000
+	/usr/bin/time -v ~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./bin/Release/net7.0/mandelbrot 16000
+	valgrind --tool=massif --stacks=yes ~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000
 
 clean:
 	rm -f -r bin

@@ -5,16 +5,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./bin/Release/net7.0/binary-trees 21" CSharp binary-trees
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21" CSharp binary-trees
 
 run:
-	./bin/Release/net7.0/binary-trees 21
+	~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21
 
 mem:
-	/usr/bin/time -v  ./bin/Release/net7.0/binary-trees 21
+	/usr/bin/time -v  ~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ./bin/Release/net7.0/binary-trees 21
+	valgrind --tool=massif --stacks=yes  ~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21
 
 clean:
 	rm -f -r bin

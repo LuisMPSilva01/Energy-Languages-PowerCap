@@ -5,13 +5,13 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./bin/Release/net7.0/fannkuch-redux 12" CSharp fannkuch-redux
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12" CSharp fannkuch-redux
 
 run:
-	./bin/Release/net7.0/fannkuch-redux 12
+	~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12
 
 mem:
-	/usr/bin/time -v  ./bin/Release/net7.0/fannkuch-redux 12
+	/usr/bin/time -v  ~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12
 
 clean:
 	rm -f -r bin
@@ -19,4 +19,4 @@ clean:
 	rm -f Program.cs
 	rm -f *.csproj
 valgrind:
-	valgrind --tool=massif --stacks=yes ./bin/Release/net7.0/fannkuch-redux 12
+	valgrind --tool=massif --stacks=yes ~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12

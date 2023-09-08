@@ -5,16 +5,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./bin/Release/net7.0/n-body 50000000" CSharp n-body
+	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000" CSharp n-body
 
 run:
-	./bin/Release/net7.0/n-body 50000000
+	~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000
 
 mem:
-	/usr/bin/time -v  ./bin/Release/net7.0/n-body 50000000
+	/usr/bin/time -v  ~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ./bin/Release/net7.0/n-body 50000000
+	valgrind --tool=massif --stacks=yes  ~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000
 
 clean:
 	rm -f -r bin

@@ -1,16 +1,24 @@
 compile:
-	cp knucleotide.fsharpcore-4.fsharpcore Program.fs
-	/usr/bin/dotnet build -c Release
+	~/.dotnet/dotnet new console -lang "F#" --force
+	cp knucleotide.fsharpcore-6.fsharpcore Program.fs
+	~/.dotnet/dotnet add reference ../../corefxlab/src/Microsoft.Experimental.Collections
+	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 0 < knucleotide-input25000000.txt" FSharp k-nucleotide
+	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < knucleotide-input25000000.txt" FSharp k-nucleotide
 
 run:
-	/usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 0 < knucleotide-input25000000.txt
+	/usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < knucleotide-input25000000.txt
 
 mem:
-	/usr/bin/time -v  /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 0 < knucleotide-input25000000.txt
+	/usr/bin/time -v  /usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < knucleotide-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/bin/dotnet ./bin/Release/netcoreapp1.1/tmp.dll 0 < knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes  /usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < knucleotide-input25000000.txt
+
+clean:
+	rm -f -r bin
+	rm -f -r obj
+	rm -f Program.fs
+	rm -f *.fsproj
