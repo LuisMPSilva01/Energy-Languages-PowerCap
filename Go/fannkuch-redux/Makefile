@@ -1,15 +1,18 @@
 compile:
-	/usr/bin/go build -o fannkuchredux.go_run
+	/opt/src/go1.20/go/bin/go build -o fannkuchredux.go-3.go_run fannkuchredux.go-3.go
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fannkuchredux.go_run 12" Go fannkuch-redux
+	sudo ../../RAPL/main "./fannkuchredux.go-3.go_run 12" Go fannkuch-redux
 
 run:
-	./fannkuchredux.go_run 12
+	./fannkuchredux.go-3.go_run 12
 
 mem:
-	/usr/bin/time -v ./fannkuchredux.go_run 12
+	/usr/bin/time -v ./fannkuchredux.go-3.go_run 12
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./fannkuchredux.go_run 12
+	valgrind --tool=massif --stacks=yes ./fannkuchredux.go-3.go_run 12
+
+clean:
+	rm -f *.go_run

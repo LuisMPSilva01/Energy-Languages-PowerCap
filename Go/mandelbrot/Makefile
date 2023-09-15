@@ -1,5 +1,5 @@
 compile:
-	/usr/bin/go build -o mandelbrot.go-3.go_run
+	/opt/src/go1.20/go/bin/go build -o mandelbrot.go-3.go_run mandelbrot.go-3.go
 
 measure:
 	sudo modprobe msr
@@ -13,3 +13,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./mandelbrot.go-3.go_run 16000
+
+clean:
+	rm -f *.go_run

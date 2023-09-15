@@ -1,5 +1,5 @@
 compile:
-	/usr/bin/go build -o spectralnorm.go-4.go_run
+	/opt/src/go1.20/go/bin/go build -o spectralnorm.go-4.go_run spectralnorm.go-4.go
 
 measure:
 	sudo modprobe msr
@@ -13,3 +13,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./spectralnorm.go-4.go_run 5500
+
+clean:
+	rm -f *.go_run

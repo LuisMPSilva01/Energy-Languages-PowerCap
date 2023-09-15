@@ -1,5 +1,5 @@
 compile:
-	/usr/bin/go build -o binarytrees.go-2.go_run
+	/opt/src/go1.20/go/bin/go build -o binarytrees.go-2.go_run binarytrees.go-2.go
 
 measure:
 	sudo modprobe msr
@@ -13,3 +13,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./binarytrees.go-2.go_run 21
+
+clean:
+	rm -f *.go_run

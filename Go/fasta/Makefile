@@ -1,15 +1,18 @@
 compile:
-	/usr/bin/go build -o fasta.go-3.go_run
+	/opt/src/go1.20/go/bin/go build -o fasta.go-2.go_run fasta.go-2.go
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fasta.go-3.go_run 25000000" Go fasta
+	sudo ../../RAPL/main "./fasta.go-2.go_run 25000000" Go fasta
 
 run:
-	./fasta.go-3.go_run 25000000
+	./fasta.go-2.go_run 25000000
 
 mem:
-	/usr/bin/time -v ./fasta.go-3.go_run 25000000
+	/usr/bin/time -v ./fasta.go-2.go_run 25000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./fasta.go-3.go_run 25000000
+	valgrind --tool=massif --stacks=yes ./fasta.go-2.go_run 25000000
+
+clean:
+	rm -f *.go_run

@@ -67,7 +67,11 @@ sudo apt install cmake
     rm -r otp_src_25.2.1
     rm -r otp_src_25.2.1.tar.gz 
 
-    #Racket
+    #GO
+    wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+    mkdir /opt/src/go1.20
+    sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.21.1.linux-amd64.tar.gz
+    #Racket1
     sudo apt install racket
 
     #Swift
