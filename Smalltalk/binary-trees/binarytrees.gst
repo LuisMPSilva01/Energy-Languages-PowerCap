@@ -1,74 +1,116 @@
-"* The Computer Language Shootout
-    http://shootout.alioth.debian.org/
+"* The Computer Language Benchmarks Game
+    https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
     contributed by Isaac Gouy
     modified by Eliot Miranda 
-    *reset*
+    reworked for multicore by Isaac Gouy
 *"!
 
+Smalltalk.Core defineClass: #BenchmarksGame
+	superclass: #{Core.Object}
+	indexedType: #none
+	private: false
+	instanceVariableNames: ''
+	classInstanceVariableNames: ''
+	imports: ''
+	category: ''!
 
-Object subclass: #TreeNode
-   instanceVariableNames: 'left right'
-   classVariableNames: ''
-   poolDictionaries: ''
-   category: 'Shootout'!
+Smalltalk defineClass: #TreeNode
+	superclass: #{Core.Object}
+	indexedType: #none
+	private: false
+	instanceVariableNames: 'left right '
+	classInstanceVariableNames: ''
+	imports: ''
+	category: 'benchmarks game'!
 
-!Tests class methodsFor: 'benchmarking'!
-binarytrees: n to: output
-   | minDepth maxDepth stretchDepth check longLivedTree iterations |
+!Core.BenchmarksGame class methodsFor: 'benchmarks game'!
+
+do: n
+   | checks depths iterations longLivedTree maxDepth minDepth
+     nprocs stretchDepth |
+
    minDepth := 4.
    maxDepth := minDepth + 2 max: n.
    stretchDepth := maxDepth + 1.
 
-   check := (TreeNode bottomUpTree: stretchDepth) itemCheck.
-   output
+   checks := (TreeNode bottomUpTree: stretchDepth) itemCheck.
+   Stdout
       nextPutAll: 'stretch tree of depth '; print: stretchDepth; tab;
-      nextPutAll: ' check: '; print: check; nl.
+      nextPutAll: ' check: '; print: checks; nl.
 
    longLivedTree := TreeNode bottomUpTree: maxDepth.
-   minDepth to: maxDepth by: 2 do: [:depth|
-      iterations := 1 bitShift: maxDepth - depth + minDepth.
 
-      check := 0.
-      1 to: iterations do: [:i|
-         check := check + (TreeNode bottomUpTree: depth) itemCheck
-         ].
-      output
-         print: iterations; tab;
-         nextPutAll: ' trees of depth '; print: depth; tab;
-         nextPutAll: ' check: '; print: check; nl
-      ].
+   depths := minDepth to: maxDepth by: 2.
+   iterations := depths collect: [:each| 1 bitShift: maxDepth - each + minDepth].
 
-   output
+      "for larger workloads split the work across multiple processes"
+   nprocs := (ExternalProcess shOne: 'nproc') asNumber.   
+   (nprocs > 1 and: [n > 16]) 
+      ifTrue: [
+         | workers |        
+         workers := MatriX.VirtualMachines new: nprocs.
+         [checks := workers do: self checkBlock with: depths with: iterations]
+            ensure: [workers release].
+      ]
+      ifFalse: [
+         checks := OrderedCollection new.
+         depths keysDo: [:j| checks add: 
+            (self checkBlock value: (depths at: j) value: (iterations at: j))].
+      ].        
+
+   checks keysDo: [:i|
+      Stdout
+         print: (iterations at: i); tab;
+         nextPutAll: ' trees of depth '; print: (depths at: i); tab;
+         nextPutAll: ' check: '; print: (checks at: i); nl
+   ].
+
+   Stdout
       nextPutAll: 'long lived tree of depth '; print: maxDepth; tab;
-      nextPutAll: ' check: '; print: longLivedTree itemCheck; nl! !
-
-!Tests class methodsFor: 'benchmark scripts'!
-binarytrees
-   self binarytrees: self arg to: self stdout.
-   ^''! !
+      nextPutAll: ' check: '; print: longLivedTree itemCheck; nl.
+   ^''! 
 
 
-!TreeNode methodsFor: 'initialize-release'!
-left: leftChild right: rightChild
-   left := leftChild.
-   right := rightChild! !
-
-!TreeNode methodsFor: 'accessing'!
-itemCheck
-   ^left isNil 
-      ifTrue: [1] ifFalse: [1 + left itemCheck + right itemCheck]! !
+checkBlock
+   ^[:d :m| 
+      | check |
+      check := 0.
+      1 to: m do: [:i| check := check + (TreeNode bottomUpTree: d) itemCheck].
+      check
+   ]! !
 
 
 !TreeNode class methodsFor: 'instance creation'!
+
+left: leftChild right: rightChild      
+   ^(super new) left: leftChild right: rightChild!
+
 bottomUpTree: anInteger
    ^(anInteger > 0) 
       ifTrue: [
          self 
             left: (self bottomUpTree: anInteger - 1) 
             right: (self bottomUpTree: anInteger - 1)  
-         ]
-      ifFalse: [self left: nil right: nil]! !
+      ]
+      ifFalse: [
+         self left: nil right: nil
+      ]! !
 
-!TreeNode class methodsFor: 'instance creation'!
-left: leftChild right: rightChild      
-   ^(super new) left: leftChild right: rightChild! !
+
+!TreeNode methodsFor: 'benchmarks game'!
+
+itemCheck
+   ^left isNil 
+      ifTrue: [1] ifFalse: [1 + left itemCheck + right itemCheck]! !
+
+!TreeNode methodsFor: 'instance creation'!
+
+left: leftChild right: rightChild
+   left := leftChild.
+   right := rightChild! !
+
+
+!Core.Stream methodsFor: 'benchmarks game'!
+
+nl
+   self nextPut: Character lf! !
