@@ -1,17 +1,6 @@
 # The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 # Contributed by Rick Branson
-# fixed by Isaac Gouy
-#
-# There is currently a bug in JRuby as of 11/16/2010 that causes
-# Marshal to read IOs in a blocking manner, which will cause this
-# script to hang.
-
-IS_THREADED = RUBY_PLATFORM == "java"
-
-if IS_THREADED
-  require "fcntl"
-end
 
 class Worker
   
@@ -24,11 +13,6 @@ class Worker
     
     @reader, @writer = IO.pipe
       
-    if IS_THREADED
-      @thread = Thread.new do
-        self.execute(&block)
-      end
-    else
       @p = Process.fork do
         @reader.close
         self.execute(&block)
@@ -36,7 +20,6 @@ class Worker
       end
       
       @writer.close
-    end
   end
   
   def execute(&block)

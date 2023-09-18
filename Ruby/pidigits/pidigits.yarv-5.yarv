@@ -1,9 +1,10 @@
 # The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 # contributed by Aaron Tavistock
+# fixed by SO Alex
 
 # Leverage GMP like all the other languages 
-require 'gmp'
+require_relative "gmp.so"
 
 # Helpers that improve readability
 class GMP::Z

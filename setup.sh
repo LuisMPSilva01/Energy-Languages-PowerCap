@@ -71,10 +71,11 @@ sudo apt install cmake
     wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
     mkdir /opt/src/go1.20
     sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.21.1.linux-amd64.tar.gz
-    #Racket1
+
+    #Racket
     sudo apt install racket
 
-    #Swift
+    #Swift - só o pi-digits não funciona por causa da biblioteca GMP
     sudo apt-get install swift
     sudo apt install clang libicu-dev libxml2 git libgmp-dev
     sudo apt install binutils gnupg2 libc6-dev libcurl4 libedit2 libgcc-9-dev libsqlite3-0 libstdc++-9-dev libxml2 libz3-dev pkg-config tzdata zlib1g-dev
@@ -84,3 +85,9 @@ sudo apt install cmake
     rm -rf *.gz swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04/
     echo 'export PATH=/opt/swift/usr/bin:$PATH' >> ~/.bashrc
     source ~/.bashrc
+
+    #Ruby
+    sudo apt install rbenv
+    sudo apt-get install -y libyaml-dev
+    rbenv install 3.2.0
+    rbenv global 3.2.0
