@@ -91,3 +91,17 @@ sudo apt install cmake
     sudo apt-get install -y libyaml-dev
     rbenv install 3.2.0
     rbenv global 3.2.0
+
+    #Ocaml
+    sudo apt install opam
+    opam init --disable-sandboxing --bare
+    eval $(opam env)
+    opam switch create 5.0.0
+    eval $(opam env)
+    opam install re
+    opam install gmp
+    opam install bigarray
+    opam install ocamlfind
+
+    
+

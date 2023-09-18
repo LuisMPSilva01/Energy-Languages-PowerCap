@@ -1,6 +1,6 @@
 compile:
 	cp regexredux.ocaml-2.ocaml regexredux.ocaml-2.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa str.cmxa regexredux.ocaml-2.ml -o regexredux.ocaml-2.ocaml_run
+	ocamlfind ocamlopt -package re -linkpkg -I +str -I +unix -o regexredux.ocaml-2.ocaml_run unix.cmxa str.cmxa regexredux.ocaml-2.ml
 	rm regexredux.ocaml-2.ml
 measure:
 	sudo modprobe msr
