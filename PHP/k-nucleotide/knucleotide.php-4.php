@@ -1,7 +1,7 @@
-<?php
+<?
 /* 
    The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    contributed by Damien Bonvillain
    fixed by Isaac Gouy
@@ -148,4 +148,3 @@ function freq_name_comparator($a, $b) {
    if ($a == $b) return 0;
    return  ($a < $b) ? 1 : -1;
 }
-?>

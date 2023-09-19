@@ -1,6 +1,6 @@
 <?php
 /* The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    regex-dna program contributed by Danny Sauer
    modified by Josh Goldfoot

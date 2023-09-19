@@ -111,5 +111,13 @@ sudo apt install cmake
     \curl -L https://install.perlbrew.pl | bash
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
-    
+
+    #PHP - Versão instalada incorreta
+    sudo apt update && apt upgrade -y
+    sudo add-apt-repository ppa:ondrej/php
+    sudo apt update
+    #sudo apt install php8.2 --> não funciona
+    sudo apt-get install php #v.8.1 por default
+
+
 
