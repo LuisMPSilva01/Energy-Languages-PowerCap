@@ -119,5 +119,16 @@ sudo apt install cmake
     #sudo apt install php8.2 --> não funciona
     sudo apt-get install php #v.8.1 por default
 
+    #Python
+    cd /usr/src 
+    sudo wget https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz 
+    sudo tar xzf Python-3.11.1.tgz 
+    cd Python-3.11.1 
+    sudo ./configure --enable-optimizations 
+    sudo make altinstall 
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 
+    cd
+    
+
 
 
