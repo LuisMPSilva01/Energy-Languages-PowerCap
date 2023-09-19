@@ -1,6 +1,6 @@
 compile:
 	cp regexredux.fpascal-2.fpascal regexredux.fpascal-2.pas
-	/usr/local/src/fpc-3.0.2.x86_64-linux/bin/fpc -FuInclude/fpascal -XXs -O4 -Tlinux -oFPASCAL_RUN regexredux.fpascal-2.pas
+	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Fl/usr/lib/x86_64-linux-gnu -oFPASCAL_RUN regexredux.fpascal-2.pas
 	mv FPASCAL_RUN regexredux.fpascal-2.fpascal_run
 	rm regexredux.fpascal-2.pas
 measure:

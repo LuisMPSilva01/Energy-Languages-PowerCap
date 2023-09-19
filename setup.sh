@@ -103,5 +103,9 @@ sudo apt install cmake
     opam install bigarray
     opam install ocamlfind
 
+    #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem
+    sudo apt install fpc
+    sudo apt-get install libpcre3-dev
+
     
 

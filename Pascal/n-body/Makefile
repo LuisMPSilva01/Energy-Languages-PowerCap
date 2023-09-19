@@ -1,6 +1,6 @@
 compile:
 	cp nbody.fpascal nbody.pas
-	/usr/local/src/fpc-3.0.2.x86_64-linux/bin/fpc -FuInclude/fpascal -XXs -O4 -Tlinux -CfSSE3 -oFPASCAL_RUN nbody.pas
+	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux  -oFPASCAL_RUN nbody.pas
 	mv FPASCAL_RUN nbody.fpascal_run
 	rm nbody.pas
 
