@@ -107,5 +107,9 @@ sudo apt install cmake
     sudo apt install fpc
     sudo apt-get install libpcre3-dev
 
+    #Perl
+    \curl -L https://install.perlbrew.pl | bash
+    source ~/perl5/perlbrew/etc/bashrc
+    perlbrew install 5.36.0
     
 

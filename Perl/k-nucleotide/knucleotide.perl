@@ -1,5 +1,5 @@
 #  The Computer Language Benchmarks Game
-#  http://benchmarksgame.alioth.debian.org/
+#  https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
 #  contributed by Karl FORNER
 # (borrowed fasta loading routine from Kjetil Skotheim, 2005-11-29)
