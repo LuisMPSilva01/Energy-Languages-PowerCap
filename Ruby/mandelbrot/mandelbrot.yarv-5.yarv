@@ -1,5 +1,5 @@
 # The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 #
 #  contributed by Karl von Laudermann
 #  modified by Jeremy Echols
@@ -7,6 +7,9 @@
 #  modified by Joseph LaFata
 #  modified by Peter Zotov
 #  parallelised by Scott Leggett
+#  Thread.exclusive deprecated
+
+require 'thread'
 
 module MiniParallel
     class Worker
@@ -42,13 +45,14 @@ module MiniParallel
     def self.work_in_processes(array, count, &block)
         index = -1
         results, threads = [], []
+        mx = Mutex.new
 
         workers = create_workers(array, count, &block)
 
         workers.each do |worker|
             threads << Thread.new do
               loop do
-                Thread.exclusive{ index += 1 }
+                mx.synchronize do index += 1 end                  
                 break if index >= array.size
                 results[index] = worker.work(index)
               end
@@ -154,19 +158,7 @@ def row y
 end
 
 if MiniParallel.core_count > 1
-    if RUBY_PLATFORM == 'java'
-        threads = []
-        out = []
-        (0...Size).each do |w|
-            threads << Thread.new do
-                out[w] = row w
-            end
-        end
-        threads.all?(&:join)
-        print out.join
-    else
-        print MiniParallel.map((0...Size).to_a){|y|row y}.join
-    end
+    print MiniParallel.map((0...Size).to_a){|y|row y}.join
 else
     (0...Size).each{|i|print row i}
 end

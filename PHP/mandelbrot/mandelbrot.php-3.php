@@ -1,7 +1,7 @@
-<?php
+<?
 /* 
    The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    contributed by Thomas GODART (based on Greg Buchholz's C program)
    multicore by anon
@@ -113,5 +113,3 @@ for($i = 0; $i < $shsize; $i+=$step) {
    echo shmop_read($shmop, $i, $step);
 }
 shmop_delete($shmop);
-?>
-

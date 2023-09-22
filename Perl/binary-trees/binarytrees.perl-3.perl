@@ -1,77 +1,103 @@
 # The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org/
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 #
 # contributed by Emanuele Zeppieri
-# modified by Christian Walde (threads)
 # *reset* by A. Sinan Unur
+# thread and depth tweaks by Richard Leach
 
 use threads;
+my @threads;
+
+use threads::shared;
+my @tasks :shared;
+my @checks :shared;
+my $phase :shared;
 
 run( @ARGV );
 
 sub bottomup_tree {
-    my $depth = shift;
-    return 0 unless $depth;
-    --$depth;
-    [ bottomup_tree($depth), bottomup_tree($depth) ];
+    my $depth = $_[0];
+    (--$depth)
+    ? [ bottomup_tree($depth), bottomup_tree($depth) ]
+    : []
+    ;
 }
 
 sub check_tree {
-    return 1 unless ref $_[0];
-    1 + check_tree($_[0][0]) + check_tree($_[0][1]);
+    1 +
+    ( ( $_[0]->@* ) ? check_tree($_[0][0]) + check_tree($_[0][1]) : 2 )
+    ;
 }
 
 sub stretch_tree {
-    my $stretch_depth = shift;
-    my $stretch_tree = bottomup_tree($stretch_depth);
+    my ($stretch_depth) = @_;
     print "stretch tree of depth $stretch_depth\t check: ",
-    check_tree($stretch_tree), "\n";
+    check_tree( bottomup_tree($stretch_depth) ), "\n";
+}
+
+sub num_cpus {
+   open my $fh, '</proc/cpuinfo' or return 4;
+   my $cpus;
+   while(<$fh>) {
+      $cpus ++ if /^processor\s+:/;
+   }
+   return $cpus;
 }
 
 sub depth_iteration {
-    my ( $depth, $max_depth, $min_depth ) = @_;
-
-    my $iterations = 2**($max_depth - $depth + $min_depth);
-    my $check      = 0;
-
-    foreach ( 1 .. $iterations ) {
-        $check += check_tree( bottomup_tree( $depth ) );
+    until ($phase) { sleep 1; }
+    while ( scalar(@tasks) > 0) {
+    my ($depth, $iterations, $check) = (shift @tasks, shift @tasks, 0);
+        foreach (1..$iterations) {
+            $check += check_tree( bottomup_tree($depth) );
+        }
+        $checks[$depth] += $check;
     }
-
-    return ( $depth => [ $iterations, $depth, $check ] );
 }
 
 sub run {
-    my $max_depth = shift;
-    my $min_depth = 4;
-
+    my ($max_depth, $min_depth) = (shift, 4);
     $max_depth = $min_depth + 2 if $min_depth + 2 > $max_depth;
+
+    my %depths;
+    my $cpu_count = num_cpus();
+
+    $phase = 0;
 
     stretch_tree( $max_depth + 1 );
 
-    my $longlived_tree = bottomup_tree( $max_depth );
+    for ( 1 .. $cpu_count - 1){
+        push @threads, threads->create(
+            \&depth_iteration);
+    }
 
-    my @results;
-    for ( my $depth = $min_depth ; $depth <= $max_depth ; $depth += 2 ) {
-        while ( 1 ) {
-            last if threads->list < 4;
-            push @results, $_->join for threads->list( threads::joinable );
+    my $longlived_tree = bottomup_tree($max_depth);
+
+    for ( my $depth = $min_depth; $depth <= $max_depth; $depth += 2 ) {
+        my $iterations = 2**($max_depth - $depth + $min_depth);
+
+        my $per_thread_iterations = int($iterations / $cpu_count) || 1;
+        my $iterations_allocated = 0;
+
+        while ($iterations_allocated < $iterations) {
+            push @tasks, ( $depth, $per_thread_iterations );
+            $iterations_allocated += $per_thread_iterations;
         }
-        threads->create(
-            { 'context' => 'list', 'stack_size' => 64 },
-            sub { depth_iteration( $depth, $max_depth, $min_depth ) }
-        );
-    }
-    while ( threads->list ) {
-        push @results, $_->join for threads->list( threads::joinable );
+
+        $depths{$depth}{iterations} = $iterations;
     }
 
-    my %results = @results;
-    for my $key ( sort { $a <=> $b } keys %results ) {
-        my ( $iterations, $depth, $check ) = @{ $results{$key} };
-        print $iterations, "\t trees of depth $depth\t check: ", $check, "\n";
+    $phase = 1;
+    depth_iteration();
+
+    for (@threads) {
+        $_->join;
+    }
+
+    for my $depth ( sort { $a <=> $b } keys %depths ) {
+        print $depths{$depth}{iterations}, "\t trees of depth $depth\t check: ", $checks[$depth], "\n";
     }
 
     print "long lived tree of depth $max_depth\t check: ",
-        check_tree( $longlived_tree ), "\n";
+        check_tree($longlived_tree), "\n"
 }

@@ -1,6 +1,6 @@
 <?php 
 /* The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    contributed by Oleksii Prudkyi
    port from pidigits.lua-5.lua (Mike Pall, Wim Couwenberg)

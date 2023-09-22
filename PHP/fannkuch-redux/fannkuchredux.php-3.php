@@ -1,11 +1,12 @@
 <?php 
 /* The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
    
    multicore version 
    algorithm is based on Java 6 source code by Oleg Mazurov
    fork/shared mem is based on mandelbrot.php-3 
    contributed by Oleksii Prudkyi
+   work-around GH-7899 regression by therealgaxbo
 */
 
 $n = (int) $argv[1];
@@ -130,7 +131,7 @@ for ($proc = 0; $proc < $procs; ++$proc, $index += $index_step ) {
          }
       }
    }
-   $written_size = shmop_write($shmop, pack("ii", $maxflips, $chksum), $proc * 16);
+   $written_size = shmop_write($shmop, pack("PP", $maxflips, $chksum), $proc * 16);
 
    if($pid === 0) {
       exit(0);
@@ -147,7 +148,7 @@ $offset = 0;
 $res = 0;
 $chk = 0;
 for ($proc = 0; $proc < $procs; ++$proc, $offset += 16 ) {
-   list($v, $chk_v) = array_values(unpack('ia/ib', shmop_read($shmop, $offset, $written_size)));
+   list($v, $chk_v) = array_values(unpack('Pa/Pb', shmop_read($shmop, $offset, $written_size)));
    $res = max( $res, $v );
    $chk += $chk_v;
 }

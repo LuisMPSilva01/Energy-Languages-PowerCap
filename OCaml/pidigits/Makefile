@@ -1,8 +1,8 @@
 compile:
 	cp pidigits.ocaml-3.ocaml pidigits.ocaml-3.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 -I /usr/local/lib/ocaml/gmp gmp.cmxa pidigits.ocaml-3.ml -o pidigits.ocaml-3.ocaml_run
+	ocamlfind ocamlopt -o pidigits.ocaml-3.ocaml_run -I +unix -I /usr/local/lib/ocaml/gmp -package gmp -linkpkg -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa gmp.cmxa pidigits.ocaml-3.ml
 	rm pidigits.ocaml-3.ml
-	
+
 xmeasure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "./pidigits.ocaml-3.ocaml_run 2000" OCaml pidigits

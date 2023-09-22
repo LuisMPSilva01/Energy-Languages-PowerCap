@@ -2,16 +2,15 @@ Program regexredux;
 
 (*
   The Computer Language Benchmarks Game
-  http://benchmarksgame.alioth.debian.org
+  https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
   contributed by Vitaly Trifonov
   adapted for 'redux' by Peter Blackman
+  fixes for fpc 3.0 by Michal Stransky
 *)
 
 {$mode objfpc}
-uses cthreads, mtprocs, sysutils;
-
-function memcpy(__dest:pointer; __src:pointer; __n:longint):pointer;cdecl; external 'libc';
+uses sysutils;
 
 
 (******************************    pcre wrap   *****************************)
@@ -71,14 +70,9 @@ var
       'agggtaa[cgt]|[acg]ttaccct'
     );
 
-  counts : array[1..9] of Longint = (0,0,0,0,0,0,0,0,0);
-  sseq   : PChar;
-  seqLen : longint;
-
-
 
 (* Count match with pattern of regexp in seq buffer. *)
-function count( const pattern : PChar): Longint;
+function count( const pattern, seq: PChar; len: Integer ): Longint;
 var
   cre: pcre;
   cre_ex: pcre_extra;
@@ -91,28 +85,28 @@ begin
   cre_ex := pcre_study(cre, PCRE_STUDY_JIT_COMPILE, @err);
   m[1] := 0;
 
-  while pcre_exec(cre,   cre_ex, sseq, seqlen,   m[1], 0, m, 3) >= 0 do
+  while pcre_exec(cre,   cre_ex, seq, len,   m[1], 0, m, 3) >= 0 do
     ind += 1;
 
   count := ind
 end;
 
-
-procedure split_count (i : ptrint; Data: Pointer; Item: TMultiThreadProcItem);
+function split_count ( const ipattern, seq: PChar; len: Integer ): Longint;
 var
   split: PChar;
   vcount: Longint;
+  pattern : Pchar;
 begin
-  split := strscan(patterns[i], '|');
+  pattern := StrNew(ipattern);
+  split := strscan(pattern, '|');
   Byte(split^) := 0;
 
-  vcount := count(patterns[i]);
-  vcount += count(@split[1]);
+  vcount := count(pattern, seq, len);
+  vcount += count(@split[1], seq, len);
 
-  split^ := '|';
-  counts[i] := vcount;
+  StrDispose(pattern);
+  split_count := vcount
 end;
-
 
 (* Substitute pattern of regexp with repl, return new length. *)
 function subst( const pattern, repl: PChar; var seq: PChar; len: Integer ): Longint;
@@ -135,7 +129,7 @@ begin
     size += size_repl - m[1] + m[0];
   size += len;
 
-  GetMem(newSeq, SizeOf(Char)*size);
+  GetMem(newSeq, SizeOf(Char)*(size+1));
 
 (* Do substitute. *)
   m[1] := 0; pos := 0;
@@ -146,7 +140,7 @@ begin
     while pcre_exec(cre,   cre_ex, seq, len,   m[1], 0, m, 3) >= 0 do
     begin
       bsize := m[0] - pos;
-      memcpy(otmpseq, @seq[pos], bsize);
+      strlcopy(otmpseq, @seq[pos], bsize);
 
       otmpseq := @otmpseq[bsize];
       pos := m[1];
@@ -157,7 +151,7 @@ begin
     while pcre_exec(cre,   cre_ex, seq, len,   m[1], 0, m, 3) >= 0 do
     begin
       bsize := m[0] - pos;
-      memcpy(otmpseq, @seq[pos], bsize);
+      strlcopy(otmpseq, @seq[pos], bsize);
 
       otmpseq := @otmpseq[bsize];
       pos := m[1];
@@ -173,40 +167,35 @@ end;
 
 
 var
-  i,slen    : LongInt;
+  i, seqLen : Longint;
   readLen   : Longint = 0;
-  maxSeqLen : Longint = 55000000;
-  infile    : file;
+  maxSeqLen : Longint = 6000000;
+  seq       : PChar;
 
 begin
-  GetMem(sseq, SizeOf(Char)*(maxSeqLen+1));
+  GetMem(seq, SizeOf(Char)*(maxSeqLen+1));
 
 (* Read FASTA format file from stdin and count length. *)
-    assign(infile, '/dev/stdin');
-    reset(infile, 1);
-    blockread (infile, sseq^, maxSeqLen, slen);
-    readlen += slen;
-
-    while (slen > 0) do
+  while not eof do
+  begin
+    if readLen = maxSeqLen then
     begin
-        maxSeqLen +=30000000;
-        sseq := ReAllocMem(sseq, SizeOf(Char)*(maxSeqLen+1));
-        blockread (infile, sseq[readlen], maxSeqLen, slen);
-        readlen += slen;
+      maxSeqLen += 3000000;
+      seq := ReAllocMem(seq, SizeOf(Char)*(maxSeqLen+1));
     end;
+    read(seq[readLen]);
+    readLen += 1
+  end;
+  Byte(seq[readLen]) := 0; //end read data
 
-    close (infile);
-    Byte(sseq[readLen]) := 0; //end read data
 
 (* Remove FASTA sequence descriptions and all linefeed characters.  *)
-  seqLen := subst('>.*|\n', '', sseq, readLen);
+  seqLen := subst('>.*|\n', '', seq, readLen);
 
 
 (* Count all matches of patterns[i] in  seq buffer. *)
-  ProcThreadPool.DoParallel(@split_count,  1, length (patterns), nil);
-
-  for i := 1 to length (patterns) do
-    writeln (patterns[i], ' ', counts[i]);
+  for i := 1 to length (patterns) do 
+    writeln(patterns[i], ' ', split_count(patterns[i], seq, seqLen));
 
   writeln;
   writeln(readLen);
@@ -214,9 +203,9 @@ begin
 
 (* All IUB substitutes. *)
   for i := 1 to length(patt) do
-    seqLen := subst(patt[i], repl[i], sseq, seqLen);
+    seqLen := subst(patt[i], repl[i], seq, seqLen);
 
   writeln(seqLen);
 
-  FreeMem(sseq);
+  FreeMem(seq);
 end.

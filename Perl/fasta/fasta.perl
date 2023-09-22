@@ -1,5 +1,5 @@
 # The Computer Language Benchmarks game
-# http://benchmarksgame.alioth.debian.org/
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 #
 # contributed by Barry Walsh
 

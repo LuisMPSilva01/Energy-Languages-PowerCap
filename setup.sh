@@ -104,10 +104,10 @@ sudo apt install cmake
     #sudo mkdir -p /opt/src/java-libs
     #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
 
-    #Racket1
+    #Racket
     sudo apt install racket
 
-    #Swift
+    #Swift - só o pi-digits não funciona por causa da biblioteca GMP
     sudo apt-get install swift
     sudo apt install clang libicu-dev libxml2 git libgmp-dev
     sudo apt install binutils gnupg2 libc6-dev libcurl4 libedit2 libgcc-9-dev libsqlite3-0 libstdc++-9-dev libxml2 libz3-dev pkg-config tzdata zlib1g-dev
@@ -117,3 +117,50 @@ sudo apt install cmake
     rm -rf *.gz swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04/
     echo 'export PATH=/opt/swift/usr/bin:$PATH' >> ~/.bashrc
     source ~/.bashrc
+
+    #Ruby
+    sudo apt install rbenv
+    sudo apt-get install -y libyaml-dev
+    rbenv install 3.2.0
+    rbenv global 3.2.0
+
+    #Ocaml
+    sudo apt install opam
+    opam init --disable-sandboxing --bare
+    eval $(opam env)
+    opam switch create 5.0.0
+    eval $(opam env)
+    opam install re
+    opam install gmp
+    opam install bigarray
+    opam install ocamlfind
+
+    #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem
+    sudo apt install fpc
+    sudo apt-get install libpcre3-dev
+
+    #Perl
+    \curl -L https://install.perlbrew.pl | bash
+    source ~/perl5/perlbrew/etc/bashrc
+    perlbrew install 5.36.0
+
+    #PHP - Versão instalada incorreta
+    sudo apt update && apt upgrade -y
+    sudo add-apt-repository ppa:ondrej/php
+    sudo apt update
+    #sudo apt install php8.2 --> não funciona
+    sudo apt-get install php #v.8.1 por default
+
+    #Python
+    cd /usr/src 
+    sudo wget https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz 
+    sudo tar xzf Python-3.11.1.tgz 
+    cd Python-3.11.1 
+    sudo ./configure --enable-optimizations 
+    sudo make altinstall 
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 
+    cd
+    
+
+
+

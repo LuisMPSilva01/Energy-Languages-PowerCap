@@ -1,9 +1,9 @@
 # The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org/
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 #
 # Contributed by Aaron Tavistock
 
-ALU = 'GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA'
+ALU = 'GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA'.freeze
 
 IUB = [
   ['a', 0.27],
@@ -21,27 +21,30 @@ IUB = [
   ['V', 0.02],
   ['W', 0.02],
   ['Y', 0.02],
-]
+].freeze
 
 HOMOSAPIENS = [
   ['a', 0.3029549426680],
   ['c', 0.1979883004921],
   ['g', 0.1975473066391],
   ['t', 0.3015094502008],
-]
+].freeze
 
 class RandomSequence
 
-  GR_IM = 139968.0
-  GR_IA = 3877.0
-  GR_IC = 29573.0
+  MULTIPLIER = 3877
+  INCREMENT = 29573
+  MODULUS = 139968
+  FLOAT_MODULUS = MODULUS.to_f
+
+  ROW_SIZE = 60
 
   attr_reader :value
 
   def initialize(seed_value, map, size)
     @size = size
     @value = seed_value
-    @output_buffer = ''
+    @output = ' ' * ROW_SIZE
     generate_map_value_method(map)
   end
 
@@ -49,10 +52,13 @@ class RandomSequence
     puts ">#{label}"
     full_row_count, last_row_size = @size.divmod(60)
     while (full_row_count > 0)
-      puts output_row(60)
+      puts output_row(ROW_SIZE)
       full_row_count -= 1
     end
-    puts output_row(last_row_size) if last_row_size > 0
+    if last_row_size > 0
+      @output = ' '*last_row_size
+      puts output_row(last_row_size)
+    end
   end
 
   private
@@ -67,22 +73,22 @@ class RandomSequence
     end
     conditions[-1] = "#{map.last.first.ord}" # Substitute last condition for fixed value
     conditions << ')' * (map.size - 1)
-
+ 
     instance_eval %[def map_value(value); #{conditions.join}; end]
   end
 
   def next_item
-    @value = (@value * GR_IA + GR_IC) % GR_IM
-    @value / GR_IM
+    @value = (@value * MULTIPLIER + INCREMENT) % MODULUS
+    @value.to_f / FLOAT_MODULUS
   end
 
   def output_row(size)
-    @output_buffer.clear
-    while (size > 0)
-      @output_buffer << map_value(next_item)
-      size -= 1
+    idx = 0
+    while idx < size
+      @output.setbyte(idx, map_value(next_item))
+      idx += 1
     end
-    @output_buffer
+    @output
   end
 
 end

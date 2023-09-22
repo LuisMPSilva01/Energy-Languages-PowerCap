@@ -1,6 +1,6 @@
 <?php
 /* The Computer Language Benchmarks Game
-   http://benchmarksgame.alioth.debian.org/
+   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
    contributed by Wing-Chung Leung
    modified by Isaac Gouy

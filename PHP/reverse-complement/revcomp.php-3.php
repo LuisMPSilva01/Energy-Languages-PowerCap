@@ -1,6 +1,6 @@
 <?php
 # The Computer Language Benchmarks Game
-# http://benchmarksgame.alioth.debian.org
+# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 #
 # contributed by Yuriy Moskalchuk
 
@@ -34,7 +34,7 @@ $headers = $workers = [];
 $seq = '';
 while (true) {
     $line = fgets(STDIN);
-    if ($line[0] === '>') {
+    if ($line && $line[0] === '>') {
         $headers[] = $line;
         if (!empty($seq)) {
             work();

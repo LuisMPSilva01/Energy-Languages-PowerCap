@@ -1,4 +1,4 @@
-compile:i
+compile:
 
 
 measure:

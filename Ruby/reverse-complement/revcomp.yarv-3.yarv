@@ -13,16 +13,19 @@ def process_segment(segment)
     'WSTAACGRYMKVHDBNTAACGRYMKVHDBN'
   )
 
-  results = [">#{header}"]
+  sequence_length = sequence.length
+  results_size = sequence_length + sequence_length / 60 + header.length + 4
+  results = String.new(">#{header}\n", capacity: results_size)
 
   idx = 0
-  length = sequence.length
-  while idx < length
+  while idx < sequence_length
     results << sequence[idx,60]
+    results << "\n"
     idx += 60
   end
 
-  results.join("\n")
+  results.freeze
+  results
 end
 
 def forking_worker(segment)
@@ -31,8 +34,8 @@ def forking_worker(segment)
   pid = Process.fork do
     begin
       reader.close
-      results = process_segment(segment)
-      Marshal.dump(results, writer)
+      results = original_process_segment(segment)
+      writer.write(results)
     ensure
       writer.close
     end
@@ -40,7 +43,7 @@ def forking_worker(segment)
 
   writer.close
   begin
-    results = Marshal.load(reader)
+    results = reader.read
   ensure
     reader.close
   end
@@ -49,16 +52,18 @@ def forking_worker(segment)
   results
 end
 
-threads = []
-$stdin.each_line('>') do |segment|
-  next if segment.length < 2
+if RUBY_PLATFORM != 'java'
+  class << self
+    alias_method :original_process_segment, :process_segment
+    alias_method :process_segment, :forking_worker
+  end
+end
 
+threads = []
+STDIN.each_line('>').lazy.each do |segment|
+  next if segment.length < 2
   threads << Thread.new do
-    if RUBY_PLATFORM == 'java'
-      Thread.current[:output] = process_segment(segment)
-    else
-      Thread.current[:output] = forking_worker(segment)
-    end
+    Thread.current[:output] = process_segment(segment)
   end
 end
 threads.each(&:join)

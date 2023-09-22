@@ -1,6 +1,6 @@
 compile:
 	cp fannkuchredux.fpascal fannkuchredux.pas
-	/usr/local/src/fpc-3.0.2.x86_64-linux/bin/fpc -FuInclude/fpascal -XXs -O4 -Tlinux -oFPASCAL_RUN fannkuchredux.pas
+	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux  -oFPASCAL_RUN fannkuchredux.pas
 	mv FPASCAL_RUN fannkuchredux.fpascal_run
 	rm fannkuchredux.pas
 measure:
