@@ -1,16 +1,15 @@
 compile:
-	cp binarytrees.ghc binarytrees.hs
-	/usr/local/src/ghc-8.0.2/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -funbox-strict-fields binarytrees.hs -o binarytrees.ghc_run
+	/opt/src/ghc9.4.4/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -fno-cse -package ghc-compact binarytrees.ghc-8.hs -o binarytrees.ghc-8.ghc_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./binarytrees.ghc_run +RTS -N4 -K128M -H -RTS 21" Haskell binary-trees
+	sudo ../../RAPL/main "./binarytrees.ghc-8.ghc_run +RTS -N4 -K128M -H -RTS 21" Haskell binary-trees
 
 run:
-	./binarytrees.ghc_run +RTS -N4 -K128M -H -RTS 21
+	./binarytrees.ghc-8.ghc_run +RTS -N4 -K128M -H -RTS 21
 
 mem:
-	/usr/bin/time -v  ./binarytrees.ghc_run +RTS -N4 -K128M -H -RTS 21
+	/usr/bin/time -v  ./binarytrees.ghc-8.ghc_run +RTS -N4 -K128M -H -RTS 21
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ./binarytrees.ghc_run +RTS -N4 -K128M -H -RTS 21
+	valgrind --tool=massif --stacks=yes  ./binarytrees.ghc-8.ghc_run +RTS -N4 -K128M -H -RTS 21

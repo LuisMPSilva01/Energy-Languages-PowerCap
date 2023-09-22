@@ -1,6 +1,6 @@
 /**
  * The Computer Language Benchmarks Game
- * http://benchmarksgame.alioth.debian.org/
+ * https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
  *
  * based on Jarkko Miettinen's Java program
  * contributed by Tristan Dupont

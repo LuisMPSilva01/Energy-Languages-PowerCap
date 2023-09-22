@@ -1,14 +1,17 @@
 compile:
-	/usr/local/src/jdk1.8.0_121/bin/javac -d . -cp .:/usr/local/src/java-libs/fastutil-7.0.12.jar knucleotide.java
+	/usr/lib/jvm/jdk-20/bin/javac -d . -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide.java
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/local/src/jdk1.8.0_121/bin/java  -cp .:/usr/local/src/java-libs/fastutil-7.0.12.jar knucleotide 0 < knucleotide-input25000000.txt" Java k-nucleotide
+	sudo ../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < knucleotide-input25000000.txt" Java k-nucleotide
 
 run:
-	/usr/local/src/jdk1.8.0_121/bin/java  -cp .:/usr/local/src/java-libs/fastutil-7.0.12.jar knucleotide 0 < knucleotide-input25000000.txt
+	/usr/lib/jvm/jdk-20/bin/java  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < knucleotide-input25000000.txt
 
 mem:
-	/usr/local/src/jdk1.8.0_121/bin//usr/bin/time -v  java  -cp .:/usr/local/src/java-libs/fastutil-7.0.12.jar knucleotide 0 < knucleotide-input25000000.txt
+	/usr/bin/time -v /usr/lib/jvm/jdk-20/bin/java  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < knucleotide-input25000000.txt
 
 valgrind:
-	/usr/local/src/jdk1.8.0_121/bin/valgrind --tool=massif --stacks=yes  java  -cp .:/usr/local/src/java-libs/fastutil-7.0.12.jar knucleotide 0 < knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java   -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < knucleotide-input25000000.txt
+
+clean:
+	rm -f *.class

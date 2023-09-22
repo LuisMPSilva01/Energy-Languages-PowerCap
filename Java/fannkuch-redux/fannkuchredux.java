@@ -1,6 +1,6 @@
 /*
  * The Computer Language Benchmarks Game
- * http://benchmarksgame.alioth.debian.org/
+ * https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
  *
  * Contributed by Oleg Mazurov, June 2010
  *

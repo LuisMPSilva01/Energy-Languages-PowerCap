@@ -1,14 +1,16 @@
 {-
 The Computer Language Benchmarks Game
-http://benchmarksgame.alioth.debian.org/
+https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
 contributed by Louis Wasserman
+GHC 9.0, 9.2 fix by Artem Pelenitsyn
 -}
 
 import Control.Monad
 import Foreign
 import Data.ByteString.Internal
 import System.IO
+import System.IO.Unsafe (unsafeDupablePerformIO)
 
 data Buf = Buf !Int !Int !(Ptr Word8) 
 
@@ -39,14 +41,14 @@ clearBuf (Buf _ lB pB) = Buf 0 lB pB
 
 main = allocaArray 82 $ \ line ->
   let go !buf = do
-      !m <- hGetBuf stdin line 82
-      if m == 0 then revcomp buf else do
-        findChar line m (c2w '>') 
-          (putBuf line m buf go)
-          (\ end -> do
-            putBuf line end buf revcomp
-            putBuf (line +* end) (m - end) (clearBuf buf)
-              go)
+        !m <- hGetBuf stdin line 82
+        if m == 0 then revcomp buf else do
+          findChar line m (c2w '>') 
+            (putBuf line m buf go)
+            (\ end -> do
+              putBuf line end buf revcomp
+              putBuf (line +* end) (m - end) (clearBuf buf)
+                go)
     in withBuf go
 
 (+*) = advancePtr
@@ -56,7 +58,7 @@ comps = Prelude.zipWith (\ a b -> (fromEnum a, c2w b)) "AaCcGgTtUuMmRrYyKkVvHhDd
   "TTGGCCAAAAKKYYRRMMBBDDHHVV"
 
 ca :: Ptr Word8
-ca = inlinePerformIO $ do
+ca = unsafeDupablePerformIO $ do
        !a <- mallocArray 200
        mapM_ (\ i -> pokeByteOff a (fromIntegral i) i ) [0..199::Word8]
        mapM_ (uncurry (pokeByteOff a)) comps
@@ -87,4 +89,3 @@ revcomp (Buf lBuf _ pBuf) = when (lBuf > 0) $ ca `seq`
       hPutBuf stdout pBuf begin'
       rc (pBuf +* begin') (pBuf +* (lBuf - 1))
       hPutBuf stdout (pBuf +* begin') (lBuf - begin - 1)
-    

@@ -71,6 +71,39 @@ sudo apt install cmake
     wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
     mkdir /opt/src/go1.20
     sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.21.1.linux-amd64.tar.gz
+
+    #Haskell
+    wget https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-x86_64-deb11-linux.tar.xz
+    tar -xvf ghc-9.4.4-x86_64-deb11-linux.tar.xz
+    cd ghc-9.4.4-x86_64-unknown-linux/
+    ./configure --prefix=/opt/src/ghc9.4.4
+    sudo make install
+    cd ..
+    rm -r ghc-9.4.4-x86_64-unknown-linux
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.1/llvm-13.0.1.src.tar.xz
+    tar -xvf llvm-13.0.1.src.tar.xz
+    sudo mv llvm-13.0.1.src /opt/src/llvm-13.0.1.src
+    sudo mkdir /opt/src/llvm13.0.1/
+    (cd /opt/src/llvm13.0.1/ && sudo cmake ../llvm-13.0.1.src/)
+    (cd /opt/src/llvm13.0.1/ && sudo make)
+    (cd /opt/src/ && sudo rm -r llvm-13.0.1.src)
+    rm -r llvm-13.0.1.src.tar.xz
+    cabal update
+    cabal install --lib parallel
+
+
+    #Java - o pidigits não está a dar (não consigo instalar o gmp)
+    wget https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb
+    sudo dpkg -i jdk-20_linux-x64_bin.deb
+    sudo apt-get install -f
+    sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-20/bin/java 1
+    sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-20/bin/javac 1
+    sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-20/bin/jar 1
+    #!!!!!!!!!!!!!!!!!!! É necessário sacar este jar https://jar-download.com/artifacts/it.unimi.dsi/fastutil/8.3.1/source-code
+    #unzip jar_files.zip
+    #sudo mkdir -p /opt/src/java-libs
+    #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
+
     #Racket1
     sudo apt install racket
 
