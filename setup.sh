@@ -169,3 +169,18 @@ sudo apt install cmake
     sudo make install
     cd ..
     rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 
+
+    #Lisp
+    wget "https://downloads.sourceforge.net/project/sbcl/sbcl/2.3.0/sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-linux-binary.tar.bz2%2Fdownload"
+    mv "sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g==&r=https:%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-li" sbcl-2.3.0-x86-64-linux-binary.tar.bz2
+    rm wget-log 
+    tar -xvjf sbcl-2.3.0-x86-64-linux-binary.tar.bz2
+    cd sbcl-2.3.0-x86-64-linux
+    sudo sh install.sh
+    cd ..
+    rm -rf sbcl-2.3.0-x86-64-linux/ sbcl-2.3.0-x86-64-linux-binary.tar.bz2 
+    curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
+    sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
+         --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
+         --eval '(ql:add-to-init-file)' \
+         --quit

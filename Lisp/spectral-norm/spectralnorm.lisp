@@ -1,37 +1,30 @@
 ;;    The Computer Language Benchmarks Game
-;;    http://benchmarksgame.alioth.debian.org/
+;;    https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;
 ;;    Adapted from the C (gcc) code by Sebastien Loisel
-;;
-;;    Contributed by Christopher Neufeld
+;;    Contributed by Christopher Neufeld 2005-08-19
 ;;    Modified by Juho Snellman 2005-10-26
 ;;      * Use SIMPLE-ARRAY instead of ARRAY in declarations
-;;      * Use TRUNCATE instead of / for fixnum division
 ;;      * Rearrange EVAL-A to make it more readable and a bit faster
 ;;    Modified by Andy Hefner 2008-09-18
 ;;      * Eliminate array consing
 ;;      * Clean up type declarations in eval-A
 ;;      * Distribute work across multiple cores on SBCL
-;;    Modified by Witali Kusnezow 2008-12-02
-;;      * use right shift instead of truncate for division in eval-A
-;;      * redefine eval-A as a macro
+;;    Modified by Isaac Gouy 2019-10-21
+;;      * eval-A like C gcc #4 program
+;;      * posix-argv like Jon Smith's fannkuch-redux Lisp SBCL #2 program
+;;      * deftype & type function suggested by tfb on SO
 
+(deftype int31 (&optional (bits 31))
+  `(signed-byte ,bits))
 
-;; This is our most expensive function.  Optimized with the knowledge
-;; that 'n' will never be "huge".  This will break if 'n' exceeds
-;; approximately half of the square root of the largest fixnum
-;; supported by the implementation.  On 32-bit sbcl,
-;; 'most-positive-fixnum' is 536870911, and we can support values of
-;; 'n' above 11000.
-
-(defmacro eval-A (i j)
-  `(let* ((n (+ ,i ,j))
-          (n+1 (1+ n)))
-     (declare (type (integer 0 22000) n n+1))
-     (/ (float (+ (ash (* n n+1) -1) ,i 1) 0d0))))
+(declaim (inline eval-A))
+(defun eval-A (i j)
+  (declare (type int31 i j))
+  (/ 1.0d0 (+ (ash (* (+ i j) (+ i j 1)) -1) i 1)))
 
 (defun eval-At-times-u (u n Au start end)
-  (declare (type fixnum n start end)
+  (declare (type int31 n start end)
            (type (simple-array double-float) u Au))
   (loop for i from start below end do
         (setf (aref Au i)
@@ -40,7 +33,7 @@
                     of-type double-float))))
 
 (defun eval-A-times-u (u n Au start end)
-  (declare (type fixnum n start end)
+  (declare (type int31 n start end)
            (type (simple-array double-float) u Au))
   (loop for i from start below end do
         (setf (aref Au i)
@@ -50,8 +43,9 @@
 
 #+sb-thread
 (defun execute-parallel (start end function)
-  (declare (optimize (speed 0)))
+  (declare (type int31 start end))
   (let* ((num-threads 4))
+    (declare (type function function))
     (loop with step = (truncate (- end start) num-threads)
           for index from start below end by step
           collecting (let ((start index)
@@ -73,25 +67,20 @@
     (lambda (start end)
       (eval-At-times-u v n AtAu start end))))
 
-(defun main (&optional n-supplied)
-  (let ((n (or n-supplied
-               (parse-integer (or (car (last #+sbcl sb-ext:*posix-argv*
-                                             #+clisp ext:*args*
-                                             #+cmu extensions:*command-line-strings*
-                                             #+gcl  si::*command-args*))
-                                  "2000")))))
-    (declare (type fixnum n))
-    (or (typep (* (- (* 2 n) 1) (- (* 2 n) 2)) 'fixnum)
-        (error "The supplied value of 'n' breaks the optimizations in EVAL-A"))
+(defun main () 
+  (let* ((args (cdr sb-ext:*posix-argv*))
+         (n (parse-integer (car args))))
+    (declare (type int31 n))
     (let ((u (make-array n :element-type 'double-float :initial-element 1.0d0))
           (v (make-array n :element-type 'double-float))
           (tmp (make-array n :element-type 'double-float)))
-      (declare (type (simple-array double-float) U V))
+      (declare (type (simple-array double-float) U V tmp))
       (dotimes (i 10)
         (eval-AtA-times-u u v tmp n 0 n)
         (eval-AtA-times-u v u tmp n 0 n))
       (let ((vBv 0.0d0)
             (vv 0.0d0))
+        (declare (type double-float vBv vv))
         (dotimes (i n)
           (incf vBv (* (aref u i) (aref v i)))
           (incf vv (* (aref v i) (aref v i))))

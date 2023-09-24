@@ -1,5 +1,5 @@
 ;;; The Computer Language Benchmarks Game
-;;; http://benchmarksgame.alioth.debian.org/
+;;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;; Michael Weber 2006-07-18
 ;;; Changes by Stefan Lang 2007-02-08
 

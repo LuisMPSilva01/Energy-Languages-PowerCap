@@ -1,5 +1,5 @@
 ;; The Computer Language Benchmarks Game
-;; http://benchmarksgame.alioth.debian.org/
+;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;
 ;; adapted from the C version by Kentaro Nakazawa 2016-11-08
 
@@ -51,4 +51,3 @@
       (format t "~C:~D~%" #\Tab i))
     (eliminate-digit d)
    continue))
-

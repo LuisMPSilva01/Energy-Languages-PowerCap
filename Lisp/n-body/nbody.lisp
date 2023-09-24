@@ -1,5 +1,5 @@
 ;;   The Computer Language Benchmarks Game
-;;   http://benchmarksgame.alioth.debian.org/
+;;   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;;
 ;;; contributed by Patrick Frankenberger
 ;;; modified by Juho Snellman 2005-11-18
@@ -143,4 +143,3 @@
                                          #+cmu  extensions:*command-line-strings*
 					 #+gcl  si::*command-args*)) "1"))))
     (nbody n)))
-

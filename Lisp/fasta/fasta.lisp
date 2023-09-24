@@ -1,5 +1,5 @@
 ;; The Computer Language Benchmarks Game
-;; http://benchmarksgame.alioth.debian.org/
+;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;
 ;; Contributed by Lorenzo Bolla
 ;; Modified by Jason Miller
@@ -149,4 +149,3 @@
 (defun mainp (n)
   (sb-sprof:with-profiling (:loop nil :report :graph)
                            (main n)))
-

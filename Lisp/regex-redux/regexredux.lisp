@@ -1,8 +1,9 @@
 ;;; The Computer Language Benchmarks Game
-;;; http://benchmarksgame.alioth.debian.org/
+;;; https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;;
 ;;; regex-dna program contributed by: Witali Kusnezow 2009-03-02
 ;;; converted from regex-dna program
+;;; fixed by Antonio Saade
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require :asdf)
@@ -186,4 +187,3 @@
                           (format nil "~%~a~%~a~%~a" size (length sequence) (length seq))))))
     (format t "~{~a~%~}" result))
   )
-

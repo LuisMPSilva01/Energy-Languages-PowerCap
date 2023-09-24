@@ -1,5 +1,5 @@
 compile:
-	sbcl --load binarytrees.lisp --eval "(save-lisp-and-die \"binarytrees.core\" :purify t :toplevel (lambda () (main) (quit)))"
+	sbcl --eval "(ql:quickload 'sb-concurrency)" --eval "(load \"binarytrees.lisp\")" --eval "(save-lisp-and-die \"binarytrees.core\" :purify t :toplevel (lambda () (main) (quit)))"
 
 measure:
 	sudo modprobe msr

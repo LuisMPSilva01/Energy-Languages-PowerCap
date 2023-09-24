@@ -1,63 +1,73 @@
 ;;   The Computer Language Benchmarks Game
-;;   http://benchmarksgame.alioth.debian.org/
+;;   https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ;;;
-;;; contributed by Manuel Giraud
-;;; modified by Nicolas Neuss
-;;; modified by Juho Snellman 2005-10-26
+;;; contributed by Roman Kashitsyn
 ;;;
-;;; modified by Witali Kusnezow 2009-01-20
-;;;  * simplified structure of leaf nodes
-;;;  * optimize GC usage
-;;;  * optimize all functions
-;;;
-;;; modified by Witali Kusnezow 2009-08-20
-;;;  * remove GC hacks to satisfy new versions of the sbcl
-;;;
-;;; *reset*
 
-;;; Node is either (DATA) (for leaf nodes) or an improper list (DATA LEFT . RIGHT)
+(deftype uint () '(unsigned-byte 62))
 
-(defun build-btree (item depth)
-  (declare (fixnum item depth))
-  (if (zerop depth) (list item)
-      (let ((item2 (+ item item))
-            (depth-1 (1- depth)))
-        (declare (fixnum item2 depth-1))
-        (cons item
-				(cons (build-btree (the fixnum (1- item2)) depth-1) 
-					  (build-btree item2 depth-1))))))
+(defconstant min-depth 4 "Minimal depth of the binary tree.")
+(defparameter num-workers 4 "Number of concurrent workers.")
+
+(defun build-tree (depth)
+    "Build a binary tree of the specified DEPTH. Leaves are represented by NIL,
+branches are represented by a cons cell."
+  (declare (ftype (function (uint) list) build-tree)
+           (uint depth)
+           (optimize (speed 3) (safety 0)))
+  (if (zerop depth) (cons nil nil)
+      (cons (build-tree (1- depth))
+            (build-tree (1- depth)))))
 
 (defun check-node (node)
-  (declare (values fixnum))
-  (let ((data (car node))
-        (kids (cdr node)))
-    (declare (fixnum data))
-    (if kids
-        (+ (+ 1 (check-node (car kids)))
-           (check-node (cdr kids)))
-        1)))
+  (declare (ftype (function (list) uint) check-node)
+           (optimize (speed 3) (safety 0)))
+  (if (null (car node))
+      1
+      (the uint (+ 1 (check-node (car node)) (check-node (cdr node))))))
 
-(defun loop-depths (max-depth &key (min-depth 4))
-  (declare (type fixnum max-depth min-depth))
-  (loop for d of-type fixnum from min-depth by 2 upto max-depth do
-       (loop with iterations of-type fixnum = (ash 1 (+ max-depth min-depth (- d)))
-          for i of-type fixnum from 1 upto iterations
-          sum (the fixnum (check-node (build-btree i d)))
-          into result of-type fixnum
-          finally
-            (format t "~D	 trees of depth ~D	 check: ~D~%"
-                    (the fixnum iterations) d result))))
+(defun check-trees-of-depth (depth max-depth)
+  (declare (uint depth max-depth)
+           (optimize (speed 3) (safety 0)))
+  (loop with iterations of-type uint = (ash 1 (+ max-depth min-depth (- depth)))
+        for i of-type uint from 1 upto iterations
+        sum (check-node (build-tree depth))
+        into result of-type uint
+        finally (return (format nil "~d~c trees of depth ~d~c check: ~d~%"
+                                iterations #\Tab depth #\Tab result))))
 
-(defun main (&optional (n (parse-integer
-                           (or (car (last #+sbcl sb-ext:*posix-argv*
-                                          #+cmu  extensions:*command-line-strings*
-                                          #+gcl  si::*command-args*))
-                               "1"))))
+(defun loop-depths-async (max-depth)
+  (declare (fixnum max-depth))
+  (let* ((tasks (sb-concurrency:make-queue
+                 :initial-contents
+                 (loop for depth from min-depth by 2 upto max-depth
+                       collect depth)))
+         (outputs (sb-concurrency:make-queue))
+         (threads
+           (loop for i of-type fixnum from 1 to num-workers
+                 collect (sb-thread:make-thread
+                          #'(lambda ()
+                              (loop as task = (sb-concurrency:dequeue tasks)
+                                    while task
+                                    do (sb-concurrency:enqueue
+                                        (cons task
+                                              (check-trees-of-depth task max-depth))
+                                        outputs)))))))
+    (mapc #'sb-thread:join-thread threads)
+    (let ((results (sort (sb-concurrency:list-queue-contents outputs)
+                         #'< :key #'car)))
+      (loop for (k . v) in results
+            do (format t "~a" v)))))
+
+(defun binary-trees-upto-size (n)
   (declare (type (integer 0 255) n))
-  (format t "stretch tree of depth ~D	 check: ~D~%" (1+ n) (check-node (build-btree 0 (1+ n))))
-  (let ((*print-pretty* nil) (long-lived-tree (build-btree 0 n)))
-    (purify)
-    (loop-depths n)
-    (format t "long lived tree of depth ~D	 check: ~D~%" n (check-node long-lived-tree))))
-    
+  (format t "stretch tree of depth ~d~c check: ~d~%" (1+ n) #\Tab
+          (check-node (build-tree (1+ n))))
+  (let ((long-lived-tree (build-tree n)))
+    (loop-depths-async n)
+    (format t "long lived tree of depth ~d~c check: ~d~%" n #\Tab
+            (check-node long-lived-tree))))
 
+(defun main (&optional (n (parse-integer (or (car (last sb-ext:*posix-argv*))
+                                             "1"))))
+  (binary-trees-upto-size n))
