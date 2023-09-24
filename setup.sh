@@ -191,3 +191,15 @@ sudo apt install cmake
     sudo cp -r julia-1.8.5 /opt/
     sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin/julia
     rm -rf julia-1.8.5/ julia-1.8.5-linux-x86_64.tar.gz 
+
+    #JavaScript
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    source ~/.bashrc
+    nvm install 19.0.0
+    nvm use 19.0.0
+    npm install -g npm@latest
+    cd JavaScript/pidigits/
+    npm install mpzjs
+    cd ../../
+    
+    
