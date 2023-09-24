@@ -1,5 +1,5 @@
 -- The Computer Language Benchmarks Game
--- http://benchmarksgame.alioth.debian.org/
+-- https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 -- contributed by Mike Pall
 -- modified by Rob Kendrick to be parallel
 -- modified by Isaac Gouy

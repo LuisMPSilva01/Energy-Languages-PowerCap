@@ -160,7 +160,12 @@ sudo apt install cmake
     sudo make altinstall 
     curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 
     cd
-    
 
-
-
+    #Lua - pidigits não tem implementação funcional
+    curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
+    tar zxf lua-5.4.4.tar.gz
+    cd lua-5.4.4
+    make all test
+    sudo make install
+    cd ..
+    rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 

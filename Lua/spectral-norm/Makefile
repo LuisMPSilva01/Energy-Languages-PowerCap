@@ -2,13 +2,13 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/local/src/lua-5.3.3/bin/lua  spectralnorm.lua 5500" Lua spectral-norm
+	sudo ../../RAPL/main "lua  spectralnorm.lua 5500" Lua spectral-norm
 
 run:
-	/usr/local/src/lua-5.3.3/bin/lua  spectralnorm.lua 5500
+	lua  spectralnorm.lua 5500
 
 mem:
-	/usr/bin/time -v /usr/local/src/lua-5.3.3/bin/lua  spectralnorm.lua 5500
+	/usr/bin/time -v lua  spectralnorm.lua 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/local/src/lua-5.3.3/bin/lua  spectralnorm.lua 5500
+	valgrind --tool=massif --stacks=yes lua  spectralnorm.lua 5500

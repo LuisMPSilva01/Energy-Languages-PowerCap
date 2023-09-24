@@ -1,7 +1,7 @@
 -- The Computer Language Benchmarks Game
--- http://benchmarksgame.alioth.debian.org/
+-- https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 -- contributed by Mike Pall
--- modified for Lua 5.3 by Robin
+-- modified for 5.3 by Robin
 
 local Last = 42
 local function random(max)
