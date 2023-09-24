@@ -1,78 +1,70 @@
-# The Computer Language Benchmarks Game
-# https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
-#
-# contributed by Adam Beckmeyer
+#=
+ The Computer Language Benchmarks Game
+ https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 
-const MPZ = Base.GMP.MPZ
-const mpz_t = MPZ.mpz_t
-addmul!(x::BigInt, a::BigInt, b::UInt64) =
-    ccall((:__gmpz_addmul_ui, :libgmp), Cvoid, (mpz_t, mpz_t, UInt64), x, a, b)
-submul!(x::BigInt, a::BigInt, b::UInt64) =
-    ccall((:__gmpz_submul_ui, :libgmp), Cvoid, (mpz_t, mpz_t, UInt64), x, a, b)
-MPZ.mul!(x::BigInt, a::BigInt, b::UInt64) =
-    ccall((:__gmpz_mul_ui, :libgmp), Cvoid, (mpz_t, mpz_t, UInt64), x, a, b)
-get_ui(x::BigInt) = ccall((:__gmpz_get_ui, :libgmp), Culong, (mpz_t,), x)
+ based on the C++ program of Alessandro Power
+ with ideas borrowed from the C program of Mr Ledrug
+ modified for Julia 1.0 by Luiz M. Faria
+=#
 
-function gen_digits!(v)
-    numer = big(1)
-    denom = big(1)
-    accum = big(0)
-    tmp = big(1)
-    i = 1
-    k = one(UInt64)
-    while i ≤ length(v)
-        next_term!(k, numer, denom, accum)
-        k += 1
-        if numer ≤ accum
-            d = extract_digit(UInt64(3), numer, denom, accum, tmp)
-            if d == extract_digit(UInt64(4), numer, denom, accum, tmp)
-                @inbounds v[i] = d + 48
-                eliminate_digit!(d, numer, denom, accum)
-                i += 1
-            end#if
-        end#if
-    end#while
-    v
-end#function
+# import a few functions from GMP wrapper to do in-place operations
+using Base.GMP.MPZ: add_ui!, mul_ui!, add!, tdiv_q!
+# and add a few more wrappers for GMP functions not currently in Base
+const mpz_t = Ref{BigInt}
+addmul_ui!(x::BigInt,a::BigInt,b) = ccall((:__gmpz_addmul_ui,"libgmp"), Cvoid, (mpz_t,mpz_t,Culong), x, a, b)
+submul_ui!(x::BigInt,a::BigInt,b) = ccall((:__gmpz_submul_ui,"libgmp"), Cvoid, (mpz_t,mpz_t,Culong), x, a, b)
+get_ui(x::BigInt) = ccall((:__gmpz_get_ui,"libgmp"), Culong, (mpz_t,), x)
 
-function next_term!(k, numer, denom, accum)
-    k2 = 2k + 1
+function next!(q,r,t,k)
+    mult  = 2*k + 1
+    addmul_ui!(r,q,2)
+    mul_ui!(r,mult)
+    mul_ui!(t,mult)
+    mul_ui!(q,k)
+    return nothing
+end
 
-    addmul!(accum, numer, UInt64(2))
-    MPZ.mul!(accum, accum, k2)
-    MPZ.mul!(denom, denom, k2)
-    MPZ.mul!(numer, numer, k)
-end#function
+function extract!(q,r,t,tmp1,tmp2,n)
+    mul_ui!(tmp1,q,n)
+    add!(tmp1,r)
+    tdiv_q!(tmp2,tmp1,t)
+    return get_ui(tmp2)
+end
 
-function extract_digit(n, numer, denom, accum, tmp)::UInt64
-    MPZ.mul!(tmp, numer, n)
-    MPZ.add!(tmp, tmp, accum)
-    MPZ.tdiv_q!(tmp, tmp, denom)
-    get_ui(tmp)
-end#function
+function produce!(q,r,t,n)
+    mul_ui!(q,10)
+    submul_ui!(r,t,n)
+    mul_ui!(r,10)
+    return nothing
+end
 
-function eliminate_digit!(d, numer, denom, accum)
-    submul!(accum, denom, d)
-    MPZ.mul!(accum, accum, UInt64(10))
-    MPZ.mul!(numer, numer, UInt64(10))
-end#function
+function pidigits(n::Int)
+    q,r,t,tmp1,tmp2 = map(BigInt,(1,0,1,0,0))
+    k = UInt(0)
+    n_digits=0
 
-function main(io, n)
-    # Make sure we don't create an empty vector
-    n = max(1, n)
-    v = Vector{UInt64}(undef, n)
-    gen_digits!(v)
-    v8 = convert(Vector{UInt8}, v)
-    i = 10
-    while i <= n
-        @inbounds write(io, v8[i - 9:i], "\t:$i\n")
-        i += 10
-    end#while
-    if n % 10 !== 0
-        filler = fill(' ' % UInt8, 10 - n % 10)
-        @inbounds write(io, v8[i - 9:end], filler, "\t$i\n")
-    end#if
-    nothing
-end#function
+    while n_digits<n
+        i=0
+        while (i<10 && n_digits<n)
+            k +=1
+            next!(q,r,t,k)
+            q>r && continue
 
-main(stdout, parse(Int, ARGS[1]))
+            digit = extract!(q,r,t,tmp1,tmp2,3)
+            if digit == extract!(q,r,t,tmp1,tmp2,4)
+                print(digit)
+                produce!(q,r,t,digit)
+                i +=1
+                n_digits+=1
+            end
+        end
+        while i < 10
+            i+=1
+            print(' ')
+        end
+        print("\t:$n_digits\n")
+    end
+end
+
+n = parse(Int,ARGS[1])
+pidigits(n)

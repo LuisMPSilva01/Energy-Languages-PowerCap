@@ -184,3 +184,10 @@ sudo apt install cmake
          --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
          --eval '(ql:add-to-init-file)' \
          --quit
+
+    #Julia
+    wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.5-linux-x86_64.tar.gz
+    tar -xzvf julia-1.8.5-linux-x86_64.tar.gz
+    sudo cp -r julia-1.8.5 /opt/
+    sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin/julia
+    rm -rf julia-1.8.5/ julia-1.8.5-linux-x86_64.tar.gz 

@@ -4,15 +4,21 @@
 # contributed by Daniel Jones
 # fixed by David Campbell
 # modified by Jarret Revels, Alex Arslan, Yichao Yu
-# made (slightly) multi-threaded by Adam Beckmeyer
+# made multi-threaded by Adam Beckmeyer
 
-# Speedup from pcre_jit_match instead of pcre_match in Base. Maybe 2%.
-const PCRE = Base.PCRE
-function PCRE.exec(re, subject, offset, options, match_data)
-    0 <= ccall((:pcre2_jit_match_8, PCRE.PCRE_LIB), Cint,
-               (Ptr{Cvoid}, Ptr{UInt8}, Csize_t, Csize_t, Cuint, Ptr{Cvoid}, Ptr{Cvoid}),
-               re, subject, sizeof(subject), offset, options, match_data,
-               PCRE.get_local_match_context())
+# Julia's replace function doesn't internally use pcre2_substitute
+# which is more efficient than the string-building Julia currently
+# uses. This gives about a 10% speedup compared to using Base.replace.
+function rereplace!(s, slen, pat::Pair{Regex,String}, dest)
+    re, rep = pat
+    dest_len = Ref{Csize_t}(sizeof(dest))
+    Base.compile(re)
+    ccall((:pcre2_substitute_8, Base.PCRE.PCRE_LIB), Cint,
+          (Ptr{Cvoid}, Ptr{UInt8}, Csize_t, Csize_t, Cuint, Ptr{Cvoid}, Ptr{Cvoid},
+           Ptr{UInt8}, Csize_t, Ptr{UInt8}, Ref{Csize_t}), re.regex, s, slen,
+          0, re.match_options | Base.PCRE.SUBSTITUTE_GLOBAL,
+          C_NULL, C_NULL, rep, sizeof(rep), dest, dest_len)
+    dest_len[]
 end
 
 const variants = (
@@ -28,38 +34,59 @@ const variants = (
 )
 
 const subs = (
-    (r"tHa[Nt]", "<4>"),
-    (r"aND|caN|Ha[DS]|WaS", "<3>"),
-    (r"a[NSt]|BY", "<2>"),
-    (r"<[^>]*>", "|"),
-    (r"\|[^|][^|]*\|", "-")
+    r"tHa[Nt]"            => "<4>",
+    r"aND|caN|Ha[DS]|WaS" => "<3>",
+    r"a[NSt]|BY"          => "<2>",
+    r"<[^>]*>"            => "|",
+    r"\|[^|][^|]*\|"      => "-"
 )
 
-function perf_regex_dna(io, out)
+function main(io, out)
+    # Read in the file as a string and get length
     seq = read(io, String)
-    # lastindex is faster than length and correct with ascii input. 4% speedup.
-    l1 = lastindex(seq)
+    l1 = sizeof(seq)
 
-    seq = replace(seq, r">.*\n|\n" => "")
-    l2 = lastindex(seq)
+    # Remove descriptions and linefeed characters while copying seq to seq2
+    seq2 = Vector{UInt8}(undef, l1)
+    l2 = rereplace!(seq, sizeof(seq), r">.*\n|\n" => "", seq2)
+    resize!(seq2, l2)
 
-    w = Threads.@spawn for v in variants
-        c = 0
-        for _ in eachmatch(v, seq)
-            c += 1
-        end
-        println(out, v.pattern, ' ', c)
+    # Turning seq2 back into a string will cause it to be truncated to
+    # zero, so we first need to make the working copies that will be
+    # needed for the replace task. These must be slightly larger than
+    # seq2 since some replacements can cause the string to grow. These
+    # are placed in a Ref container to prevent the compiler from
+    # boxing them inside the closure spawned to run in a thread (since
+    # the variables don't have to be re-bound this way).
+    rseq1 = Ref(similar(seq2, trunc(Int, 1.1l2)))
+    copyto!(rseq1[], seq2)
+    rseq2 = Ref(similar(rseq1[]))
+
+    # First we start the task to find the length of the string with
+    # all replacements since it takes the longest.
+    l3 = Ref(l2 % Csize_t)
+    replace_task = Threads.@spawn for sub in subs
+        # This loop moves back and forth, first doing a replacement
+        # while copying rseq1 to rseq2 and then another replacement
+        # while copying rseq2 back to rseq1.
+        l3[] = rereplace!(rseq1[], l3[], sub, rseq2[])
+        rseq1[], rseq2[] = rseq2[], rseq1[]
     end
 
-    repseq = seq
-    for (u, v) in subs
-        repseq = replace(repseq, u => v)
+    # Then we count the occurrences of each variant within
+    # seq. Although this could be done multi-threaded with a counter
+    # per thread, there's no benefit to doing so since replace_task
+    # takes longer than all variant counts in serial.
+    seq = String(seq2)
+    for v in variants
+        println(out, v.pattern, ' ', count(v, seq))
     end
 
-
-    wait(w)
-    write(out, '\n', string(l1), '\n', string(l2), '\n', string(lastindex(repseq)), '\n')
+    println(out, '\n', l1)
+    println(out, l2)
+    # Wait for the replacing task to complete before printing sequence lengths.
+    wait(replace_task)
+    println(out, l3[])
 end
 
-isinteractive() || perf_regex_dna(stdin, stdout)
- 
+isinteractive() || main(stdin, stdout)
