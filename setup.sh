@@ -144,7 +144,7 @@ sudo apt install cmake
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
 
-    #PHP - Versão instalada incorreta
+    #PHP - Versão instalada incorreta + falta instalar uma biblioteca
     sudo apt update && apt upgrade -y
     sudo add-apt-repository ppa:ondrej/php
     sudo apt update
