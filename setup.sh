@@ -12,11 +12,11 @@ sudo apt install cmake
     sudo apt-get install libgmp-dev
     sudo apt-get install libapr1-dev
 
-    #C *precisa versao especifica*
+    #C *não sei se já está
     sudo apt install build-essential
     sudo apt-get install libpcre2-dev
-
-    #C++ *precisa versao especifica*
+    
+    #C++ *não sei se já está
     sudo apt install libtbb-dev
     sudo apt-get install libboost-all-dev
 
@@ -33,7 +33,7 @@ sudo apt install cmake
     cd ..
     sudo rm -r chapel-1.29.0/
 
-    #Csharp (.net) fasta is looking kinda weird idk
+    #Csharp (.net)
     wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
     chmod +x ./dotnet-install.sh
     ./dotnet-install.sh --version 7.0.200
@@ -78,7 +78,7 @@ sudo apt install cmake
     cd ghc-9.4.4-x86_64-unknown-linux/
     ./configure --prefix=/opt/src/ghc9.4.4
     sudo make install
-    cd ..
+    cd ..fasta is looking kinda weird idk
     rm -r ghc-9.4.4-x86_64-unknown-linux
     wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.1/llvm-13.0.1.src.tar.xz
     tar -xvf llvm-13.0.1.src.tar.xz
@@ -144,7 +144,7 @@ sudo apt install cmake
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
 
-    #PHP - Versão instalada incorreta + falta instalar uma biblioteca
+    #PHP - Versão instalada incorreta
     sudo apt update && apt upgrade -y
     sudo add-apt-repository ppa:ondrej/php
     sudo apt update
@@ -160,46 +160,7 @@ sudo apt install cmake
     sudo make altinstall 
     curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 
     cd
-
-    #Lua - pidigits não tem implementação funcional
-    curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-    tar zxf lua-5.4.4.tar.gz
-    cd lua-5.4.4
-    make all test
-    sudo make install
-    cd ..
-    rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 
-
-    #Lisp
-    wget "https://downloads.sourceforge.net/project/sbcl/sbcl/2.3.0/sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-linux-binary.tar.bz2%2Fdownload"
-    mv "sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g==&r=https:%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-li" sbcl-2.3.0-x86-64-linux-binary.tar.bz2
-    rm wget-log 
-    tar -xvjf sbcl-2.3.0-x86-64-linux-binary.tar.bz2
-    cd sbcl-2.3.0-x86-64-linux
-    sudo sh install.sh
-    cd ..
-    rm -rf sbcl-2.3.0-x86-64-linux/ sbcl-2.3.0-x86-64-linux-binary.tar.bz2 
-    curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
-    sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
-         --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
-         --eval '(ql:add-to-init-file)' \
-         --quit
-
-    #Julia
-    wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.5-linux-x86_64.tar.gz
-    tar -xzvf julia-1.8.5-linux-x86_64.tar.gz
-    sudo cp -r julia-1.8.5 /opt/
-    sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin/julia
-    rm -rf julia-1.8.5/ julia-1.8.5-linux-x86_64.tar.gz 
-
-    #JavaScript
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-    source ~/.bashrc
-    nvm install 19.0.0
-    nvm use 19.0.0
-    npm install -g npm@latest
-    cd JavaScript/pidigits/
-    npm install mpzjs
-    cd ../../
     
-    
+
+
+

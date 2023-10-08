@@ -1,0 +1,6 @@
+Language, Program, PowerLimit, Package , Core(s) , GPU , DRAM , Time (ms) , Temperature , Memory 
+C ,reverse-complement ,2000 ,0.160339355468750000, 0.101684570312500000,  ,  , 6 , 54.2 , 0 
+C ,reverse-complement ,2000 ,0.062438964843750000, 0.057250976562500000,  ,  , 2 , 54.2 , 0 
+C ,reverse-complement ,2000 ,0.059326171875000000, 0.047424316406250000,  ,  , 2 , 54.2 , 0 
+C ,reverse-complement ,2000 ,0.114562988281250000, 0.092529296875000000,  ,  , 4 , 54.2 , 0 
+C ,reverse-complement ,2000 ,0.058776855468750000, 0.054260253906250000,  ,  , 2 , 54.2 , 0 
