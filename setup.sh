@@ -144,12 +144,24 @@ sudo apt install cmake
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
 
-    #PHP - Versão instalada incorreta
-    sudo apt update && apt upgrade -y
-    sudo add-apt-repository ppa:ondrej/php
-    sudo apt update
-    #sudo apt install php8.2 --> não funciona
-    sudo apt-get install php #v.8.1 por default
+    #PHP - problemas com o shmop_open()
+    wget https://www.php.net/distributions/php-8.2.1.tar.gz
+    tar -xzf php-8.2.1.tar.gz
+    cd php-8.2.1/
+    sudo apt install -y pkg-config build-essential autoconf bison re2c \
+                        libxml2-dev libsqlite3-dev
+    ./buildconf
+    ./configure
+    make
+    make test
+    sudo make install
+    cd ..
+    rm -rf php-8.2.1 php-8.2.1.tar.gz
+    sudo sed -i 's/;extension=shmop/extension=shmop/' /etc/php/8.1/cli/php.ini
+    sudo sed -i 's/;extension=shmop/extension=shmop/' /etc/php/8.1/apache2/php.ini
+    source ~/.bashrc
+
+
 
     #Python
     cd /usr/src 
