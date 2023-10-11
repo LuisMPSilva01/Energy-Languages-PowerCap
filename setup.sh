@@ -138,6 +138,12 @@ sudo apt install cmake
     #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem
     sudo apt install fpc
     sudo apt-get install libpcre3-dev
+    git clone https://github.com/BeRo1985/pasmp
+    cd pasmp/src/
+    fpc PasMP.pas
+    ./PasMP
+
+
 
     #Perl
     \curl -L https://install.perlbrew.pl | bash

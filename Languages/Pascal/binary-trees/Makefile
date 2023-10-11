@@ -1,6 +1,6 @@
 compile:
 	cp binarytrees.fpascal binarytrees.pas
-	fpc -FuInclude/fpascal -XXs -O4 -Tlinux  -oFPASCAL_RUN binarytrees.pas
+	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Mdelphi -oFPASCAL_RUN binarytrees.fpascal-7.pas PasMP.pas
 	mv FPASCAL_RUN binarytrees.fpascal_run
 	rm binarytrees.pas
 	
