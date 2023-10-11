@@ -144,14 +144,14 @@ sudo apt install cmake
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
 
-    #PHP - ficheiro .txt em k-nucleotide, reverse_complement, regex_redux desconhecidos - os outros problemas funcionam corretamente
+    #PHP - ficheiro .txt em k-nucleotide, reverse_complement, regex_redux com conteudo errado - todos os problemas executam bem
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
     tar -xzf php-8.2.1.tar.gz
     cd php-8.2.1/
     sudo apt install -y pkg-config build-essential autoconf bison re2c \
-                        libxml2-dev libsqlite3-dev
+                        libxml2-dev libsqlite3-dev libgmp-dev
     ./buildconf
-    ./configure --enable-shmop --enable-pcntl --with-gmp
+    ./configure --enable-shmop --enable-pcntl --with-gmp --enable-sysvmsg
     make
     make test
     sudo make install
@@ -160,9 +160,6 @@ sudo apt install cmake
     sudo sed -i 's/;extension=shmop/extension=shmop/' /etc/php/8.1/cli/php.ini
     sudo sed -i 's/;extension=shmop/extension=shmop/' /etc/php/8.1/apache2/php.ini
     source ~/.bashrc
-
-
-
 
     #Python
     cd /usr/src 

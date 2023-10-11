@@ -54,3 +54,4 @@ foreach ($workers as $n => $socket) {
     stream_copy_to_stream($socket, STDOUT);
     fwrite(STDOUT, "\n");
 }
+    
