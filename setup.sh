@@ -12,10 +12,15 @@ sudo apt install cmake
     sudo apt-get install libgmp-dev
     sudo apt-get install libapr1-dev
 
-    #C *não sei se já está
-    sudo apt install build-essential
-    sudo apt-get install libpcre2-dev
-    
+    #C - experimentar "sudo apt-cache policy gcc" e ver que a versão realmente é 12.2.0, mas com "gcc --version" a versão é 12.3.0
+    wget http://security.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/gcc_12.2.0-3ubuntu1_amd64.deb
+    sudo dpkg -i gcc_12.2.0-3ubuntu1_amd64.deb
+    sudo apt-get install -f
+    rm gcc_12.2.0-3ubuntu1_amd64.deb
+    cd Languages/C/k-nucleotide/
+    git clone https://github.com/attractivechaos/klib
+    cd ../..
+
     #C++ *não sei se já está
     sudo apt install libtbb-dev
     sudo apt-get install libboost-all-dev
@@ -150,7 +155,7 @@ sudo apt install cmake
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
 
-    #PHP - ficheiro .txt em k-nucleotide, reverse_complement, regex_redux com conteudo errado - todos os problemas executam bem
+    #PHP
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
     tar -xzf php-8.2.1.tar.gz
     cd php-8.2.1/

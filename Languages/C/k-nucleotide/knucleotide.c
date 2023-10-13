@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <khash.h>
+#include "klib/khash.h"
 
 // Define a custom hash function to use instead of khash's default hash
 // function. This custom hash function uses a simpler bit shift and XOR which
