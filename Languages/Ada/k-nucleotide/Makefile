@@ -1,12 +1,11 @@
 compile:
 	gnatchop -r -w knucleotide.gnat-2.gnat
-	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f knucleotide.adb -o knucleotide.gnat-2.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp knucleotide.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp data_input.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp string_fragments.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp line_io.adb
-	x86_64-linux-gnu-gnatbind-11 -x knucleotide.ali
-	x86_64-linux-gnu-gnatlink-11 knucleotide.ali -O3 -fomit-frame-pointer -march=ivybridge -o knucleotide.gnat-2.gnat_run
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
+	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f knucleotide.adb -o knucleotide.gnat-2.gnat_run
+
 
 measure:
 	sudo modprobe msr

@@ -1,24 +1,23 @@
 compile:
 	gnatchop -r -w revcomp.gnat-2.gnat
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
 	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f revcomp.adb -o revcomp.gnat-2.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp revcomp.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp line_io.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp text_input.adb
-	x86_64-linux-gnu-gnatbind-11 -x revcomp.ali
-	x86_64-linux-gnu-gnatlink-11 revcomp.ali -O3 -fomit-frame-pointer -march=ivybridge -o revcomp.gnat-2.gnat_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.gnat-2.gnat_run 0 < ../../revcomp-input25000000.txt" Ada reverse-complement
+	sudo ../../RAPL/main "./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt" Ada reverse-complement
 
 run:
-	./revcomp.gnat-2.gnat_run 0 < ../../revcomp-input25000000.txt
+	./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt
 	
 mem:
-	/usr/bin/time -v ./revcomp.gnat-2.gnat_run 0 < ../../revcomp-input25000000.txt
+	/usr/bin/time -v ./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./revcomp.gnat-2.gnat_run 0 < ../../revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes ./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt
 
 clean:
 	rm -f *.gnat_run 

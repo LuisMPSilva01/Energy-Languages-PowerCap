@@ -1,17 +1,10 @@
 compile:
 	gnatchop -r -w spectralnorm.gnat-4.gnat
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
 	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f spectralnorm.adb -o spectralnorm.gnat-4.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectralnorm.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp division.ads
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp division-d.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp division-s.ads
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils-d.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils-dist.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp spectral_utils-s.adb
-	x86_64-linux-gnu-gnatbind-11 -x spectralnorm.ali
-	x86_64-linux-gnu-gnatlink-11 spectralnorm.ali -O3 -fomit-frame-pointer -march=ivybridge -o spectralnorm.gnat-4.gnat_run
-
 
 measure:
 	sudo modprobe msr

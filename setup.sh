@@ -8,9 +8,15 @@ sudo apt install cmake
 
 ## Compilers ##
     #Ada
-    sudo apt install gnat-11
     sudo apt-get install libgmp-dev
     sudo apt-get install libapr1-dev
+    wget https://gnat-packs.annexi-strayline.com/x86_64-linux-gnu/gnat-11.3.0-base.tar.xz
+    mkdir gnat-11.3.0-base
+    tar -xf gnat-11.3.0-base.tar -C gnat-11.3.0-base
+    sudo mv gnat-11.3.0-base/opt/gcc-fsf-gnat /usr/local/
+    export PATH=/usr/local/gcc-fsf-gnat/bin:$PATH
+    rm -rf gnat-11.3.0-base gnat-11.3.0-base.tar 
+
 
     #C - experimentar "sudo apt-cache policy gcc" e ver que a versão realmente é 12.2.0, mas com "gcc --version" a versão é 12.3.0
     wget http://security.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/gcc_12.2.0-3ubuntu1_amd64.deb

@@ -1,9 +1,11 @@
 compile:
 	gnatchop -r -w mandelbrot.gnat-3.gnat
-	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f mandelbrot.adb -o mandelbrot.gnat-3.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp mandelbrot.adb
-	x86_64-linux-gnu-gnatbind-11 -x mandelbrot.ali
-	x86_64-linux-gnu-gnatlink-11 mandelbrot.ali -O3 -fomit-frame-pointer -march=ivybridge -o mandelbrot.gnat-3.gnat_run
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
+	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f mandelbrot.adb -o mandelbrot.gnat-3.gnat_run
+
 measure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "./mandelbrot.gnat-3.gnat_run 16000" Ada mandelbrot

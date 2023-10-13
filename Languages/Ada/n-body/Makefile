@@ -1,12 +1,10 @@
 compile:
 	gnatchop -r -w nbody.gnat-2.gnat
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
 	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f nbody.adb -o nbody.gnat-2.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp nbody.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp nbody_pck.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp root.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp systems.adb
-	x86_64-linux-gnu-gnatbind-11 -x nbody.ali
-	x86_64-linux-gnu-gnatlink-11 nbody.ali -O3 -fomit-frame-pointer -march=ivybridge -o nbody.gnat-2.gnat_run
 
 measure:
 	sudo modprobe msr

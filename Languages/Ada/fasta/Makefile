@@ -1,14 +1,11 @@
 compile:
 	gnatchop -r -w fasta.gnat-5.gnat
-	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f fasta.adb -o fasta.gnat-5.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp fasta.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp sequence.ads
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp sequence-creation.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp sequence-data.ads
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp lcg_random.adb
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp line_io.adb
-	x86_64-linux-gnu-gnatbind-11 -x fasta.ali
-	x86_64-linux-gnu-gnatlink-11 fasta.ali -O3 -fomit-frame-pointer -march=ivybridge -o fasta.gnat-5.gnat_run
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
+	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f fasta.adb -o fasta.gnat-5.gnat_run
+
 
 measure:
 	sudo modprobe msr

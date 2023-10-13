@@ -1,9 +1,10 @@
 compile:
 	gnatchop -r -w fannkuchredux.gnat-3.gnat
-	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f fannkuchredux.adb -o fannkuchredux.gnat-3.gnat_run 
-	x86_64-linux-gnu-gcc-11 -c -O3 -fomit-frame-pointer -march=ivybridge -gnatNp fannkuchredux.adb
-	x86_64-linux-gnu-gnatbind-11 -x fannkuchredux.ali
-	x86_64-linux-gnu-gnatlink-11 fannkuchredux.ali -O3 -fomit-frame-pointer -march=ivybridge -o fannkuchredux.gnat-3.gnat_run
+	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
+	export PATH && \
+	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \
+	export LD_LIBRARY_PATH && \
+	gnatmake -O3 -fomit-frame-pointer -march=ivybridge -gnatNp -f fannkuchredux.adb -o fannkuchredux.gnat-3.gnat_run
 
 
 measure:
