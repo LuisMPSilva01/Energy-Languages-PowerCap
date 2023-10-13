@@ -3,16 +3,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.gpp-2.gpp_run 0 < ../../revcomp-input25000000.txt" C++ reverse-complement
+	sudo ../../RAPL/main "./revcomp.gpp-2.gpp_run 0 < revcomp-input25000000.txt" C++ reverse-complement
 
 run:
-	./revcomp.gpp-2.gpp_run 0 < ../../revcomp-input25000000.txt
+	./revcomp.gpp-2.gpp_run 0 < revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v ./revcomp.gpp-2.gpp_run 0 < ../../revcomp-input25000000.txt
+	/usr/bin/time -v ./revcomp.gpp-2.gpp_run 0 < revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./revcomp.gpp-2.gpp_run 0 < ../../revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes ./revcomp.gpp-2.gpp_run 0 < revcomp-input25000000.txt
 
 clean:
 	rm -f *.gpp_run

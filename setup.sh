@@ -21,9 +21,11 @@ sudo apt install cmake
     git clone https://github.com/attractivechaos/klib
     cd ../..
 
-    #C++ *não sei se já está
-    sudo apt install libtbb-dev
+    #C++ - acontece exatamente o mesmo que em C
+    sudo apt-get install libtbb-dev
     sudo apt-get install libboost-all-dev
+    sudo apt-get install g++
+
 
     #Chapel *compilador nao funciona*
     sudo apt-get install -y gcc g++ m4 perl python3 python3-dev bash make mawk git pkg-config cmake
