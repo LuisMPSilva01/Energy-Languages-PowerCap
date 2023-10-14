@@ -3,16 +3,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.swift_run 0 < ../../revcomp-input25000000.txt" Swift reverse-complement
+	sudo ../../RAPL/main "./revcomp.swift_run 0 < ../../inputs/revcomp-input25000000.txt" Swift reverse-complement
 
 run:
-	./revcomp.swift_run 0 < ../../revcomp-input25000000.txt
+	./revcomp.swift_run 0 < ../../inputs/revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v  ./revcomp.swift_run 0 < ../../revcomp-input25000000.txt
+	/usr/bin/time -v  ./revcomp.swift_run 0 < ../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ./revcomp.swift_run 0 < ../../revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes  ./revcomp.swift_run 0 < ../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm *.swift_run

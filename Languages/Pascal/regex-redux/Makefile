@@ -5,13 +5,13 @@ compile:
 	rm regexredux.fpascal-2.pas
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./regexredux.fpascal-2.fpascal_run 0 < ../../regexredux-input5000000.txt" Pascal regex-redux
+	sudo ../../RAPL/main "./regexredux.fpascal-2.fpascal_run 0 < r../../inputs/egexredux-input5000000.txt" Pascal regex-redux
 
 run:
-	./regexredux.fpascal-2.fpascal_run 0 < ../../regexredux-input5000000.txt
+	./regexredux.fpascal-2.fpascal_run 0 < ../../inputs/regexredux-input5000000.txt
 
 mem:
-	/usr/bin/time -v ./regexredux.fpascal-2.fpascal_run 0 < ../../regexredux-input5000000.txt
+	/usr/bin/time -v ./regexredux.fpascal-2.fpascal_run 0 < ../../inputs/regexredux-input5000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./regexredux.fpascal-2.fpascal_run 0 < ../../regexredux-input5000000.txt
+	valgrind --tool=massif --stacks=yes ./regexredux.fpascal-2.fpascal_run 0 < ../../inputs/regexredux-input5000000.txt

@@ -4,16 +4,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.dart-5.dart_run 0 < revcomp-input25000000.txt" Dart reverse-complement
+	sudo ../../RAPL/main "./revcomp.dart-5.dart_run 0 < ../../inputs/revcomp-input25000000.txt" Dart reverse-complement
 
 run:
-	./revcomp.dart-5.dart_run 0 < revcomp-input25000000.txt
+	./revcomp.dart-5.dart_run 0 < ../../inputs/revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v ./revcomp.dart-5.dart_run 0 < revcomp-input25000000.txt
+	/usr/bin/time -v ./revcomp.dart-5.dart_run 0 < ../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./revcomp.dart-5.dart_run 0 < revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes ./revcomp.dart-5.dart_run 0 < ../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm -r *.dart_run

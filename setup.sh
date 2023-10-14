@@ -32,7 +32,7 @@ sudo apt install cmake
     sudo apt-get install libboost-all-dev
     sudo apt-get install g++
 
-    #Chapel - v1.29.0
+    #Chapel - v1.29.0 [NOTA: Isto vai demorar +- 4h a instalar]
     sudo apt-get install -y gcc g++ m4 perl python3 python3-dev bash make mawk git pkg-config cmake
     sudo apt-get install -y llvm-dev llvm clang libclang-dev libclang-cpp-dev libedit-dev
     wget https://github.com/chapel-lang/chapel/releases/download/1.29.0/chapel-1.29.0.tar.gz
@@ -58,33 +58,39 @@ sudo apt install cmake
     rm dotnet-install.sh
     sudo apt install aspnetcore-runtime-7.0
 
-
     #Dart - v2.18.6 
     wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.6/sdk/dartsdk-linux-x64-release.zip
     unzip dartsdk-linux-x64-release.zip
     sudo mv dart-sdk /opt/src/dart-sdk
     rm dartsdk-linux-x64-release.zip
 
-    #Erlang
+    #Erlang - [CORRIGIR]
     wget https://github.com/erlang/otp/releases/download/OTP-25.2.1/otp_src_25.2.1.tar.gz
     tar -zxvf otp_src_25.2.1.tar.gz 
     cd otp_src_25.2.1/
-    ./configure --prefix=/opt/src/otp_src_25.2.1
+    export ERL_TOP=`pwd`
+    ./configure
     sudo make
     sudo make install
     cd ..
-    rm -r otp_src_25.2.1
-    rm -r otp_src_25.2.1.tar.gz 
+    sudo cp -r otp_src_25.2.1 /opt/src/
+    sudo rm -r otp_src_25.2.1
+    sudo rm -r otp_src_25.2.1.tar.gz 
 
     #Intel license
     sudo apt install net-tools
 
     #Fortran o login nao funciona de momento
+    #TODO
+
+    #FSharp
 
     #GO
     wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
     mkdir /opt/src/go1.20
     sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.21.1.linux-amd64.tar.gz
+
+    #Hack
 
     #Haskell
     wget https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-x86_64-deb11-linux.tar.xz
@@ -118,25 +124,50 @@ sudo apt install cmake
     #sudo mkdir -p /opt/src/java-libs
     #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
 
-    #Racket
-    sudo apt install racket
+    #Java-GaalVM
 
-    #Swift - só o pi-digits não funciona por causa da biblioteca GMP
-    sudo apt-get install swift
-    sudo apt install clang libicu-dev libxml2 git libgmp-dev
-    sudo apt install binutils gnupg2 libc6-dev libcurl4 libedit2 libgcc-9-dev libsqlite3-0 libstdc++-9-dev libxml2 libz3-dev pkg-config tzdata zlib1g-dev
-    wget https://download.swift.org/swift-5.8-branch/ubuntu2204/swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a/swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04.tar.gz
-    tar xzf swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04.tar.gz
-    sudo mv swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04 /opt/swift
-    rm -rf *.gz swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04/
-    echo 'export PATH=/opt/swift/usr/bin:$PATH' >> ~/.bashrc
+    #JavaScript
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     source ~/.bashrc
+    nvm install 19.0.0
+    nvm use 19.0.0
+    npm install -g npm@latest
+    cd Languages/JavaScript/pidigits/
+    npm install mpzjs
+    cd ../../
 
-    #Ruby
-    sudo apt install rbenv
-    sudo apt-get install -y libyaml-dev
-    rbenv install 3.2.0
-    rbenv global 3.2.0
+    #JRuby
+
+    #Julia
+    wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.5-linux-x86_64.tar.gz
+    tar -xzvf julia-1.8.5-linux-x86_64.tar.gz
+    sudo cp -r julia-1.8.5 /opt/
+    sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin/julia
+    rm -rf julia-1.8.5/ julia-1.8.5-linux-x86_64.tar.gz 
+    
+    #Lisp
+    wget "https://downloads.sourceforge.net/project/sbcl/sbcl/2.3.0/sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-linux-binary.tar.bz2%2Fdownload"
+    mv "sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g==&r=https:%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-li" sbcl-2.3.0-x86-64-linux-binary.tar.bz2
+    rm wget-log 
+    tar -xvjf sbcl-2.3.0-x86-64-linux-binary.tar.bz2
+    cd sbcl-2.3.0-x86-64-linux
+    sudo sh install.sh
+    cd ..
+    rm -rf sbcl-2.3.0-x86-64-linux/ sbcl-2.3.0-x86-64-linux-binary.tar.bz2 
+    curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
+    sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
+         --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
+         --eval '(ql:add-to-init-file)' \
+         --quit
+
+    #Lua - pidigits não tem implementação funcional
+    curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
+    tar zxf lua-5.4.4.tar.gz
+    cd lua-5.4.4
+    make all test
+    sudo make install
+    cd ..
+    rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 
 
     #Ocaml
     sudo apt install opam
@@ -156,8 +187,6 @@ sudo apt install cmake
     cd pasmp/src/
     fpc PasMP.pas
     ./PasMP
-
-
 
     #Perl
     \curl -L https://install.perlbrew.pl | bash
@@ -191,6 +220,26 @@ sudo apt install cmake
     curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 
     cd
     
+    #Racket
+    sudo apt install racket
 
+    #Ruby
+    sudo apt install rbenv
+    sudo apt-get install -y libyaml-dev
+    rbenv install 3.2.0
+    rbenv global 3.2.0
 
+    #Rust
 
+    #Swift - só o pi-digits não funciona por causa da biblioteca GMP
+    sudo apt-get install swift
+    sudo apt install clang libicu-dev libxml2 git libgmp-dev
+    sudo apt install binutils gnupg2 libc6-dev libcurl4 libedit2 libgcc-9-dev libsqlite3-0 libstdc++-9-dev libxml2 libz3-dev pkg-config tzdata zlib1g-dev
+    wget https://download.swift.org/swift-5.8-branch/ubuntu2204/swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a/swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04.tar.gz
+    tar xzf swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04.tar.gz
+    sudo mv swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04 /opt/swift
+    rm -rf *.gz swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04/
+    echo 'export PATH=/opt/swift/usr/bin:$PATH' >> ~/.bashrc
+    source ~/.bashrc
+
+    #TypeScript
