@@ -51,17 +51,13 @@ sudo apt install cmake
     export PATH=/opt/src/chapel-1.29.0/bin:$PATH
     source ~/.bashrc
     
-    
-    #Csharp (.net)
+    #Csharp (.net) - v7.0.200
     wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
     chmod +x ./dotnet-install.sh
     ./dotnet-install.sh --version 7.0.200
     rm dotnet-install.sh
     sudo apt install aspnetcore-runtime-7.0
-    git clone https://github.com/dotnet/corefxlab.git
-    cd corefxlab/
-    ~/.dotnet/dotnet restore
-    cd ..
+
 
     #Dart
     wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.6/sdk/dartsdk-linux-x64-release.zip

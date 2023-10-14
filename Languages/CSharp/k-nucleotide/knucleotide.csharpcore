@@ -210,3 +210,4 @@ public static class KNucleotide
         Console.WriteLine(task18.Result);
     }
 }
+    

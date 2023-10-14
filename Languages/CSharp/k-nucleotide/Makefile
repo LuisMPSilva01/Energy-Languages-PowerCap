@@ -1,7 +1,7 @@
 compile:
 	~/.dotnet/dotnet new console --force
 	cp knucleotide.csharpcore Program.cs
-	~/.dotnet/dotnet add reference ../../corefxlab/src/Microsoft.Experimental.Collections
+	~/.dotnet/dotnet add package Microsoft.Experimental.Collections --prerelease
 	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
 
 measure:
