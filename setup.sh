@@ -59,17 +59,11 @@ sudo apt install cmake
     sudo apt install aspnetcore-runtime-7.0
 
 
-    #Dart
+    #Dart - v2.18.6 
     wget https://storage.googleapis.com/dart-archive/channels/stable/release/2.18.6/sdk/dartsdk-linux-x64-release.zip
     unzip dartsdk-linux-x64-release.zip
     sudo mv dart-sdk /opt/src/dart-sdk
-    rm -r dart-sdk
     rm dartsdk-linux-x64-release.zip
-
-    #Intel license
-    sudo apt install net-tools
-
-    #Fortran o login nao funciona de momento
 
     #Erlang
     wget https://github.com/erlang/otp/releases/download/OTP-25.2.1/otp_src_25.2.1.tar.gz
@@ -81,6 +75,11 @@ sudo apt install cmake
     cd ..
     rm -r otp_src_25.2.1
     rm -r otp_src_25.2.1.tar.gz 
+
+    #Intel license
+    sudo apt install net-tools
+
+    #Fortran o login nao funciona de momento
 
     #GO
     wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
