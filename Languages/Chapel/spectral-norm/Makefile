@@ -1,5 +1,5 @@
 compile:
-	/opt/src/chapel-1.29.0/bin/chpl --fast spectralnorm.chapel-2.chpl -o spectralnorm.chapel-2.chapel_run
+	/opt/src/chapel-1.29.0/bin/linux64-x86_64/chpl --fast spectralnorm.chapel-2.chpl -o spectralnorm.chapel-2.chapel_run
 measure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "./spectralnorm.chapel-2.chapel_run --n=5500" Chapel spectral-norm

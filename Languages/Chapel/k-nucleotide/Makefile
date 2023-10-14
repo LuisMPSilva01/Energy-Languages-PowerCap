@@ -1,5 +1,5 @@
 compile:
-	/opt/src/chapel-1.29.0/bin/chpl --fast knucleotide.chapel-4.chpl -o knucleotide.chapel-4.chapel_run
+	/opt/src/chapel-1.29.0/bin/linux64-x86_64/chpl --fast knucleotide.chapel-4.chpl -o knucleotide.chapel-4.chapel_run
 measure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "./knucleotide.chapel-4.chapel_run --n=0 < knucleotide-input25000000.txt" Chapel k-nucleotide

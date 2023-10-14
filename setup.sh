@@ -7,7 +7,8 @@ sudo apt-get update
 sudo apt install cmake
 
 ## Compilers ##
-    #Ada
+
+    #Ada - v11.3.0
     sudo apt-get install libgmp-dev
     sudo apt-get install libapr1-dev
     wget https://gnat-packs.annexi-strayline.com/x86_64-linux-gnu/gnat-11.3.0-base.tar.xz
@@ -16,7 +17,6 @@ sudo apt install cmake
     sudo mv gnat-11.3.0-base/opt/gcc-fsf-gnat /usr/local/
     export PATH=/usr/local/gcc-fsf-gnat/bin:$PATH
     rm -rf gnat-11.3.0-base gnat-11.3.0-base.tar 
-
 
     #C - experimentar "sudo apt-cache policy gcc" e ver que a versão realmente é 12.2.0, mas com "gcc --version" a versão é 12.3.0
     wget http://security.ubuntu.com/ubuntu/pool/main/g/gcc-defaults/gcc_12.2.0-3ubuntu1_amd64.deb
@@ -32,20 +32,26 @@ sudo apt install cmake
     sudo apt-get install libboost-all-dev
     sudo apt-get install g++
 
-
-    #Chapel *compilador nao funciona*
+    #Chapel - v1.29.0
     sudo apt-get install -y gcc g++ m4 perl python3 python3-dev bash make mawk git pkg-config cmake
     sudo apt-get install -y llvm-dev llvm clang libclang-dev libclang-cpp-dev libedit-dev
     wget https://github.com/chapel-lang/chapel/releases/download/1.29.0/chapel-1.29.0.tar.gz
     tar -xvzf chapel-1.29.0.tar.gz
     sudo rm -r chapel-1.29.0.tar.gz
     cd chapel-1.29.0/
-    sudo ./configure --prefix=/opt/src/chapel-1.29.0
-    sudo make
+    export CHPL_LLVM=bundled
+    ./configure --with-gmp
+    make
     sudo make install
+    export PATH=/usr/local/bin:$PATH
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
     cd ..
-    sudo rm -r chapel-1.29.0/
-
+    sudo cp -r chapel-1.29.0 /opt/src/
+    rm -rf chapel-1.29.0/
+    export PATH=/opt/src/chapel-1.29.0/bin:$PATH
+    source ~/.bashrc
+    
+    
     #Csharp (.net)
     wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
     chmod +x ./dotnet-install.sh
