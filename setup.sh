@@ -80,8 +80,7 @@ sudo apt install cmake
     #Intel license
     sudo apt install net-tools
 
-    #Fortran o login nao funciona de momento
-    #TODO
+    #Fortran o login nao funciona de momento [TODO]
 
     #FSharp - v7.0.102
     wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
@@ -102,7 +101,7 @@ sudo apt install cmake
     cd ../../..
 
 
-    #Haskell
+    #Haskell [TODO]
     wget https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-x86_64-deb11-linux.tar.xz
     tar -xvf ghc-9.4.4-x86_64-deb11-linux.tar.xz
     cd ghc-9.4.4-x86_64-unknown-linux/
@@ -122,7 +121,7 @@ sudo apt install cmake
     cabal install --lib parallel
 
 
-    #Java - o pidigits não está a dar (não consigo instalar o gmp)
+    #Java - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
     wget https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb
     sudo dpkg -i jdk-20_linux-x64_bin.deb
     sudo apt-get install -f
@@ -134,11 +133,11 @@ sudo apt install cmake
     #sudo mkdir -p /opt/src/java-libs
     #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
 
-    #JavaScript
+    #JavaScript v19.0.1
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     source ~/.bashrc
-    nvm install 19.0.0
-    nvm use 19.0.0
+    nvm install 19.0.1
+    nvm use 19.0.1
     npm install -g npm@latest
     cd Languages/JavaScript/pidigits/
     npm install mpzjs
@@ -237,7 +236,7 @@ sudo apt install cmake
 
     #Rust
 
-    #Swift - só o pi-digits não funciona por causa da biblioteca GMP
+    #Swift - só o pi-digits não funciona por causa da biblioteca GMP [TODO]
     sudo apt-get install swift
     sudo apt install clang libicu-dev libxml2 git libgmp-dev
     sudo apt install binutils gnupg2 libc6-dev libcurl4 libedit2 libgcc-9-dev libsqlite3-0 libstdc++-9-dev libxml2 libz3-dev pkg-config tzdata zlib1g-dev
