@@ -90,10 +90,18 @@ sudo apt install cmake
     rm dotnet-install.sh
     sudo apt install aspnetcore-runtime-7.0
 
-    #GO
-    wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
-    mkdir /opt/src/go1.20
-    sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.21.1.linux-amd64.tar.gz
+    #GO - v1.20
+    wget https://go.dev/dl/go1.20.linux-amd64.tar.gz  
+    sudo mkdir /opt/src/go1.20
+    sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.20.linux-amd64.tar.gz
+    sudo rm *.gz
+    sudo apt-get install libpcre3-dev
+    cd Languages/Go/regex-redux
+    /opt/src/go1.20/go/bin/go mod init regex-redux
+    /opt/src/go1.20/go/bin/go get github.com/GRbit/go-pcre@v1.0.0
+    cd ../../..
+
+
 
     #Hack
 
