@@ -229,9 +229,9 @@ sudo apt install cmake
     cd
     pip3.11 install gmpy2
 
-    #Racket
-    sudo apt install racket
-
+    #Racket - v8.7
+    sudo apt-get install racket
+    
     #Ruby
     sudo apt install rbenv
     sudo apt-get install -y libyaml-dev
