@@ -150,7 +150,7 @@ sudo apt install cmake
     sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin/julia
     rm -rf julia-1.8.5/ julia-1.8.5-linux-x86_64.tar.gz 
     
-    #Lisp
+    #Lisp - v2.3.0
     wget "https://downloads.sourceforge.net/project/sbcl/sbcl/2.3.0/sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-linux-binary.tar.bz2%2Fdownload"
     mv "sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g==&r=https:%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-li" sbcl-2.3.0-x86-64-linux-binary.tar.bz2
     rm wget-log 
