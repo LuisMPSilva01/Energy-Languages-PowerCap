@@ -83,7 +83,12 @@ sudo apt install cmake
     #Fortran o login nao funciona de momento
     #TODO
 
-    #FSharp
+    #FSharp - v7.0.102
+    wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+    chmod +x ./dotnet-install.sh
+    ./dotnet-install.sh --version 7.0.102
+    rm dotnet-install.sh
+    sudo apt install aspnetcore-runtime-7.0
 
     #GO
     wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
