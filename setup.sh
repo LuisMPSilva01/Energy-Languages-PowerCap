@@ -102,9 +102,6 @@ sudo apt install cmake
     cd ../../..
 
 
-
-    #Hack
-
     #Haskell
     wget https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-x86_64-deb11-linux.tar.xz
     tar -xvf ghc-9.4.4-x86_64-deb11-linux.tar.xz
@@ -137,8 +134,6 @@ sudo apt install cmake
     #sudo mkdir -p /opt/src/java-libs
     #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
 
-    #Java-GaalVM
-
     #JavaScript
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     source ~/.bashrc
@@ -148,8 +143,6 @@ sudo apt install cmake
     cd Languages/JavaScript/pidigits/
     npm install mpzjs
     cd ../../
-
-    #JRuby
 
     #Julia
     wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.5-linux-x86_64.tar.gz
@@ -254,5 +247,3 @@ sudo apt install cmake
     rm -rf *.gz swift-5.8-DEVELOPMENT-SNAPSHOT-2023-03-17-a-ubuntu22.04/
     echo 'export PATH=/opt/swift/usr/bin:$PATH' >> ~/.bashrc
     source ~/.bashrc
-
-    #TypeScript
