@@ -165,7 +165,8 @@ sudo apt install cmake
          --eval '(ql:add-to-init-file)' \
          --quit
 
-    #Lua - pidigits não tem implementação funcional
+    #Lua - v5.4.4
+    sudo apt-get install libpcre2-dev
     curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
     tar zxf lua-5.4.4.tar.gz
     cd lua-5.4.4
@@ -185,7 +186,7 @@ sudo apt install cmake
     opam install bigarray
     opam install ocamlfind
 
-    #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem
+    #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem [TODO]
     sudo apt install fpc
     sudo apt-get install libpcre3-dev
     git clone https://github.com/BeRo1985/pasmp

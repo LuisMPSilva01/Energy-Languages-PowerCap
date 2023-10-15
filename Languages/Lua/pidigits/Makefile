@@ -4,7 +4,7 @@ xmeasure:
 	sudo modprobe msr
 	sudo ../../RAPL/main "lua  pidigits.lua-5.lua 10000" Lua pidigits
 
-run:
+xrun:
 	lua  pidigits.lua-5.lua 10000
 
 mem:
