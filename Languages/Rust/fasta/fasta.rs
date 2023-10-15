@@ -1,16 +1,19 @@
 // The Computer Language Benchmarks Game
-// http://benchmarksgame.alioth.debian.org/
+// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 //
 // contributed by the Rust Project Developers
 // contributed by TeXitoi
-// multi-threaded version contributed by Alisdair Owens
+// contributed by Alisdair Owens
+// contributed by Ryohei Machida
 
+extern crate core;
 extern crate num_cpus;
+extern crate spin;
 
-use std::cmp::min;
-use std::io;
-use std::io::{Write, BufWriter, ErrorKind};
-use std::sync::{Mutex,Arc};
+use spin::Mutex;
+use std::cmp;
+use std::io::{self, ErrorKind, Write};
+use std::sync::Arc;
 use std::thread;
 
 const LINE_LENGTH: usize = 60;
@@ -18,158 +21,228 @@ const IM: u32 = 139968;
 const LINES: usize = 1024;
 const BLKLEN: usize = LINE_LENGTH * LINES;
 
-struct MyStdOut {
-    thread_count: u16,
-    next_thread_num: u16,
-    stdout: io::Stdout,
+#[repr(align(32))]
+#[derive(Clone)]
+struct Aligned<T>(T);
+
+#[derive(Clone)]
+struct WeightedRandom<T> {
+    cumprob: Aligned<[u32; 16]>,
+    elements: [T; 16],
+}
+
+impl<T: Copy + Default> WeightedRandom<T> {
+    fn from_slice(mapping: &[(T, f32)]) -> Self {
+        assert!(0 < mapping.len());
+        assert!(mapping.len() <= 16);
+        let mut elements = [T::default(); 16];
+        let mut cumprob = Aligned([i32::MAX as u32; 16]);
+        let mut acc = 0.;
+
+        for (i, map) in mapping.iter().enumerate() {
+            elements[i] = map.0;
+            acc += map.1;
+            cumprob.0[i] = (acc * IM as f32).floor() as u32;
+        }
+
+        Self { elements, cumprob }
+    }
+
+    #[cfg(target_feature = "sse2")]
+    fn gen_from_u32(&self, prob: u32) -> T {
+        #[cfg(target_arch = "x86")]
+        use core::arch::x86::*;
+        #[cfg(target_arch = "x86_64")]
+        use core::arch::x86_64::*;
+
+        // count elements in cumprob which satisfy `cumprob[i] < prob`
+        unsafe {
+            let needle = _mm_set1_epi32(prob as i32);
+            let ptr = self.cumprob.0.as_ptr();
+
+            let vcp1 = _mm_load_si128(ptr as _);
+            let vcp2 = _mm_load_si128(ptr.add(4) as _);
+            let vcp3 = _mm_load_si128(ptr.add(8) as _);
+            let vcp4 = _mm_load_si128(ptr.add(12) as _);
+
+            let mut count = _mm_setzero_si128();
+            count = _mm_sub_epi32(count, _mm_cmplt_epi32(vcp1, needle));
+            count = _mm_sub_epi32(count, _mm_cmplt_epi32(vcp2, needle));
+            count = _mm_sub_epi32(count, _mm_cmplt_epi32(vcp3, needle));
+            count = _mm_sub_epi32(count, _mm_cmplt_epi32(vcp4, needle));
+
+            let idx = _mm_extract_epi32(count, 0)
+                + _mm_extract_epi32(count, 1)
+                + _mm_extract_epi32(count, 2)
+                + _mm_extract_epi32(count, 3);
+            *self.elements.get_unchecked(idx as usize)
+        }
+    }
+
+    #[cfg(not(target_feature = "sse2"))]
+    fn gen_from_u32(&self, prob: u32) -> T {
+        let mut cnt = 0;
+
+        for i in 0..16 {
+            if self.cumprob.0[i] < prob {
+                cnt += 1;
+            }
+        }
+
+        self.elements[cnt]
+    }
 }
 
 struct MyRandom {
-    last: u32,
+    seed: u32,
     count: usize,
     thread_count: u16,
-    next_thread_num: u16,
+    next_thread_id: u16,
 }
 
 impl MyRandom {
     fn new(count: usize, thread_count: u16) -> MyRandom {
-        MyRandom { 
-            last: 42,
-            count: count,
-            thread_count: thread_count,
-            next_thread_num: 0
-        }
+        MyRandom { seed: 42, count, thread_count, next_thread_id: 0 }
     }
-    
-    fn normalize(p: f32) -> u32 {(p * IM as f32).floor() as u32}
 
     fn reset(&mut self, count: usize) {
-        self.next_thread_num = 0;
+        self.next_thread_id = 0;
         self.count = count;
     }
 
-    fn gen(&mut self, buf: &mut [u32], cur_thread: u16) -> Result<usize,()> {
-
-        if self.next_thread_num != cur_thread {
-            return Err(())
+    // performance bottleneck
+    fn gen(&mut self, buf: &mut [u32], cur_thread: u16) -> Result<usize, ()> {
+        if self.next_thread_id != cur_thread {
+            return Err(());
         }
+        self.next_thread_id = (self.next_thread_id + 1) % self.thread_count;
 
-        self.next_thread_num+=1;
-        if self.next_thread_num == self.thread_count {
-            self.next_thread_num = 0;
-        }
-
-        let to_gen = min(buf.len(), self.count);
+        let to_gen = cmp::min(buf.len(), self.count);
         for i in 0..to_gen {
-            self.last = (self.last * 3877 + 29573) % IM;
-            buf[i] = self.last;
+            self.seed = (self.seed * 3877 + 29573) % IM;
+            buf[i] = self.seed;
         }
         self.count -= to_gen;
         Ok(to_gen)
     }
 }
 
+struct MyStdOut {
+    thread_count: u16,
+    next_thread_id: u16,
+    stdout: io::Stdout,
+}
+
 impl MyStdOut {
     fn new(thread_count: u16) -> MyStdOut {
-        MyStdOut {
-            thread_count: thread_count,
-            next_thread_num: 0,
-            stdout: io::stdout() 
-        } 
+        MyStdOut { thread_count, next_thread_id: 0, stdout: io::stdout() }
     }
+
     fn write(&mut self, data: &[u8], cur_thread: u16) -> io::Result<()> {
-        if self.next_thread_num != cur_thread {
+        if self.next_thread_id != cur_thread {
             return Err(io::Error::new(ErrorKind::Other, ""));
         }
-
-        self.next_thread_num+=1;
-        if self.next_thread_num == self.thread_count {
-            self.next_thread_num = 0;
-        }
-
+        self.next_thread_id = (self.next_thread_id + 1) % self.thread_count;
         self.stdout.write_all(data)
     }
 }
 
-fn make_random(data: &[(char, f32)]) -> Vec<(u32, u8)> {
-    let mut acc = 0.;
-    data.iter()
-        .map(|&(ch, p)| {
-            acc += p;
-            (MyRandom::normalize(acc), ch as u8)
-        })
-        .collect()
+fn gcd(a: usize, b: usize) -> usize {
+    if b == 0 {
+        a
+    } else {
+        gcd(b, a % b)
+    }
 }
 
-fn make_fasta2<I: Iterator<Item=u8>>(header: &str, mut it: I, mut n: usize)
-    -> io::Result<()> {
-    let mut sysout = BufWriter::new(io::stdout());
-    try!(sysout.write_all(header.as_bytes()));
-    let mut line = [0u8; LINE_LENGTH + 1];
-    while n > 0 {
-        let nb = min(LINE_LENGTH, n);
-        for i in (0..nb) {
-            line[i] = it.next().unwrap();
+fn fasta_repeat(seq: &[u8], n: usize) -> io::Result<()> {
+    let num_lines_per_buf = seq.len() / gcd(seq.len(), LINE_LENGTH);
+    let buf_size = num_lines_per_buf * (LINE_LENGTH + 1);
+    let mut buf = vec![0u8; buf_size];
+    let mut n2 = n + n / LINE_LENGTH;
+
+    // fill buf
+    let mut it = seq.iter().copied().cycle();
+    for i in 0..num_lines_per_buf {
+        for j in 0..LINE_LENGTH {
+            buf[i * (LINE_LENGTH + 1) + j] = it.next().unwrap();
         }
-        n -= nb;
-        line[nb] = '\n' as u8;
-        try!(sysout.write_all(&line[..(nb+1)]));
+        buf[i * (LINE_LENGTH + 1) + LINE_LENGTH] = b'\n';
     }
+
+    // write to stdout
+    let stdout = io::stdout();
+    let mut stdout = stdout.lock();
+    while n2 >= buf_size {
+        stdout.write_all(buf.as_slice())?;
+        n2 -= buf_size;
+    }
+
+    // trailing line feed
+    if n % LINE_LENGTH != 0 {
+        buf[n2] = b'\n';
+        n2 += 1;
+    }
+
+    stdout.write_all(&buf[..n2])?;
     Ok(())
 }
 
-fn do_fasta(thread_num: u16, rng: Arc<Mutex<MyRandom>>,
-            wr: Arc<Mutex<MyStdOut>>, data: Vec<(u32, u8)>) {
-    
+fn fasta_random(
+    thread_id: u16,
+    rng: Arc<Mutex<MyRandom>>,
+    writer: Arc<Mutex<MyStdOut>>,
+    wr: WeightedRandom<u8>,
+) {
     let mut rng_buf = [0u32; BLKLEN];
     let mut out_buf = [0u8; BLKLEN + LINES];
-    let mut count;
     loop {
-        loop {
-            if let Ok(x) = rng.lock().unwrap().gen(&mut rng_buf, thread_num) {
-                count = x;
-                break;
+        let count = loop {
+            if let Ok(x) = rng.lock().gen(&mut rng_buf, thread_id) {
+                break x;
             }
         };
 
         if count == 0 {
             break;
         }
-        let mut line_count = 0;
-        for i in 0..count {
-            if i % LINE_LENGTH == 0 && i > 0 {
-                out_buf[i+line_count] = b'\n';
-                line_count += 1;
-            } 
-            let rn = rng_buf[i];
-            for j in &data {
-                if j.0 >= rn {
-                    out_buf[i+line_count] = j.1;
-                    break;
-                }
-            }
-        }
-        out_buf[count+line_count] = b'\n';
 
-        while let Err(_) = wr.lock()
-                .unwrap()
-                .write(&out_buf[..(count+line_count+1)], thread_num) {};
+        let rng_buf = &rng_buf[..count];
+
+        let mut line_count = 0;
+        for begin in (0..rng_buf.len()).step_by(LINE_LENGTH) {
+            let end = cmp::min(begin + LINE_LENGTH, rng_buf.len());
+
+            for j in begin..end {
+                let rn = rng_buf[j];
+                out_buf[j + line_count] = wr.gen_from_u32(rn);
+            }
+
+            out_buf[end + line_count] = b'\n';
+            line_count += 1;
+        }
+
+        while let Err(_) = writer
+            .lock()
+            .write(&out_buf[..(rng_buf.len() + line_count)], thread_id)
+        {
+        }
     }
 }
 
-fn make_fasta(header: &str, rng: Arc<Mutex<MyRandom>>,
-                 data: Vec<(u32, u8)>, num_threads: u16
-             ) -> io::Result<()> {
-
+fn fasta_random_par(
+    rng: Arc<Mutex<MyRandom>>,
+    wr: WeightedRandom<u8>,
+    num_threads: u16,
+) -> io::Result<()> {
     let stdout = Arc::new(Mutex::new(MyStdOut::new(num_threads)));
-    try!(io::stdout().write_all(header.as_bytes()));
     let mut threads = Vec::new();
     for thread in 0..num_threads {
-        let d = data.clone();
+        let wr = wr.clone();
         let rng_clone = rng.clone();
         let stdout_clone = stdout.clone();
         threads.push(thread::spawn(move || {
-            do_fasta(thread, rng_clone, stdout_clone, d);
+            fasta_random(thread, rng_clone, stdout_clone, wr);
         }));
     }
     for thread_guard in threads {
@@ -179,43 +252,66 @@ fn make_fasta(header: &str, rng: Arc<Mutex<MyRandom>>,
 }
 
 fn main() {
-    let n = std::env::args_os().nth(1)
+    let n = std::env::args_os()
+        .nth(1)
         .and_then(|s| s.into_string().ok())
         .and_then(|n| n.parse().ok())
         .unwrap_or(1000);
-    
-    let num_threads: u16 = num_cpus::get() as u16;
+    let num_threads: u16 = cmp::min(num_cpus::get() as u16, 2);
 
-    let rng = Arc::new(Mutex::new(MyRandom::new(n*3, num_threads)));
-    let alu: &[u8] = b"GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTT\
-                       GGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTC\
-                       GAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT\
-                       AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTG\
-                       TAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCT\
-                       TGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG\
-                       CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCT\
-                       CAAAAA";
+    // Homo sapiens alu
+    {
+        let alu: [u8; 287] = *b"GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTT\
+                                GGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTC\
+                                GAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT\
+                                AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTG\
+                                TAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCT\
+                                TGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG\
+                                CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTC\
+                                TCAAAAA";
 
-    let iub = &[('a', 0.27), ('c', 0.12), ('g', 0.12),
-                ('t', 0.27), ('B', 0.02), ('D', 0.02),
-                ('H', 0.02), ('K', 0.02), ('M', 0.02),
-                ('N', 0.02), ('R', 0.02), ('S', 0.02),
-                ('V', 0.02), ('W', 0.02), ('Y', 0.02)];
+        println!(">ONE Homo sapiens alu");
+        fasta_repeat(&alu, n * 2).unwrap();
+    }
 
-    let homosapiens = &[('a', 0.3029549426680),
-                        ('c', 0.1979883004921),
-                        ('g', 0.1975473066391),
-                        ('t', 0.3015094502008)];
+    let rng = Arc::new(Mutex::new(MyRandom::new(n * 3, num_threads)));
 
-    make_fasta2(">ONE Homo sapiens alu\n",
-                    alu.iter().cycle().map(|c| *c), n * 2).unwrap();
-    make_fasta(">TWO IUB ambiguity codes\n",
-                    rng.clone(), make_random(iub), num_threads).unwrap();
+    // IUB ambiguity codes
+    {
+        let iub = WeightedRandom::from_slice(&[
+            (b'a', 0.27),
+            (b'c', 0.12),
+            (b'g', 0.12),
+            (b't', 0.27),
+            (b'B', 0.02),
+            (b'D', 0.02),
+            (b'H', 0.02),
+            (b'K', 0.02),
+            (b'M', 0.02),
+            (b'N', 0.02),
+            (b'R', 0.02),
+            (b'S', 0.02),
+            (b'V', 0.02),
+            (b'W', 0.02),
+            (b'Y', 0.02),
+        ]);
 
-    rng.lock().unwrap().reset(n*5);
+        println!(">TWO IUB ambiguity codes");
+        fasta_random_par(rng.clone(), iub, num_threads).unwrap();
+    }
 
-    make_fasta(">THREE Homo sapiens frequency\n",
-                    rng, make_random(homosapiens), num_threads).unwrap();
+    rng.lock().reset(n * 5);
 
-    io::stdout().flush().unwrap();
+    // Homo sapience frequency
+    {
+        let homosapiens = WeightedRandom::from_slice(&[
+            (b'a', 0.3029549426680),
+            (b'c', 0.1979883004921),
+            (b'g', 0.1975473066391),
+            (b't', 0.3015094502008),
+        ]);
+
+        println!(">THREE Homo sapiens frequency");
+        fasta_random_par(rng, homosapiens, num_threads).unwrap();
+    }
 }

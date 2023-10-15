@@ -232,13 +232,25 @@ sudo apt install cmake
     #Racket - v8.7
     sudo apt-get install racket
     
-    #Ruby
-    sudo apt install rbenv
-    sudo apt-get install -y libyaml-dev
+    #Ruby - v3.2.0 [TODO] (falta o pidigits apenas)
+    sudo apt update
+    sudo apt install git curl libssl-dev libreadline-dev zlib1g-dev autoconf bison build-essential libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev libgmp-dev
+    curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+    source ~/.bashrc
     rbenv install 3.2.0
     rbenv global 3.2.0
 
-    #Rust
+    #Rust [TODO]
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source ~/.bashrc
+    rustup toolchain install 1.67.0
+    rustup default 1.67.0
+    #NOTA: Atualizar com a versão exata (15.0.6)
+    sudo apt-get update
+    sudo apt-get install llvm-15
+
 
     #Swift - só o pi-digits não funciona por causa da biblioteca GMP [TODO]
     sudo apt-get install swift
