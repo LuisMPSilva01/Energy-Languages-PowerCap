@@ -5,16 +5,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../inputs/revcomp-input25000000.txt" FSharp reverse-complement
+	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt" FSharp reverse-complement
 
 run:
-	/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../inputs/revcomp-input25000000.txt
+	/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v  /usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../inputs/revcomp-input25000000.txt
+	/usr/bin/time -v  /usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../inputs/revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes  /usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm -f -r bin

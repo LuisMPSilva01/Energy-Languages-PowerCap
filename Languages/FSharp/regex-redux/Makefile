@@ -5,16 +5,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../inputs/regexredux-input5000000.txt" FSharp regex-redux
+	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt" FSharp regex-redux
 
 run:
-	/usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../inputs/regexredux-input5000000.txt
+	/usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
 
 mem:
-	/usr/bin/time -v /usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../inputs/regexredux-input5000000.txt
+	/usr/bin/time -v /usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../inputs/regexredux-input5000000.txt
+	valgrind --tool=massif --stacks=yes /usr/bin/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
 
 clean:
 	rm -f -r bin

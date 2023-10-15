@@ -3,13 +3,13 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./regexredux.rust_run 0 < ../../inputs/regexredux-input5000000.txt" Rust regex-redux
+	sudo ../../RAPL/main "./regexredux.rust_run 0 < ../../../inputs/regexredux-input5000000.txt" Rust regex-redux
 
 run:
-	./regexredux.rust_run 0 < ../../inputs/regexredux-input5000000.txt
+	./regexredux.rust_run 0 < ../../../inputs/regexredux-input5000000.txt
 
 mem:
-	/usr/bin/time -v ./regexredux.rust_run 0 < ../../inputs/regexredux-input5000000.txt
+	/usr/bin/time -v ./regexredux.rust_run 0 < ../../../inputs/regexredux-input5000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./regexredux.rust_run 0 < ../../inputs/regexredux-input5000000.txt
+	valgrind --tool=massif --stacks=yes ./regexredux.rust_run 0 < ../../../inputs/regexredux-input5000000.txt

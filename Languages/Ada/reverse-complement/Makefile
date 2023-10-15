@@ -8,16 +8,16 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt" Ada reverse-complement
+	sudo ../../RAPL/main "./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt" Ada reverse-complement
 
 run:
-	./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt
+	./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt
 	
 mem:
-	/usr/bin/time -v ./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt
+	/usr/bin/time -v ./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ./revcomp.gnat-2.gnat_run 0 < revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes ./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm -f *.gnat_run 
