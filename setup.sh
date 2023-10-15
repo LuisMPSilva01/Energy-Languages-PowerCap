@@ -218,7 +218,7 @@ sudo apt install cmake
     sudo sed -i 's/;extension=shmop/extension=shmop/' /etc/php/8.1/apache2/php.ini
     source ~/.bashrc
 
-    #Python
+    #Python - v3.11.1
     cd /usr/src 
     sudo wget https://www.python.org/ftp/python/3.11.1/Python-3.11.1.tgz 
     sudo tar xzf Python-3.11.1.tgz 
@@ -227,7 +227,8 @@ sudo apt install cmake
     sudo make altinstall 
     curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 
     cd
-    
+    pip3.11 install gmpy2
+
     #Racket
     sudo apt install racket
 
