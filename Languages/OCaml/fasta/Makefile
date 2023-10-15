@@ -14,3 +14,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./fasta.ocaml-6.ocaml_run 25000000
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

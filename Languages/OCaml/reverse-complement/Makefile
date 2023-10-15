@@ -13,3 +13,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./revcomp.ocaml-3.ocaml_run 0 < ../../../inputs/revcomp-input25000000.txt
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

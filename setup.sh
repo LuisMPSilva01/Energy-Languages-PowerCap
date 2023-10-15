@@ -175,7 +175,7 @@ sudo apt install cmake
     cd ..
     rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 
 
-    #Ocaml
+    #Ocaml - v5.0.0
     sudo apt install opam
     opam init --disable-sandboxing --bare
     eval $(opam env)
@@ -185,6 +185,7 @@ sudo apt install cmake
     opam install gmp
     opam install bigarray
     opam install ocamlfind
+    opam install zarith
 
     #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem [TODO]
     sudo apt install fpc

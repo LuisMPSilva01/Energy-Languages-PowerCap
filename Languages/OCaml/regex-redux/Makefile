@@ -14,3 +14,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes  /usr/bin/time -v  ./regexredux.ocaml-2.ocaml_run 0 < ../../../inputs/regexredux-input5000000.txt
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

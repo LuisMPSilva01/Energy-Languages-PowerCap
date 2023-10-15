@@ -14,3 +14,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./nbody.ocaml_run 50000000
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

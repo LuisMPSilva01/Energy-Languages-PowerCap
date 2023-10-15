@@ -16,3 +16,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./spectralnorm.ocaml-3.ocaml_run 5500
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

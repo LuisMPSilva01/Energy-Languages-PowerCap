@@ -15,3 +15,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./mandelbrot.ocaml_run 16000
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

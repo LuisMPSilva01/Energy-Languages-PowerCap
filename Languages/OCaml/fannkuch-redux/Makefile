@@ -15,3 +15,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./fannkuchredux.ocaml-4.ocaml_run 12
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run

@@ -15,3 +15,6 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./binarytrees.ocaml-2.ocaml_run 21
+
+clean:
+	rm *.cmi *.cmx *.o *.ocaml_run
