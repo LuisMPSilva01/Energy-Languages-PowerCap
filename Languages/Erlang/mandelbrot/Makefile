@@ -1,18 +1,18 @@
 compile:
 	cp mandelbrot.erlang-4.erlang mandelbrot.erl
-	/opt/src/otp_src_25.2.1/bin/erlc mandelbrot.erl
+	/opt/erlang/25.2.1/bin/erlc mandelbrot.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000" Erlang mandelbrot
+	sudo ../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000" Erlang mandelbrot
 
 run:
-	/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000
+	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000
 
 mem:
-	/usr/bin/time -v  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000
+	/usr/bin/time -v  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000
+	valgrind --tool=massif --stacks=yes  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  mandelbrot main 16000
 
 clean:
 	rm -f *.beam

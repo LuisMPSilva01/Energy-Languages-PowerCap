@@ -1,18 +1,18 @@
 compile:
 	cp binarytrees.erlang-2.erlang binarytrees.erl
-	/opt/src/otp_src_25.2.1/bin/erlc binarytrees.erl
+	/opt/erlang/25.2.1/bin/erlc binarytrees.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21" Erlang binary-trees
+	sudo ../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21" Erlang binary-trees
 
 run:
-	/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21
+	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21
 
 mem:
-	/usr/bin/time -v  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21
+	/usr/bin/time -v  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21
+	valgrind --tool=massif --stacks=yes  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  binarytrees main 21
 
 clean:
 	rm -f *.beam

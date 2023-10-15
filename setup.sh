@@ -64,16 +64,16 @@ sudo apt install cmake
     sudo mv dart-sdk /opt/src/dart-sdk
     rm dartsdk-linux-x64-release.zip
 
-    #Erlang - [CORRIGIR]
+    #Erlang - v25.2.1
     wget https://github.com/erlang/otp/releases/download/OTP-25.2.1/otp_src_25.2.1.tar.gz
     tar -zxvf otp_src_25.2.1.tar.gz 
     cd otp_src_25.2.1/
     export ERL_TOP=`pwd`
-    ./configure
+    export LANG=C 
+    ./configure --prefix=/opt/erlang/25.2.1
     sudo make
     sudo make install
     cd ..
-    sudo cp -r otp_src_25.2.1 /opt/src/
     sudo rm -r otp_src_25.2.1
     sudo rm -r otp_src_25.2.1.tar.gz 
 

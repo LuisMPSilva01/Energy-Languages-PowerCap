@@ -1,18 +1,18 @@
 compile:
 	cp regexredux.erlang-6.erlang regexredux.erl
-	/opt/src/otp_src_25.2.1/bin/erlc regexredux.erl
-xmeasure:
+	/opt/erlang/25.2.1/bin/erlc regexredux.erl
+measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../inputs/regexredux-input50000.txt" Erlang regex-redux
+	sudo ../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../../inputs/regexredux-input5000000.txt" Erlang regex-redux
 
 run:
-	/opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../inputs/regexredux-input50000.txt
+	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../../inputs/regexredux-input5000000.txt
 
 mem:
-	/usr/bin/time -v  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../inputs/regexredux-input50000.txt
+	/usr/bin/time -v  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../../inputs/regexredux-input5000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /opt/src/otp_src_25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../inputs/regexredux-input50000.txt
+	valgrind --tool=massif --stacks=yes  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run -noinput -run regexredux main 0 < ../../../inputs/regexredux-input5000000.txt
 
 clean:
 	rm -f *.beam
