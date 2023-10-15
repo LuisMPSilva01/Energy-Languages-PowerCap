@@ -195,10 +195,11 @@ sudo apt install cmake
     fpc PasMP.pas
     ./PasMP
 
-    #Perl
+    #Perl - v5.36.0
     \curl -L https://install.perlbrew.pl | bash
     source ~/perl5/perlbrew/etc/bashrc
     perlbrew install 5.36.0
+    cpan Math::BigInt::GMP
 
     #PHP
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
