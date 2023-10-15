@@ -133,7 +133,7 @@ sudo apt install cmake
     #sudo mkdir -p /opt/src/java-libs
     #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
 
-    #JavaScript v19.0.1
+    #JavaScript - v19.0.1
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
     source ~/.bashrc
     nvm install 19.0.1
@@ -143,7 +143,7 @@ sudo apt install cmake
     npm install mpzjs
     cd ../../
 
-    #Julia
+    #Julia - v1.8.5
     wget https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.5-linux-x86_64.tar.gz
     tar -xzvf julia-1.8.5-linux-x86_64.tar.gz
     sudo cp -r julia-1.8.5 /opt/
