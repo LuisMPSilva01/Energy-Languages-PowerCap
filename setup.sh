@@ -201,7 +201,7 @@ sudo apt install cmake
     perlbrew install 5.36.0
     cpan Math::BigInt::GMP
 
-    #PHP
+    #PHP - v8.2.1
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
     tar -xzf php-8.2.1.tar.gz
     cd php-8.2.1/
