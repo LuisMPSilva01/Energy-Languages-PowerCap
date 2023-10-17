@@ -101,13 +101,13 @@ sudo apt install cmake
     cd ../../..
 
 
-    #Haskell [TODO]
+    #Haskell -v9.4.4
     wget https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-x86_64-deb11-linux.tar.xz
     tar -xvf ghc-9.4.4-x86_64-deb11-linux.tar.xz
     cd ghc-9.4.4-x86_64-unknown-linux/
     ./configure --prefix=/opt/src/ghc9.4.4
     sudo make install
-    cd ..fasta is looking kinda weird idk
+    cd ..
     rm -r ghc-9.4.4-x86_64-unknown-linux
     wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.1/llvm-13.0.1.src.tar.xz
     tar -xvf llvm-13.0.1.src.tar.xz
@@ -121,17 +121,20 @@ sudo apt install cmake
     cabal install --lib parallel
 
 
-    #Java - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
+    #Java - v20.0.2 - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
     wget https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb
     sudo dpkg -i jdk-20_linux-x64_bin.deb
     sudo apt-get install -f
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-20/bin/java 1
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-20/bin/javac 1
     sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-20/bin/jar 1
-    #!!!!!!!!!!!!!!!!!!! É necessário sacar este jar https://jar-download.com/artifacts/it.unimi.dsi/fastutil/8.3.1/source-code
-    #unzip jar_files.zip
-    #sudo mkdir -p /opt/src/java-libs
-    #sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
+    rm jdk-20_linux-x64_bin.deb
+    #-----------------Download .jar from https://jar-download.com/artifacts/it.unimi.dsi/fastutil/8.3.1/source-code
+    cd Languages/Java
+    unzip jar_files.zip
+    sudo mkdir -p /opt/src/java-libs
+    sudo mv fastutil-8.3.1.jar /opt/src/java-libs/fastutil-8.3.1.jar
+    cd ..
 
     #JavaScript - v19.0.1
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
@@ -247,10 +250,12 @@ sudo apt install cmake
     source ~/.bashrc
     rustup toolchain install 1.67.0
     rustup default 1.67.0
-    #NOTA: Atualizar com a versão exata (15.0.6)
-    sudo apt-get update
-    sudo apt-get install llvm-15
-
+    cd Languages/Rust/binary-trees
+    cargo init --bin
+    cargo add bumpalo
+    cargo add crayon
+    cd ../../..
+    
 
     #Swift - só o pi-digits não funciona por causa da biblioteca GMP [TODO]
     sudo apt-get install swift

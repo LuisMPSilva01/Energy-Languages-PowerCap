@@ -13,3 +13,5 @@ mem:
 valgrind:
 	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java -Djava.library.path=Include/java  pidigits 10000
 
+clean:
+	rm -f *.class
