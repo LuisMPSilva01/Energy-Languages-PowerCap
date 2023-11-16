@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, fannkuch-redux, -1,42.413024902343750000, 40.347412109375000000,  ,  , 3583, 44.2, 3712
+C++, fannkuch-redux, -1,40.364562988281250000, 38.708374023437500000,  ,  , 3264, 45.8, 3712

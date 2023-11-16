@@ -1,5 +1,5 @@
 #!/bin/bash
-NTIMES=500
+NTIMES=2
 
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL
@@ -28,8 +28,8 @@ cd ..
 echo "Language,Program,PowerLimit,Package,Core,GPU,DRAM,Time,Temperature,Memory" > measurements.csv
 
 # Loop over power limit values
-for limit in -1 2 10 15 25
-#for limit in -1
+#for limit in -1 2 10 15 25
+for limit in -1
     do
     cd Utils/
     python3 raplCapUpdate.py $limit ../RAPL/main.c
@@ -90,4 +90,4 @@ cd RAPL/
 make clean
 cd ..
 
-sudo reboot
+#sudo reboot

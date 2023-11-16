@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C, fibo, -1,23.454772949218750000, 20.470581054687500000,  ,  , 2978, 52.0, 134400
+C, fibo, -1,24.207214355468750000, 21.399536132812500000,  ,  , 2821, 51.8, 134400

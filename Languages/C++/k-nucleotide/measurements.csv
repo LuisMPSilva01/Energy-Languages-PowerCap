@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, k-nucleotide, -1,20.578552246093750000, 18.780578613281250000,  ,  , 2439, 45.0, 156244
+C++, k-nucleotide, -1,18.963623046875000000, 17.642272949218750000,  ,  , 2150, 44.0, 155860

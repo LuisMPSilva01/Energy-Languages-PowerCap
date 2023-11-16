@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, spectral-norm, -1,5.687683105468750000, 5.360656738281250000,  ,  , 510, 45.2, 2432
+C++, spectral-norm, -1,4.732299804687500000, 4.473937988281250000,  ,  , 398, 45.2, 2432

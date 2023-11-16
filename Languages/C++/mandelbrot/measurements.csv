@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, mandelbrot, -1,11.479675292968750000, 10.983703613281250000,  ,  , 812, 45.2, 34048
+C++, mandelbrot, -1,10.588500976562500000, 10.153503417968750000,  ,  , 756, 47.5, 34048

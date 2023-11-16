@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, regex-redux, -1,10.959106445312500000, 9.987670898437500000,  ,  , 1583, 41.8, 275528
+C++, regex-redux, -1,10.707275390625000000, 9.802856445312500000,  ,  , 1543, 41.0, 275708

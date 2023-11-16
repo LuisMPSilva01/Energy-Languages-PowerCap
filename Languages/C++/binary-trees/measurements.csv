@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, binary-trees, -1,16.920532226562500000, 15.847778320312500000,  ,  , 1312, 43.8, 234036
+C++, binary-trees, -1,17.542175292968750000, 16.301696777343750000,  ,  , 1456, 44.0, 299316

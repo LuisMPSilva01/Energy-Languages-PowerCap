@@ -1,6 +1,3 @@
-Language, Program, PowerLimit, Package , Core(s) , GPU , DRAM , Time (ms) , Temperature , Memory 
-C ,mandelbrot ,2000 ,0.097229003906250000, 0.081909179687500000,  ,  , 5 , 54.2 , 768 
-C ,mandelbrot ,2000 ,0.062683105468750000, 0.055908203125000000,  ,  , 3 , 54.2 , 768 
-C ,mandelbrot ,2000 ,0.108581542968750000, 0.076538085937500000,  ,  , 4 , 54.2 , 768 
-C ,mandelbrot ,2000 ,0.207702636718750000, 0.137145996093750000,  ,  , 7 , 54.2 , 768 
-C ,mandelbrot ,2000 ,0.061767578125000000, 0.067443847656250000,  ,  , 3 , 63.5 , 768 
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C, mandelbrot, -1,18.691772460937500000, 17.671447753906250000,  ,  , 1536, 43.0, 32896
+C, mandelbrot, -1,15.616638183593750000, 14.936401367187500000,  ,  , 1365, 45.0, 33152

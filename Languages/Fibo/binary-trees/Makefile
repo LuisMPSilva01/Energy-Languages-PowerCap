@@ -7,7 +7,7 @@ compile:
 	
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./binarytrees.gcc-3.gcc_run 21" C binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "./binarytrees.gcc-3.gcc_run 21" C fibo $(NTIMES)
 
 run:
 	./binarytrees.gcc-3.gcc_run 21

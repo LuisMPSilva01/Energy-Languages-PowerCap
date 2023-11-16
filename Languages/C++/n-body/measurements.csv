@@ -1,0 +1,3 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+C++, n-body, -1,13.850830078125000000, 12.391174316406250000,  ,  , 2752, 42.0, 1536
+C++, n-body, -1,12.472045898437500000, 11.187927246093750000,  ,  , 2724, 42.0, 1536
