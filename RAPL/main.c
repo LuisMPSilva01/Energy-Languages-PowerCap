@@ -181,8 +181,8 @@ void performMeasurements(const char *command, const char *language, const char *
         rapl_after(fp, core);
         sprintf(str_temp, "%.1f", getTemperature());
         fprintf(fp, "%G, %s, %d\n", time_spent, str_temp, mem);
+        fflush(fp);
     }
-
     fclose(fp);
 }
 

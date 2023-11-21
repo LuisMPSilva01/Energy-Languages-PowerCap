@@ -1,5 +1,5 @@
 #!/bin/bash
-NTIMES=500
+NTIMES=200
 
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL

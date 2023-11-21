@@ -7,11 +7,14 @@ float getTemperature() {
     int count = 0;
 
     // Run sensors command and capture output
+    // Run sensors command and capture output
     int status = system("sensors > temp.txt");
     if (status != 0) {
-        printf("Error executing command: sensors > temp.txt\n");
+        perror("Error executing command: sensors > temp.txt");
+        printf("STATUS:%d \n", status);
         return -1;
     }
+
     FILE* temp_file = fopen("temp.txt", "r");
         
     // Parse temperature from output

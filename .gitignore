@@ -7,3 +7,5 @@ lshw
 sysinfo.*
 
 corefxlab/
+raplcap/
+powercap/
