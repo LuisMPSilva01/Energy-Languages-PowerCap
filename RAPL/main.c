@@ -13,9 +13,9 @@
 #include "rapl.h"
 #include "sensors.h"
 
-#define TEMPERATURETHRESHOLD 44.25
+#define TEMPERATURETHRESHOLD 31.0
 #define VARIANCE 5
-#define WHATTSCAP -1
+#define WHATTSCAP 2
 #define MAX_STRING_LENGTH 500
 #define MAX_COMMAND_LENGTH 500
 #define MEASUREMENTS_FILE "measurements.csv"
@@ -28,7 +28,7 @@ long fib(int n)
         return fib(n - 1) + fib(n - 2);
 }
 
-int initializeRapl(raplcap rc){
+int initializeRapl(raplcap *rc){
     printf("Running with CAP\n");
     raplcap_limit rl_short, rl_long;
     uint32_t q, j, n, d;
@@ -199,6 +199,7 @@ void writeErrorMessage(const char *language, const char *program){
     fclose(fp);
 }
 
+
 int main(int argc, char **argv) {
     char command[MAX_COMMAND_LENGTH];
     char language[MAX_STRING_LENGTH] = "";
@@ -222,7 +223,7 @@ int main(int argc, char **argv) {
     fflush(stdout);
 
     if (WHATTSCAP != -1) {
-        if(initializeRapl(rc))
+        if(initializeRapl(&rc))
             return -1;
     }
     
@@ -242,4 +243,6 @@ int main(int argc, char **argv) {
         }
     }
     return 0;
+    
 }
+

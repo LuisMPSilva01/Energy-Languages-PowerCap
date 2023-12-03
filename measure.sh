@@ -1,5 +1,5 @@
 #!/bin/bash
-NTIMES=200
+NTIMES=20
 
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL
@@ -28,7 +28,7 @@ cd ..
 echo "Language,Program,PowerLimit,Package,Core,GPU,DRAM,Time,Temperature,Memory" > measurements.csv
 
 # Loop over power limit values
-for limit in -1 2 10 15 25
+for limit in 2 -1 10 15 25
 #for limit in -1
     do
     cd Utils/
@@ -61,7 +61,7 @@ for limit in -1 2 10 15 25
             fi
         done
     done
-comment
+
     for program in "Languages/C"/*; do
         cd $program
         make compile
@@ -73,6 +73,7 @@ comment
         make clean
         cd ../../..
     done
+comment
     for program in "Languages/C++"/*; do
         cd $program
         make compile

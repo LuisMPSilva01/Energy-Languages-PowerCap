@@ -36,7 +36,6 @@ for limit in -1
     cd ..
     #Make RAPL lib
     cd RAPL/
-    rm sensors.so
     make
     cd ..
 

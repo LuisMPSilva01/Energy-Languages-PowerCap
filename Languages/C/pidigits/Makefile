@@ -1,4 +1,4 @@
-NTIMES=500
+NTIMES=5
 
 export NTIMES
 
