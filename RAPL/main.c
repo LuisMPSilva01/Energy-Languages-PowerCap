@@ -13,9 +13,9 @@
 #include "rapl.h"
 #include "sensors.h"
 
-#define TEMPERATURETHRESHOLD 31.0
-#define VARIANCE 5
-#define WHATTSCAP 2
+#define TEMPERATURETHRESHOLD 49.5
+#define VARIANCE 30
+#define WHATTSCAP -1
 #define MAX_STRING_LENGTH 500
 #define MAX_COMMAND_LENGTH 500
 #define MEASUREMENTS_FILE "measurements.csv"
@@ -34,7 +34,7 @@ int initializeRapl(raplcap *rc){
     uint32_t q, j, n, d;
 
     // initialize
-    if (raplcap_init(&rc))
+    if (raplcap_init(rc))
     {
         perror("raplcap_init");
         return -1;
@@ -49,11 +49,11 @@ int initializeRapl(raplcap *rc){
     }
 
     // assuming each package has the same number of die, only querying for package=0
-    d = raplcap_get_num_die(&rc, 0);
+    d = raplcap_get_num_die(rc, 0);
     if (d == 0)
     {
         perror("raplcap_get_num_die");
-        raplcap_destroy(&rc);
+        raplcap_destroy(rc);
         return -1;
     }
 
@@ -68,7 +68,7 @@ int initializeRapl(raplcap *rc){
     {
         for (j = 0; j < d; j++)
         {
-            if (raplcap_pd_set_limits(&rc, q, j, RAPLCAP_ZONE_PACKAGE, &rl_long, &rl_short))
+            if (raplcap_pd_set_limits(rc, q, j, RAPLCAP_ZONE_PACKAGE, &rl_long, &rl_short))
             {
                 perror("raplcap_pd_set_limits");
             }
@@ -81,7 +81,7 @@ int initializeRapl(raplcap *rc){
     {
         for (j = 0; j < d; j++)
         {
-            if (raplcap_pd_set_zone_enabled(&rc, q, j, RAPLCAP_ZONE_PACKAGE, 1))
+            if (raplcap_pd_set_zone_enabled(rc, q, j, RAPLCAP_ZONE_PACKAGE, 1))
             {
                 perror("raplcap_pd_set_zone_enabled");
             }
