@@ -13,5 +13,9 @@ run:
 mem:
 	/usr/bin/time -v  ./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt
 
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt

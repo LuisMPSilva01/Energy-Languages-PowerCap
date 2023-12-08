@@ -13,6 +13,10 @@ run:
 
 mem:
 	/usr/bin/time -v  ./nbody.fpascal_run 50000000
-
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
+	
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./nbody.fpascal_run 50000000

@@ -1,6 +1,6 @@
 compile:
 	cp binarytrees.fpascal binarytrees.pas
-	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Mdelphi -oFPASCAL_RUN binarytrees.fpascal-7.pas PasMP.pas
+	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Mdelphi -oFPASCAL_RUN binarytrees.pas
 	mv FPASCAL_RUN binarytrees.fpascal_run
 	rm binarytrees.pas
 	
@@ -14,5 +14,9 @@ run:
 mem:
 	/usr/bin/time -v ./binarytrees.fpascal_run 21
 
+clean:
+	rm *.o
+	rm *run
+	rm *.ppu
 valgrind:
 	valgrind --tool=massif --stacks=yes ./binarytrees.fpascal_run 21

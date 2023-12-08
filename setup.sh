@@ -190,13 +190,20 @@ sudo apt install cmake
     opam install ocamlfind
     opam install zarith
 
-    #Pascal - faltam mandelbrot, pidigits e binarytrees funcionarem [TODO]
+    #Pascal
     sudo apt install fpc
     sudo apt-get install libpcre3-dev
     git clone https://github.com/BeRo1985/pasmp
+    cp pasmp/src/PasMP.pas Languages/Pascal/binary-trees/
     cd pasmp/src/
     fpc PasMP.pas
     ./PasMP
+    cd ../../
+    #git clone https://github.com/alrieckert/lazarus.git
+    #cp lazarus/components/multithreadprocs/mtprocs.pas Languages/Pascal/mandelbrot/
+    #cp lazarus/components/multithreadprocs/mtpcpu.pas Languages/Pascal/mandelbrot/
+    #sudo rm -r lazarus/
+    sudo rm -r pasmp
 
     #Perl - v5.36.0
     \curl -L https://install.perlbrew.pl | bash

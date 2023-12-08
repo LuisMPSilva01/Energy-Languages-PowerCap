@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/usr/lib/jvm/jdk-20/bin/javac -d .  binarytrees.java
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java binarytrees 21" Java binary-trees
+	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java binarytrees 21" Java binary-trees $(NTIMES)
 
 run:
 	/usr/lib/jvm/jdk-20/bin/java binarytrees 21

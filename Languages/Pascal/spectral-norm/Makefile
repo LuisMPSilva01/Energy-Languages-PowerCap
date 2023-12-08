@@ -13,5 +13,10 @@ run:
 mem:
 	/usr/bin/time -v ./spectralnorm.fpascal-2.fpascal_run 5500
 
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
+
 valgrind:
 	valgrind --tool=massif --stacks=yes ./spectralnorm.fpascal-2.fpascal_run 5500

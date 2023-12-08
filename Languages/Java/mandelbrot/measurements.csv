@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Java, mandelbrot, -1,94.810241699218750000, 88.578796386718750000,  ,  , 2944, 78.0, 88912

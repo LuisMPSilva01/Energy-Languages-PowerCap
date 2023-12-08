@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/usr/lib/jvm/jdk-20/bin/javac -d .  fannkuchredux.java
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12" Java fannkuch-redux
+	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12" Java fannkuch-redux $(NTIMES)
 
 run:
 	/usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12

@@ -13,5 +13,10 @@ run:
 mem:
 	/usr/bin/time -v ./regexredux.fpascal-2.fpascal_run 0 < ../../../inputs/regexredux-input5000000.txt
 
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
+	
 valgrind:
 	valgrind --tool=massif --stacks=yes ./regexredux.fpascal-2.fpascal_run 0 < ../../../inputs/regexredux-input5000000.txt

@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/usr/lib/jvm/jdk-20/bin/javac -d .  regexredux.java
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   regexredux 0 < ../../../inputs/regexredux-input5000000.txt" Java regex-redux
+	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   regexredux 0 < ../../../inputs/regexredux-input5000000.txt" Java regex-redux $(NTIMES)
 
 run:
 	/usr/lib/jvm/jdk-20/bin/java   regexredux 0 < ../../../inputs/regexredux-input5000000.txt

@@ -13,6 +13,9 @@ run:
 
 mem:
 	/usr/bin/time -v  ./mandelbrot.fpascal-5.fpascal_run 16000
-
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./mandelbrot.fpascal-5.fpascal_run 16000

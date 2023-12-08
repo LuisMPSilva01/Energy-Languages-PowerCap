@@ -13,6 +13,9 @@ run:
 
 mem:
 	/usr/bin/time -v  ./fasta.fpascal-4.fpascal_run 25000000
-
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./fasta.fpascal-4.fpascal_run 25000000

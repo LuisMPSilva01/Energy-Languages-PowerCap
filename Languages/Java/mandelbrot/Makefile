@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/usr/lib/jvm/jdk-20/bin/javac -d .  mandelbrot.java
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000" Java mandelbrot
+	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000" Java mandelbrot $(NTIMES)
 
 run:
 	/usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000

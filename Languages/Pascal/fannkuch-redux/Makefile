@@ -12,7 +12,11 @@ run:
 
 mem:
 	/usr/bin/time -v ./fannkuchredux.fpascal_run 12
-
+clean:
+	rm *run
+	rm *.o
+	rm *.ppu
+	
 valgrind:
 	valgrind --tool=massif --stacks=yes ./fannkuchredux.fpascal_run 12
 

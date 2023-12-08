@@ -13,5 +13,9 @@ run:
 mem:
 	/usr/bin/time -v ./pidigits.fpascal-3.fpascal_run 10000
 
+clean: 
+	rm *.fpascal_run
+	rm *.o
+
 valgrind:
 	valgrind --tool=massif --stacks=yes ./pidigits.fpascal-3.fpascal_run 10000
