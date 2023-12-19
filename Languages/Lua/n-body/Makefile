@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "lua  nbody.lua-2.lua 50000000" Lua n-body
+	sudo ../../../RAPL/main "lua  nbody.lua-2.lua 50000000" Lua n-body $(NTIMES)
 
 run:
 	lua  nbody.lua-2.lua 50000000

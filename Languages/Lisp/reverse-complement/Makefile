@@ -1,15 +1,20 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	sbcl --load revcomp.lisp --eval "(save-lisp-and-die \"revcomp.core\" :purify t :toplevel (lambda () (main) (quit)))"
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "sbcl --noinform --core revcomp.core 0 < ../../../inputs/revcomp-input25000000.txt" Lisp reverse-complement
+	sudo ../../../RAPL/main "sbcl --noinform --core revcomp.core 0 < ../../../inputs/revcomp-input25000000.txt" Lisp reverse-complement $(NTIMES)
 
 run:
 	sbcl --noinform --core revcomp.core 0 < ../../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm -rf *.core
+	rm -f output
 
 mem:
 	/usr/bin/time -v  sbcl --noinform --core revcomp.core 0 < ../../../inputs/revcomp-input25000000.txt

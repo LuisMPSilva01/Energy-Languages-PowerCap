@@ -1,9 +1,12 @@
-compile:
+NTIMES=1
 
+export NTIMES
+
+compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "ruby -W0 revcomp.yarv-3.yarv 0 < ../../../inputs/revcomp-input25000000.txt" Ruby reverse-complement
+	sudo ../../../RAPL/main "ruby -W0 revcomp.yarv-3.yarv 0 < ../../../inputs/revcomp-input25000000.txt" Ruby reverse-complement $(NTIMES)
 
 run:
 	ruby -W0 revcomp.yarv-3.yarv 0 < ../../../inputs/revcomp-input25000000.txt

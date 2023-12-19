@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	raco make revcomp.racket-2.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "racket ./compiled/revcomp.racket-2_racket.zo 0 < ../../../inputs/revcomp-input25000000.txt" Racket reverse-complement
+	sudo ../../../RAPL/main "racket ./compiled/revcomp.racket-2_racket.zo 0 < ../../../inputs/revcomp-input25000000.txt" Racket reverse-complement $(NTIMES)
 
 run:
 	racket ./compiled/revcomp.racket-2_racket.zo 0 < ../../../inputs/revcomp-input25000000.txt

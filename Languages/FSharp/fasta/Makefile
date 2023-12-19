@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console -lang "F#" --force
 	cp fasta.fsharpcore-3.fsharpcore Program.fs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/fasta.dll 25000000" FSharp fasta
+	sudo ../../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/fasta.dll 25000000" FSharp fasta $(NTIMES)
 
 run:
 	/usr/bin/dotnet ./bin/Release/net7.0/fasta.dll 25000000

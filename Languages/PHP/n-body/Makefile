@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "php -n  nbody.php-3.php 50000000" PHP n-body
+	sudo ../../../RAPL/main "php -n  nbody.php-3.php 50000000" PHP n-body $(NTIMES)
 
 run:
 	php -n  nbody.php-3.php 50000000

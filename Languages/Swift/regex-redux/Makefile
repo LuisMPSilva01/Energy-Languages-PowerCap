@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	swiftc regexredux.swift-2.swift -Ounchecked -whole-module-optimization  -o regexredux.swift-2.swift_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./regexredux.swift-2.swift_run 0 < ../../../inputs/regexredux-input5000000.txt" Swift regex-redux
+	sudo ../../../RAPL/main "./regexredux.swift-2.swift_run 0 < ../../../inputs/regexredux-input5000000.txt" Swift regex-redux $(NTIMES)
 
 run:
 	./regexredux.swift-2.swift_run 0 < ../../../inputs/regexredux-input5000000.txt

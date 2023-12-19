@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp knucleotide.ocaml-3.ocaml knucleotide.ocaml-3.ml
 	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa knucleotide.ocaml-3.ml -o knucleotide.ocaml-3.ocaml_run
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./knucleotide.ocaml-3.ocaml_run 0 < ../../../inputs/knucleotide-input25000000.txt" OCaml k-nucleotide
+	sudo ../../../RAPL/main "./knucleotide.ocaml-3.ocaml_run 0 < ../../../inputs/knucleotide-input25000000.txt" OCaml k-nucleotide $(NTIMES)
 
 run:
 	./knucleotide.ocaml-3.ocaml_run 0 < ../../../inputs/knucleotide-input25000000.txt

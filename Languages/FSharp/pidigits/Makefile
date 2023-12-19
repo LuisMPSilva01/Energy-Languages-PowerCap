@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console -lang "F#" --force
 	cp pidigits.fsharpcore-6.fsharpcore Program.fs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/pidigits.dll 10000" FSharp pidigits
+	sudo ../../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/pidigits.dll 10000" FSharp pidigits $(NTIMES)
 
 run:
 	/usr/bin/dotnet ./bin/Release/net7.0/pidigits.dll 10000

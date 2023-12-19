@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/opt/src/go1.20/go/bin/go build -o nbody.go-3.go_run nbody.go-3.go
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./nbody.go-3.go_run 50000000" Go n-body
+	sudo ../../../RAPL/main "./nbody.go-3.go_run 50000000" Go n-body $(NTIMES)
 
 run:
 	./nbody.go-3.go_run 50000000

@@ -1,15 +1,23 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	rustc -C opt-level=3 -C target-cpu=core2 -C lto -L /usr/local/src/rust-libs spectralnorm.rs -o spectralnorm.rust-4.rust_run
+	cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./spectralnorm.rust-4.rust_run 5500" Rust spectral-norm
+	sudo ../../../RAPL/main "./spectralnorm.rust-4.rust_run 5500" Rust spectral-norm $(NTIMES)
 
 run:
-	./spectralnorm.rust-4.rust_run 5500
+	cargo run -- 5500
 
 mem:
 	/usr/bin/time -v ./spectralnorm.rust-4.rust_run 5500
 
+clean:
+	rm -r target
+	rm -r Cargo.lock
+	
 valgrind:
 	valgrind --tool=massif --stacks=yes ./spectralnorm.rust-4.rust_run 5500

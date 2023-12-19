@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	sed -i '/<\/PropertyGroup>/i \    <AllowUnsafeBlocks>true<\/AllowUnsafeBlocks>' obj/reverse-complement.csproj.nuget.g.props
@@ -6,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt" CSharp reverse-complement
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt" CSharp reverse-complement $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt

@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	swiftc revcomp.swift -Ounchecked -whole-module-optimization  -o revcomp.swift_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.swift_run 0 < ../../../inputs/revcomp-input25000000.txt" Swift reverse-complement
+	sudo ../../../RAPL/main "./revcomp.swift_run 0 < ../../../inputs/revcomp-input25000000.txt" Swift reverse-complement $(NTIMES)
 
 run:
 	./revcomp.swift_run 0 < ../../../inputs/revcomp-input25000000.txt

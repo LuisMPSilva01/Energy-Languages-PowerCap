@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp -L spectralnorm.node-2.node spectralnorm.node-2.js
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node spectralnorm.node-2.js 5500" JavaScript spectral-norm
+	sudo ../../../RAPL/main "node spectralnorm.node-2.js 5500" JavaScript spectral-norm $(NTIMES)
 
 run:
 	node spectralnorm.node-2.js 5500

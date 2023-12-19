@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	swiftc fasta.swift-3.swift -Ounchecked -whole-module-optimization  -o fasta.swift-3.swift_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fasta.swift-3.swift_run 25000000" Swift fasta
+	sudo ../../../RAPL/main "./fasta.swift-3.swift_run 25000000" Swift fasta $(NTIMES)
 
 run:
 	./fasta.swift-3.swift_run 25000000

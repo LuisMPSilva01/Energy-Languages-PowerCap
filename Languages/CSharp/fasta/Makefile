@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	cp fasta.csharpcore-5.csharpcore Program.cs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000" CSharp fasta
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000" CSharp fasta $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000

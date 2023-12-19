@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp binarytrees.ocaml-2.ocaml binarytrees.ocaml-2.ml
 	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa binarytrees.ocaml-2.ml -o binarytrees.ocaml-2.ocaml_run
@@ -5,7 +9,7 @@ compile:
 	
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./binarytrees.ocaml-2.ocaml_run 21" OCaml binary-trees
+	sudo ../../../RAPL/main "./binarytrees.ocaml-2.ocaml_run 21" OCaml binary-trees $(NTIMES)
 
 run:
 	./binarytrees.ocaml-2.ocaml_run 21

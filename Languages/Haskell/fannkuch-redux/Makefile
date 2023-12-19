@@ -1,14 +1,23 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	/opt/src/ghc9.4.4/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -XScopedTypeVariables fannkuchredux.ghc-5.hs -v -o fannkuchredux.ghc-5.ghc_run 
+	/opt/src/ghc9.4.4/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -XScopedTypeVariables -package vector fannkuchredux.ghc-5.hs -v -o fannkuchredux.ghc-5.ghc_run 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fannkuchredux.ghc-3.ghc_run +RTS -N4 -RTS 12" Haskell fannkuch-redux
+	sudo ../../../RAPL/main "./fannkuchredux.ghc-5.ghc_run +RTS -N4 -RTS 12" Haskell fannkuch-redux $(NTIMES)
 
 run:
-	./fannkuchredux.ghc-3.ghc_run +RTS -N4 -RTS 12
+	./fannkuchredux.ghc-5.ghc_run +RTS -N4 -RTS 12
 
 mem:
-	/usr/bin/time -v  ./fannkuchredux.ghc-3.ghc_run +RTS -N4 -RTS 12
+	/usr/bin/time -v  ./fannkuchredux.ghc-5.ghc_run +RTS -N4 -RTS 12
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ./fannkuchredux.ghc-3.ghc_run +RTS -N4 -RTS 12
+	valgrind --tool=massif --stacks=yes  ./fannkuchredux.ghc-5.ghc_run +RTS -N4 -RTS 12
+
+clean:
+	rm -f *.ghc_run
+	rm -f *.hi
+	rm -f *.o

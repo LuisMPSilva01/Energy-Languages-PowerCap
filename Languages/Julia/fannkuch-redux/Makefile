@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	
 measure:
 	export JULIA_NUM_THREADS=4
-	sudo ../../RAPL/main "julia -O3  -- fannkuchredux.julia-2.julia 12" Julia fannkuch-redux
+	sudo ../../../RAPL/main "julia -O3  -- fannkuchredux.julia-2.julia 12" Julia fannkuch-redux $(NTIMES)
 run:
 	export JULIA_NUM_THREADS=4
 	julia -O3  -- fannkuchredux.julia-2.julia 12

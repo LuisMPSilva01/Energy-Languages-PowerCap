@@ -1,9 +1,12 @@
-compile:
+NTIMES=1
 
+export NTIMES
+
+compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "ruby -W0 fannkuchredux.yarv-2.yarv 12" Ruby fannkuch-redux
+	sudo ../../../RAPL/main "ruby -W0 fannkuchredux.yarv-2.yarv 12" Ruby fannkuch-redux $(NTIMES)
 
 run:
 	ruby -W0 fannkuchredux.yarv-2.yarv 12

@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	raco make nbody.racket-2.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "racket ./compiled/nbody.racket-2_racket.zo 50000000" Racket n-body
+	sudo ../../../RAPL/main "racket ./compiled/nbody.racket-2_racket.zo 50000000" Racket n-body $(NTIMES)
 
 run:
 	racket ./compiled/nbody.racket-2_racket.zo 50000000

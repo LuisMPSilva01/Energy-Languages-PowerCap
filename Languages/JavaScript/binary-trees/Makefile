@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp -L binarytrees.node binarytrees.js
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node binarytrees.js 21" JavaScript binary-trees
+	sudo ../../../RAPL/main "node binarytrees.js 21" JavaScript binary-trees $(NTIMES)
 
 run:
 	node binarytrees.js 21

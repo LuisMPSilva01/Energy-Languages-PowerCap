@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp -L pidigits.node pidigits.js
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node pidigits.js 10000" JavaScript pidigits
+	sudo ../../../RAPL/main "node pidigits.js 10000" JavaScript pidigits $(NTIMES)
 
 run:
 	node pidigits.js 10000

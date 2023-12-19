@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	raco make fannkuchredux.racket-3.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "racket ./compiled/fannkuchredux.racket-3_racket.zo 12" Racket fannkuch-redux
+	sudo ../../../RAPL/main "racket ./compiled/fannkuchredux.racket-3_racket.zo 12" Racket fannkuch-redux $(NTIMES)
 
 run:
 	racket ./compiled/fannkuchredux.racket-3_racket.zo 12

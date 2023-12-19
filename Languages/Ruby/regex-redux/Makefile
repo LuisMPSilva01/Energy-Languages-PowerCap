@@ -1,9 +1,12 @@
-compile:
+NTIMES=1
 
+export NTIMES
+
+compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "ruby -W0 regexredux.yarv-2.yarv 0 < ../../../inputs/regexredux-input5000000.txt" Ruby regex-redux
+	sudo ../../../RAPL/main "ruby -W0 regexredux.yarv-2.yarv 0 < ../../../inputs/regexredux-input5000000.txt" Ruby regex-redux $(NTIMES)
 
 run:
 	ruby -W0 regexredux.yarv-2.yarv 0 < ../../../inputs/regexredux-input5000000.txt

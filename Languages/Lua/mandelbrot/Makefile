@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "lua  mandelbrot.lua-6.lua 16000" Lua mandelbrot
+	sudo ../../../RAPL/main "lua  mandelbrot.lua-6.lua 16000" Lua mandelbrot $(NTIMES)
 
 run:
 	lua  mandelbrot.lua-6.lua 16000

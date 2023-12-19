@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w regexredux.gnat-5.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -8,7 +12,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./regexredux.gnat-5.gnat_run 0 < ../../../inputs/regexredux-input5000000.txt" Ada regex-redux
+	sudo ../../../RAPL/main "./regexredux.gnat-5.gnat_run 0 < ../../../inputs/regexredux-input5000000.txt" Ada regex-redux $(NTIMES)
 
 run:
 	./regexredux.gnat-5.gnat_run 0 < ../../../inputs/regexredux-input5000000.txt
@@ -25,3 +29,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

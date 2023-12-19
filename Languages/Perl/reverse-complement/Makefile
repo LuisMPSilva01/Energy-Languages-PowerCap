@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt" Perl reverse-complement
+	sudo ../../../RAPL/main "perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt" Perl reverse-complement $(NTIMES)
 
 run:
 	perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt

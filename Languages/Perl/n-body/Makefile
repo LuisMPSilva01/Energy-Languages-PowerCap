@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "perl nbody.perl-2.perl 50000000" Perl n-body
+	sudo ../../../RAPL/main "perl nbody.perl-2.perl 50000000" Perl n-body $(NTIMES)
 
 run:
 	perl nbody.perl-2.perl 50000000

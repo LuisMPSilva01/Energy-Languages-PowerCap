@@ -1,5 +1,6 @@
 #!/bin/bash
-NTIMES=20
+#NTIMES=20
+NTIMES=1
 
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL
@@ -28,8 +29,8 @@ cd ..
 echo "Language,Program,PowerLimit,Package,Core,GPU,DRAM,Time,Temperature,Memory" > measurements.csv
 
 # Loop over power limit values
-for limit in -1 2 10 15 25
-#for limit in -1
+#for limit in -1 2 10 15 25
+for limit in -1
     do
     cd Utils/
     python3 raplCapUpdate.py $limit ../RAPL/main.c
@@ -74,7 +75,7 @@ for limit in -1 2 10 15 25
         cd ../../..
     done
 comment
-    for program in "Languages/C++"/*; do
+    for program in "Languages/Ada"/*; do
         cd $program
         make compile
         make measure 

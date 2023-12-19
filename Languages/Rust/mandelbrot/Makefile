@@ -1,13 +1,21 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	rustc -C opt-level=3 -C target-cpu=core2 -C lto -L /usr/local/src/rust-libs mandelbrot.rs -o mandelbrot.rust-4.rust_run
+	cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./mandelbrot.rust-4.rust_run 16000" Rust mandelbrot
+	sudo ../../../RAPL/main "./mandelbrot.rust-4.rust_run 16000" Rust mandelbrot $(NTIMES)
 
 run:
-	./mandelbrot.rust-4.rust_run 16000
+	cargo run -- 16000
 
+clean:
+	rm -r target
+	rm -r Cargo.lock
+	
 mem:
 	/usr/bin/time -v  ./mandelbrot.rust-4.rust_run 16000
 

@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "lua  knucleotide.lua-2.lua 0 < ../../../inputs/knucleotide-input25000000.txt" Lua k-nucleotide
+	sudo ../../../RAPL/main "lua  knucleotide.lua-2.lua 0 < ../../../inputs/knucleotide-input25000000.txt" Lua k-nucleotide $(NTIMES)
 
 run:
 	lua  knucleotide.lua-2.lua 0 < ../../../inputs/knucleotide-input25000000.txt

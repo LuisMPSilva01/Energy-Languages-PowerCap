@@ -1,0 +1,1 @@
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/binary-trees: /home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/src/main.rs

@@ -1,4 +1,4 @@
-NTIMES=5
+NTIMES=1
 
 export NTIMES
 
@@ -16,3 +16,4 @@ mem:
 
 clean:
 	rm -f *.gcc_run
+	rm -f output

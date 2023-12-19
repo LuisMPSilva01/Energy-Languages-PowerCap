@@ -1,10 +1,14 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/opt/src/dart-sdk/bin/dart analyze 
 	/opt/src/dart-sdk/bin/dart compile exe regexredux.dart-5.dart -o regexredux.dart-5.dart_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./regexredux.dart-5.dart_run 0 < ../../../inputs/regexredux-input5000000.txt" Dart regex-redux
+	sudo ../../../RAPL/main "./regexredux.dart-5.dart_run 0 < ../../../inputs/regexredux-input5000000.txt" Dart regex-redux $(NTIMES)
 
 run:
 	./regexredux.dart-5.dart_run 0 < ../../../inputs/regexredux-input5000000.txt

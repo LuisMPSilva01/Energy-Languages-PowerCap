@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	swiftc nbody.swift-5.swift -Ounchecked -whole-module-optimization  -o nbody.swift-5.swift_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./nbody.swift-5.swift_run 50000000" Swift n-body
+	sudo ../../../RAPL/main "./nbody.swift-5.swift_run 50000000" Swift n-body $(NTIMES)
 
 run:
 	./nbody.swift-5.swift_run 50000000

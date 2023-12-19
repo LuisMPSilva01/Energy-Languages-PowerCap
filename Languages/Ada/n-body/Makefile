@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w nbody.gnat-2.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -8,7 +12,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./nbody.gnat-2.gnat_run 50000000" Ada n-body
+	sudo ../../../RAPL/main "./nbody.gnat-2.gnat_run 50000000" Ada n-body $(NTIMES)
 
 run:
 	./nbody.gnat-2.gnat_run 50000000
@@ -26,3 +30,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

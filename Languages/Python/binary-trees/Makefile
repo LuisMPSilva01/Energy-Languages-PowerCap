@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp binarytrees.python3 binarytrees.py
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/local/bin/python3.11 -OO binarytrees.py 21" Python binary-trees
+	sudo ../../../RAPL/main "/usr/local/bin/python3.11 -OO binarytrees.py 21" Python binary-trees $(NTIMES)
 
 run:
 	/usr/local/bin/python3.11  -OO binarytrees.py 21

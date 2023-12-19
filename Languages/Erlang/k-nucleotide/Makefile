@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp knucleotide.erlang-3.erlang knucleotide.erl
 	/opt/erlang/25.2.1/bin/erlc knucleotide.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt" Erlang k-nucleotide
+	sudo ../../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt" Erlang k-nucleotide $(NTIMES)
 run:
 	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
 

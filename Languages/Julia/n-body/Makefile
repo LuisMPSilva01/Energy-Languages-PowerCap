@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	
 measure:
 	export JULIA_NUM_THREADS=4
-	sudo ../../RAPL/main "julia -O3  -- nbody.julia-3.julia 50000000" Julia n-body
+	sudo ../../../RAPL/main "julia -O3  -- nbody.julia-3.julia 50000000" Julia n-body $(NTIMES)
 run:
 	export JULIA_NUM_THREADS=4
 	julia -O3  -- nbody.julia-3.julia 50000000

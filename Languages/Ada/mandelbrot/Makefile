@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w mandelbrot.gnat-3.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -8,7 +12,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./mandelbrot.gnat-3.gnat_run 16000" Ada mandelbrot
+	sudo ../../../RAPL/main "./mandelbrot.gnat-3.gnat_run 16000" Ada mandelbrot $(NTIMES)
 
 run:
 	./mandelbrot.gnat-3.gnat_run 16000
@@ -25,3 +29,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

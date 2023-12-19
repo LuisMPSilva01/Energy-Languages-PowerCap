@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	cp nbody.csharpcore-9.csharpcore Program.cs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000" CSharp n-body
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000" CSharp n-body $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/n-body.dll 50000000

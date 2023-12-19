@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "lua  spectralnorm.lua 5500" Lua spectral-norm
+	sudo ../../../RAPL/main "lua  spectralnorm.lua 5500" Lua spectral-norm $(NTIMES)
 
 run:
 	lua  spectralnorm.lua 5500

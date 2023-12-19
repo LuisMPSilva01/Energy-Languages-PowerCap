@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp mandelbrot.python3-7.python3 mandelbrot.python3-7.py
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/local/bin/python3.11 -OO mandelbrot.python3-7.py 16000" Python mandelbrot
+	sudo ../../../RAPL/main "/usr/local/bin/python3.11 -OO mandelbrot.python3-7.py 16000" Python mandelbrot $(NTIMES)
 
 run:
 	/usr/local/bin/python3.11 -OO mandelbrot.python3-7.py 16000

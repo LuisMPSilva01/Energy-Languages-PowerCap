@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "perl mandelbrot.perl 16000" Perl mandelbrot
+	sudo ../../../RAPL/main "perl mandelbrot.perl 16000" Perl mandelbrot $(NTIMES)
 
 run:
 	perl mandelbrot.perl 16000

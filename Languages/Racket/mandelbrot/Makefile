@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	raco make mandelbrot.racket-3.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "racket ./compiled/mandelbrot.racket-3_racket.zo 16000" Racket mandelbrot
+	sudo ../../../RAPL/main "racket ./compiled/mandelbrot.racket-3_racket.zo 16000" Racket mandelbrot $(NTIMES)
 
 run:
 	racket ./compiled/mandelbrot.racket-3_racket.zo 16000

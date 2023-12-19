@@ -1,15 +1,20 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	sbcl --load nbody.lisp --eval "(save-lisp-and-die \"nbody.core\" :purify t :toplevel (lambda () (main) (quit)))"
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "sbcl --noinform --core nbody.core 50000000" Lisp n-body
+	sudo ../../../RAPL/main "sbcl --noinform --core nbody.core 50000000" Lisp n-body $(NTIMES)
 
 run:
 	sbcl --noinform --core nbody.core 50000000
 
 clean:
 	rm -rf *core
+	rm -f output
 
 mem:
 	/usr/bin/time -v  sbcl --noinform --core nbody.core 50000000

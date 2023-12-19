@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	
 measure:
 	export JULIA_NUM_THREADS=4
-	sudo ../../RAPL/main "julia -O3 -p4 -- binarytrees.julia-4.julia 21" Julia binary-trees
+	sudo ../../../RAPL/main "julia -O3 -p4 -- binarytrees.julia-4.julia 21" Julia binary-trees $(NTIMES)
 run:
 	export JULIA_NUM_THREADS=4
 	julia -O3 -p4 -- binarytrees.julia-4.julia 21

@@ -1,0 +1,11 @@
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/deps/wayland_sys-9a212b0aa32d644a.rmeta: /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/lib.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/common.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/client.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/egl.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/cursor.rs
+
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/deps/libwayland_sys-9a212b0aa32d644a.rlib: /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/lib.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/common.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/client.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/egl.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/cursor.rs
+
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/deps/wayland_sys-9a212b0aa32d644a.d: /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/lib.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/common.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/client.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/egl.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/cursor.rs
+
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/lib.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/common.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/client.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/egl.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/wayland-sys-0.20.12/src/cursor.rs:

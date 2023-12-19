@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp revcomp.fpascal-2.fpascal revcomp.fpascal-2.pas
 	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux  -oFPASCAL_RUN revcomp.fpascal-2.pas
@@ -5,7 +9,7 @@ compile:
 	rm revcomp.fpascal-2.pas
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt" Pascal reverse-complement
+	sudo ../../../RAPL/main "./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt" Pascal reverse-complement $(NTIMES)
 
 run:
 	./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt
@@ -14,8 +18,8 @@ mem:
 	/usr/bin/time -v  ./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt
 
 clean:
-	rm *run
-	rm *.o
-	rm *.ppu
+	rm -f *.o
+	rm -f *run
+	rm -f *.ppu
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./revcomp.fpascal-2.fpascal_run 0 < ../../../inputs/revcomp-input25000000.txt

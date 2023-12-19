@@ -1,13 +1,21 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	rustc -C opt-level=3 -C target-cpu=core2 -C lto -L /usr/local/src/rust-libs fasta.rs -o fasta.rust-2.rust_run
+	cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fasta.rust-2.rust_run 25000000" Rust fasta
+	sudo ../../../RAPL/main "./fasta.rust-2.rust_run 25000000" Rust fasta $(NTIMES)
 
 run:
-	./fasta.rust-2.rust_run 25000000
+	cargo run -- 25000000
 
+clean:
+	rm -r target
+	rm -r Cargo.lock
+	
 mem:
 	/usr/bin/time -v ./fasta.rust-2.rust_run 25000000
 

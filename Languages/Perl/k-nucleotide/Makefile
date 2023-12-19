@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "perl knucleotide.perl 0 < ../../../inputs/knucleotide-input25000000.txt" Perl k-nucleotide
+	sudo ../../../RAPL/main "perl knucleotide.perl 0 < ../../../inputs/knucleotide-input25000000.txt" Perl k-nucleotide $(NTIMES)
 
 run:
 	perl knucleotide.perl 0 < ../../../inputs/knucleotide-input25000000.txt

@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	raco make regexredux.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "racket ./compiled/regexredux_racket.zo 0 < ../../../inputs/regexredux-input5000000.txt" Racket regex-redux
+	sudo ../../../RAPL/main "racket ./compiled/regexredux_racket.zo 0 < ../../../inputs/regexredux-input5000000.txt" Racket regex-redux $(NTIMES)
 
 run:
 	racket ./compiled/regexredux_racket.zo 0 < ../../../inputs/regexredux-input5000000.txt

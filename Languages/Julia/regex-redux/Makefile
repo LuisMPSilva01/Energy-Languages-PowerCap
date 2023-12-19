@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	
 measure:
 	export JULIA_NUM_THREADS=4
-	sudo ../../RAPL/main "julia -O3  -- regexredux.julia-3.julia 0 < ../../../inputs/regexredux-input5000000.txt" Julia regex-redux
+	sudo ../../../RAPL/main "julia -O3  -- regexredux.julia-3.julia 0 < ../../../inputs/regexredux-input5000000.txt" Julia regex-redux $(NTIMES)
 run:
 	export JULIA_NUM_THREADS=4
 	julia -O3  -- regexredux.julia-3.julia 0 < ../../../inputs/regexredux-input5000000.txt

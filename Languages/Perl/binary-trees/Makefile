@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "perl binarytrees.perl-3.perl 21" Perl binary-trees
+	sudo ../../../RAPL/main "perl binarytrees.perl-3.perl 21" Perl binary-trees $(NTIMES)
 
 run:
 	perl binarytrees.perl-3.perl 21

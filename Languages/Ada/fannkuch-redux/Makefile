@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w fannkuchredux.gnat-3.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -9,7 +13,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fannkuchredux.gnat-3.gnat_run 12" Ada fannkuch-redux
+	sudo ../../../RAPL/main "./fannkuchredux.gnat-3.gnat_run 12" Ada fannkuch-redux $(NTIMES)
 
 run:
 	./fannkuchredux.gnat-3.gnat_run 12
@@ -26,3 +30,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

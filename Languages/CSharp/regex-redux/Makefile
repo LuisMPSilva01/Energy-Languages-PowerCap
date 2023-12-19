@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	sed -i '/<\/PropertyGroup>/i \    <AllowUnsafeBlocks>true<\/AllowUnsafeBlocks>' obj/regex-redux.csproj.nuget.g.props
@@ -6,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt" CSharp regex-redux
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt" CSharp regex-redux $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt

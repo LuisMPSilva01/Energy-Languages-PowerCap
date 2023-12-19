@@ -1,13 +1,17 @@
-xcompile:
+NTIMES=1
+
+export NTIMES
+
+compile:
 	~/.dotnet/dotnet new console -lang "F#" --force
 	cp revcomp.fsharpcore-4.fsharpcore Program.fs
 	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
 
-xmeasure:
+measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt" FSharp reverse-complement
+	sudo ../../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt" FSharp reverse-complement $(NTIMES)
 
-xrun:
+run:
 	/usr/bin/dotnet ./bin/Release/net7.0/reverse-complement.dll 0 < ../../../inputs/revcomp-input25000000.txt
 
 mem:

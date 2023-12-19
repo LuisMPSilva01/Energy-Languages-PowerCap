@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp spectralnorm.ocaml-3.ocaml spectralnorm.ocaml-3.ml
 	ocamlopt -noassert -unsafe -fPIC -nodynlink -I +unix -inline 100 unix.cmxa spectralnorm.ocaml-3.ml -o spectralnorm.ocaml-3.ocaml_run
@@ -6,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./spectralnorm.ocaml-3.ocaml_run 5500" OCaml spectral-norm
+	sudo ../../../RAPL/main "./spectralnorm.ocaml-3.ocaml_run 5500" OCaml spectral-norm $(NTIMES)
 
 run:
 	./spectralnorm.ocaml-3.ocaml_run 5500

@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w revcomp.gnat-2.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -8,7 +12,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt" Ada reverse-complement
+	sudo ../../../RAPL/main "./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt" Ada reverse-complement $(NTIMES)
 
 run:
 	./revcomp.gnat-2.gnat_run 0 < ../../../inputs/revcomp-input25000000.txt
@@ -25,3 +29,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

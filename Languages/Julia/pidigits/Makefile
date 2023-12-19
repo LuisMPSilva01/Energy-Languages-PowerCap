@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	
 measure:
 	export JULIA_NUM_THREADS=4
-	sudo ../../RAPL/main "julia -O3  -- pidigits.julia-2.julia 10000" Julia pidigits
+	sudo ../../../RAPL/main "julia -O3  -- pidigits.julia-2.julia 10000" Julia pidigits $(NTIMES)
 run:
 	export JULIA_NUM_THREADS=4
 	julia -O3  -- pidigits.julia-2.julia 10000

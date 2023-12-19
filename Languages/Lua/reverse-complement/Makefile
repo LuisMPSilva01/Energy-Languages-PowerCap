@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "lua  revcomp.lua-2.lua 0 < ../../../inputs/revcomp-input25000000.txt" Lua reverse-complement
+	sudo ../../../RAPL/main "lua  revcomp.lua-2.lua 0 < ../../../inputs/revcomp-input25000000.txt" Lua reverse-complement $(NTIMES)
 
 run:
 	lua  revcomp.lua-2.lua 0 < ../../../inputs/revcomp-input25000000.txt

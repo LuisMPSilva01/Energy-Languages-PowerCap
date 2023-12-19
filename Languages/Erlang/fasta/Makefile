@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp fasta.erlang-2.erlang fasta.erl
 	/opt/erlang/25.2.1/bin/erlc fasta.erl
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000" Erlang fasta
+	sudo ../../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000" Erlang fasta $(NTIMES)
 
 run:
 	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  fasta main 25000000

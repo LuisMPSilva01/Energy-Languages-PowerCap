@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	cp binarytrees.csharpcore-7.csharpcore Program.cs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21" CSharp binary-trees
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21" CSharp binary-trees $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/binary-trees.dll 21

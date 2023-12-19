@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "php  mandelbrot.php-3.php 16000" PHP mandelbrot
+	sudo ../../../RAPL/main "php  mandelbrot.php-3.php 16000" PHP mandelbrot $(NTIMES)
 
 run:
 	php  mandelbrot.php-3.php 16000

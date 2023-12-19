@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	raco make binarytrees.racket-3.racket
 	
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "racket ./compiled/binarytrees.racket-3_racket.zo 21" Racket binary-trees
+	sudo ../../../RAPL/main "racket ./compiled/binarytrees.racket-3_racket.zo 21" Racket binary-trees $(NTIMES)
 
 run:
 	racket ./compiled/binarytrees.racket-3_racket.zo 21

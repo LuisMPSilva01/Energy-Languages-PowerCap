@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Ada, mandelbrot, -1,49.817932128906250000, 47.186401367187500000,  ,  , 3736, 42.2, 36096

@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp -L regexredux.node-2.node regexredux.node-2.js
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node regexredux.node-2.js 0 < ../../../inputs/regexredux-input5000000.txt" JavaScript regex-redux
+	sudo ../../../RAPL/main "node regexredux.node-2.js 0 < ../../../inputs/regexredux-input5000000.txt" JavaScript regex-redux $(NTIMES)
 
 run:
 	node regexredux.node-2.js 0 < ../../../inputs/regexredux-input5000000.txt

@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	cp fannkuchredux.csharpcore-8.csharpcore Program.cs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12" CSharp fannkuch-redux
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12" CSharp fannkuch-redux $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/fannkuch-redux.dll 12

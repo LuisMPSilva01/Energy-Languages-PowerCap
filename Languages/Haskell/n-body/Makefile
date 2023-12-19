@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/opt/src/ghc9.4.4/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts  nbody.ghc-2.hs -o nbody.ghc-2.ghc_run
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./nbody.ghc-2.ghc_run +RTS -N4 -RTS 50000000" Haskell n-body
+	sudo ../../../RAPL/main "./nbody.ghc-2.ghc_run +RTS -N4 -RTS 50000000" Haskell n-body $(NTIMES)
 
 run:
 	./nbody.ghc-2.ghc_run +RTS -N4 -RTS 50000000
@@ -12,3 +16,7 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./nbody.ghc-2.ghc_run +RTS -N4 -RTS 50000000
+clean:
+	rm -f *.ghc_run
+	rm -f *.hi
+	rm -f *.o

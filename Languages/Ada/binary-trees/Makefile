@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w binarytrees.gnat-4.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -10,7 +14,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./binarytrees.gnat-4.gnat_run 21" Ada binary-trees
+	sudo ../../../RAPL/main "./binarytrees.gnat-4.gnat_run 21" Ada binary-trees $(NTIMES)
 
 run:
 	./binarytrees.gnat-4.gnat_run 21
@@ -27,3 +31,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

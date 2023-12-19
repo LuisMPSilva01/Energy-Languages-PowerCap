@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w spectralnorm.gnat-4.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -8,7 +12,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./spectralnorm.gnat-4.gnat_run 5500" Ada spectral-norm
+	sudo ../../../RAPL/main "./spectralnorm.gnat-4.gnat_run 5500" Ada spectral-norm $(NTIMES)
 
 run:
 	./spectralnorm.gnat-4.gnat_run 5500
@@ -25,3 +29,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

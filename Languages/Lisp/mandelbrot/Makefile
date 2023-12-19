@@ -1,15 +1,20 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	sbcl --load mandelbrot.lisp --eval "(save-lisp-and-die \"mandelbrot.core\" :purify t :toplevel (lambda () (main) (quit)))"
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "sbcl --noinform --core mandelbrot.core 16000" Lisp mandelbrot
+	sudo ../../../RAPL/main "sbcl --noinform --core mandelbrot.core 16000" Lisp mandelbrot $(NTIMES)
 
 run:
 	sbcl --noinform --core mandelbrot.core 16000
 
 clean:
 	rm -rf *core
+	rm -f output
 
 mem:
 	/usr/bin/time -v sbcl --noinform --core mandelbrot.core 16000

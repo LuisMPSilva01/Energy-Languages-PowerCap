@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp regexredux.python3 regexredux.py
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/local/bin/python3.11 -OO regexredux.py 0 < ../../../inputs/regexredux-input5000000.txt" Python regex-redux
+	sudo ../../../RAPL/main "/usr/local/bin/python3.11 -OO regexredux.py 0 < ../../../inputs/regexredux-input5000000.txt" Python regex-redux $(NTIMES)
 
 run:
 	/usr/local/bin/python3.11 -OO regexredux.py 0 < ../../../inputs/regexredux-input5000000.txt

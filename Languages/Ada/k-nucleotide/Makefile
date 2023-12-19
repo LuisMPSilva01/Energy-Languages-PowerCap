@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w knucleotide.gnat-2.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -9,7 +13,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./knucleotide.gnat-2.gnat_run 0 < ../../../inputs/knucleotide-input25000000.txt" Ada k-nucleotide
+	sudo ../../../RAPL/main "./knucleotide.gnat-2.gnat_run 0 < ../../../inputs/knucleotide-input25000000.txt" Ada k-nucleotide $(NTIMES)
 
 run:
 	./knucleotide.gnat-2.gnat_run 0 < knucleotide-input25000000.txt
@@ -26,3 +30,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

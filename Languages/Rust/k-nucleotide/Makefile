@@ -1,13 +1,21 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	rustc -C opt-level=3 -C target-cpu=core2 -C lto -L /usr/local/src/rust-libs knucleotide.rs -o knucleotide.rust-4.rust_run
+	cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./knucleotide.rust-4.rust_run 0 < ../../../inputs/knucleotide-input25000000.txt" Rust k-nucleotide
+	sudo ../../../RAPL/main "./knucleotide.rust-4.rust_run 0 < ../../../inputs/knucleotide-input25000000.txt" Rust k-nucleotide $(NTIMES)
 
 run:
-	./knucleotide.rust-4.rust_run 0 < ../../../inputs/knucleotide-input25000000.txt
+	cargo run -- 0 < ../../../inputs/knucleotide-input25000000.txt
 
+clean:
+	rm -r target
+	rm -r Cargo.lock
+	
 mem:
 	/usr/bin/time -v ./knucleotide.rust-4.rust_run 0 < ../../../inputs/knucleotide-input25000000.txt
 

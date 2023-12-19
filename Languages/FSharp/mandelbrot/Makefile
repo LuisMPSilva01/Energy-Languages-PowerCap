@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console -lang "F#" --force
 	cp mandelbrot.fsharpcore-6.fsharpcore Program.fs
@@ -5,7 +9,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000" FSharp mandelbrot
+	sudo ../../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000" FSharp mandelbrot $(NTIMES)
 
 run:
 	/usr/bin/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000

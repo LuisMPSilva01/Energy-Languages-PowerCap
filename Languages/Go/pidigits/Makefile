@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	/opt/src/go1.20/go/bin/go build -o pidigits.go-4.go_run pidigits.go-4.go
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./pidigits.go-4.go_run 10000" Go pidigits
+	sudo ../../../RAPL/main "./pidigits.go-4.go_run 10000" Go pidigits $(NTIMES)
 
 run:
 	./pidigits.go-4.go_run 10000

@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp -L fasta.node-4.node fasta.node-4.js
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node fasta.node-4.js 25000000" JavaScript fasta
+	sudo ../../../RAPL/main "node fasta.node-4.js 25000000" JavaScript fasta $(NTIMES)
 
 run:
 	node fasta.node-4.js 25000000
@@ -13,4 +17,3 @@ mem:
 
 valgrind:
 	valgrind --tool=massif --stacks=yes node fasta.node-4.js 25000000
-

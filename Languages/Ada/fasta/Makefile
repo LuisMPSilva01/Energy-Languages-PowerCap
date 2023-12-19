@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	gnatchop -r -w fasta.gnat-5.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
@@ -9,7 +13,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./fasta.gnat-5.gnat_run 25000000" Ada fasta
+	sudo ../../../RAPL/main "./fasta.gnat-5.gnat_run 25000000" Ada fasta $(NTIMES)
 
 run:
 	./fasta.gnat-5.gnat_run 25000000
@@ -26,3 +30,4 @@ clean:
 	rm -f *.ads
 	rm -f *.ali
 	rm -f *.o
+	rm -f output

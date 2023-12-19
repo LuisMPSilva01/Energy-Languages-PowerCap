@@ -122,8 +122,6 @@ sudo apt install cmake
     (cd /opt/src/llvm13.0.1/ && sudo make)
     (cd /opt/src/ && sudo rm -r llvm-13.0.1.src)
     rm -r llvm-13.0.1.src.tar.xz
-    cabal update
-    cabal install --lib parallel
 
 
     #Java - v20.0.2 - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
@@ -257,16 +255,11 @@ sudo apt install cmake
     rbenv install 3.2.0
     rbenv global 3.2.0
 
-    #Rust [TODO]
+    #Rust
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     source ~/.bashrc
     rustup toolchain install 1.67.0
     rustup default 1.67.0
-    cd Languages/Rust/binary-trees
-    cargo init --bin
-    cargo add bumpalo
-    cargo add crayon
-    cd ../../..
     
 
     #Swift - só o pi-digits não funciona por causa da biblioteca GMP [TODO]

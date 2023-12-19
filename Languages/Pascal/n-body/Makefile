@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp nbody.fpascal nbody.pas
 	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux  -oFPASCAL_RUN nbody.pas
@@ -6,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./nbody.fpascal_run 50000000" Pascal n-body
+	sudo ../../../RAPL/main "./nbody.fpascal_run 50000000" Pascal n-body $(NTIMES)
 
 run:
 	./nbody.fpascal_run 50000000
@@ -14,9 +18,9 @@ run:
 mem:
 	/usr/bin/time -v  ./nbody.fpascal_run 50000000
 clean:
-	rm *run
-	rm *.o
-	rm *.ppu
+	rm -f *.o
+	rm -f *run
+	rm -f *.ppu
 	
 valgrind:
 	valgrind --tool=massif --stacks=yes  ./nbody.fpascal_run 50000000

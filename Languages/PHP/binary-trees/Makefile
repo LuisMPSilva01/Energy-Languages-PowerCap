@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "php -n -d memory_limit=4096M binarytrees.php-5.php 21" PHP binary-trees
+	sudo ../../../RAPL/main "php -n -d memory_limit=4096M binarytrees.php-5.php 21" PHP binary-trees $(NTIMES)
 
 run:
 	php -n -d memory_limit=4096M binarytrees.php-5.php 21

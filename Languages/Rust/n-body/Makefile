@@ -1,13 +1,21 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	rustc -C opt-level=3 -C target-cpu=core2 -C lto -C llvm-args='-unroll-threshold=500' nbody.rs -o nbody.rust-2.rust_run
+	cargo build	
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./nbody.rust-2.rust_run 50000000" Rust n-body
+	sudo ../../../RAPL/main "./nbody.rust-2.rust_run 50000000" Rust n-body $(NTIMES)
 
 run:
-	./nbody.rust-2.rust_run 50000000
+	cargo run -- 50000000
 
+clean:
+	rm -r target
+	rm -r Cargo.lock
+	
 mem:
 	/usr/bin/time -v ./nbody.rust-2.rust_run 50000000
 

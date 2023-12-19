@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	swiftc mandelbrot.swift-3.swift -Ounchecked -whole-module-optimization  -o mandelbrot.swift-3.swift_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./mandelbrot.swift-3.swift_run 16000" Swift mandelbrot
+	sudo ../../../RAPL/main "./mandelbrot.swift-3.swift_run 16000" Swift mandelbrot $(NTIMES)
 
 run:
 	./mandelbrot.swift-3.swift_run 16000

@@ -1,9 +1,13 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	swiftc knucleotide.swift-2.swift -Ounchecked -whole-module-optimization  -o knucleotide.swift-2.swift_run
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./knucleotide.swift-2.swift_run 0 < ../../../inputs/knucleotide-input25000000.txt" Swift k-nucleotide
+	sudo ../../../RAPL/main "./knucleotide.swift-2.swift_run 0 < ../../../inputs/knucleotide-input25000000.txt" Swift k-nucleotide $(NTIMES)
 
 run:
 	./knucleotide.swift-2.swift_run 0 < ../../../inputs/knucleotide-input25000000.txt

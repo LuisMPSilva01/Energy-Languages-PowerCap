@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "php -n  spectralnorm.php 5500" PHP spectral-norm
+	sudo ../../../RAPL/main "php -n  spectralnorm.php 5500" PHP spectral-norm $(NTIMES)
 
 run:
 	php -n  spectralnorm.php 5500

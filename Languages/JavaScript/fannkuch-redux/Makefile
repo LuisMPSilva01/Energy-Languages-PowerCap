@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
-	cp -L fannkuchredux.node-4.node fannkuchredux.node-4.js
+
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "node fannkuchredux.node-4.js 12" JavaScript fannkuch-redux
+	sudo ../../../RAPL/main "node fannkuchredux.node-4.js 12" JavaScript fannkuch-redux $(NTIMES)
 
 run:
 	node fannkuchredux.node-4.js 12

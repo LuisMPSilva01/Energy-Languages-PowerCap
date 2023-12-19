@@ -1,0 +1,10 @@
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/deps/inlinable_string-0b6a1b16f7405aaa.rmeta: /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/lib.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/serde_impl.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/inline_string.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/string_ext.rs
+
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/deps/libinlinable_string-0b6a1b16f7405aaa.rlib: /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/lib.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/serde_impl.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/inline_string.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/string_ext.rs
+
+/home/diguest/Documents/GitHub/Energy-Languages-PowerCap/Languages/Rust/binary-trees/target/debug/deps/inlinable_string-0b6a1b16f7405aaa.d: /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/lib.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/serde_impl.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/inline_string.rs /home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/string_ext.rs
+
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/lib.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/serde_impl.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/inline_string.rs:
+/home/diguest/.cargo/registry/src/github.com-1ecc6299db9ec823/inlinable_string-0.1.15/src/string_ext.rs:

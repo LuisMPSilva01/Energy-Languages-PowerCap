@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Ada, fannkuch-redux, -1,112.152526855468750000, 107.458129882812500000,  ,  , 8625, 42.0, 4736

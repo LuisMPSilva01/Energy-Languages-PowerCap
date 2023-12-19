@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "php -d memory_limit=512M regexredux.php 0 < ../../../inputs/regexredux-input5000000.txt" PHP regex-redux
+	sudo ../../../RAPL/main "php -d memory_limit=512M regexredux.php 0 < ../../../inputs/regexredux-input5000000.txt" PHP regex-redux $(NTIMES)
 
 run:
 	php -d memory_limit=512M regexredux.php 0 < ../../../inputs/regexredux-input5000000.txt

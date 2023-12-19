@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	cp spectralnorm.fpascal-2.fpascal spectralnorm.fpascal-2.pas
 	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Fi Include/fpascal -oFPASCAL_RUN spectralnorm.fpascal-2.pas
@@ -5,7 +9,7 @@ compile:
 	rm spectralnorm.fpascal-2.pas
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "./spectralnorm.fpascal-2.fpascal_run 5500" Pascal spectral-norm
+	sudo ../../../RAPL/main "./spectralnorm.fpascal-2.fpascal_run 5500" Pascal spectral-norm $(NTIMES)
 
 run:
 	./spectralnorm.fpascal-2.fpascal_run 5500
@@ -14,9 +18,9 @@ mem:
 	/usr/bin/time -v ./spectralnorm.fpascal-2.fpascal_run 5500
 
 clean:
-	rm *run
-	rm *.o
-	rm *.ppu
+	rm -f *.o
+	rm -f *run
+	rm -f *.ppu
 
 valgrind:
 	valgrind --tool=massif --stacks=yes ./spectralnorm.fpascal-2.fpascal_run 5500

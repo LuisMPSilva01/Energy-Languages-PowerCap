@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console --force
 	sed -i '/<\/PropertyGroup>/i \    <AllowUnsafeBlocks>true<\/AllowUnsafeBlocks>' obj/spectral-norm.csproj.nuget.g.props 
@@ -6,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500" CSharp spectral-norm
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500" CSharp spectral-norm $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/spectral-norm.dll 5500

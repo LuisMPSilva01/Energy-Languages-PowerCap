@@ -1,9 +1,12 @@
-compile:
+NTIMES=1
 
+export NTIMES
+
+compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "ruby -W0 spectralnorm.yarv-5.yarv 5500" Ruby spectral-norm
+	sudo ../../../RAPL/main "ruby -W0 spectralnorm.yarv-5.yarv 5500" Ruby spectral-norm $(NTIMES)
 
 run:
 	ruby -W0 spectralnorm.yarv-5.yarv 5500

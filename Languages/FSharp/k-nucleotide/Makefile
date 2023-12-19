@@ -1,3 +1,7 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	~/.dotnet/dotnet new console -lang "F#" --force
 	cp knucleotide.fsharpcore-6.fsharpcore Program.fs
@@ -6,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < ../../../inputs/knucleotide-input25000000.txt" FSharp k-nucleotide
+	sudo ../../../RAPL/main "/usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < ../../../inputs/knucleotide-input25000000.txt" FSharp k-nucleotide $(NTIMES)
 
 run:
 	/usr/bin/dotnet ./bin/Release/net7.0/k-nucleotide.dll 0 < ../../../inputs/knucleotide-input25000000.txt

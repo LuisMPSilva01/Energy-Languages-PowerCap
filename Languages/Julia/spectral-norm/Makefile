@@ -1,8 +1,12 @@
+NTIMES=1
+
+export NTIMES
+
 compile:
 	
 measure:
 	export JULIA_NUM_THREADS=4
-	sudo ../../RAPL/main "julia -O3  -- spectralnorm.julia-3.julia 5500" Julia spectral-norms
+	sudo ../../../RAPL/main "julia -O3  -- spectralnorm.julia-3.julia 5500" Julia spectral-norms $(NTIMES)
 run:
 	export JULIA_NUM_THREADS=4
 	julia -O3  -- spectralnorm.julia-3.julia 5500
