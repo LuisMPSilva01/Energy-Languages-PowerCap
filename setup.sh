@@ -193,7 +193,7 @@ sudo apt install cmake
     opam install ocamlfind
     opam install zarith
 
-    #Pascal
+    #Pascal - v3.2.2
     sudo apt install fpc
     sudo apt-get install libpcre3-dev
     git clone https://github.com/BeRo1985/pasmp
@@ -245,7 +245,7 @@ sudo apt install cmake
     #Racket - v8.7
     sudo apt-get install racket
     
-    #Ruby - v3.2.0 [TODO] (falta o pidigits apenas)
+    #Ruby - v3.2.0
     sudo apt update
     sudo apt install git curl libssl-dev libreadline-dev zlib1g-dev autoconf bison build-essential libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev libgmp-dev
     curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
@@ -254,6 +254,10 @@ sudo apt install cmake
     source ~/.bashrc
     rbenv install 3.2.0
     rbenv global 3.2.0
+    gem install gmp
+    cd Languages/Ruby/pidigits/
+    cp $(dirname $(gem which gmp))/gmp.so .
+    cd ../../..
 
     #Rust
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
