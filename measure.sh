@@ -86,8 +86,8 @@ for limit in -1
         make clean
         cd ../../..
     done
-done
 comment
+done
 
 cd RAPL/
 make clean
