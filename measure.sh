@@ -41,7 +41,7 @@ for limit in -1
     make
     cd ..
 
-<<comment
+
     for language in "Languages"/*; do
         for program in "$language"/*; do
             if [ -d "$program" ]; then
@@ -62,7 +62,7 @@ for limit in -1
             fi
         done
     done
-
+<<comment
     for program in "Languages/C"/*; do
         cd $program
         make compile
@@ -74,7 +74,7 @@ for limit in -1
         make clean
         cd ../../..
     done
-comment
+
     for program in "Languages/Ada"/*; do
         cd $program
         make compile
@@ -87,6 +87,7 @@ comment
         cd ../../..
     done
 done
+comment
 
 cd RAPL/
 make clean
