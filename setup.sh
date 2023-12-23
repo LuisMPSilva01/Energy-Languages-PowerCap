@@ -125,13 +125,13 @@ sudo apt install cmake
 
 
     #Java - v20.0.2 - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
-    wget https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb
-    sudo dpkg -i jdk-20_linux-x64_bin.deb
+    wget https://download.oracle.com/java/20/archive/jdk-20.0.2_linux-x64_bin.deb
+    sudo dpkg -i jdk-20.0.2_linux-x64_bin.deb
     sudo apt-get install -f
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-20/bin/java 1
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-20/bin/javac 1
     sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-20/bin/jar 1
-    rm jdk-20_linux-x64_bin.deb
+    rm jdk-20.0.2_linux-x64_bin.deb
     #-----------------Download .jar from https://jar-download.com/artifacts/it.unimi.dsi/fastutil/8.3.1/source-code
     cd Languages/Java
     unzip jar_files.zip
@@ -144,7 +144,7 @@ sudo apt install cmake
     source ~/.bashrc
     nvm install 19.0.1
     nvm use 19.0.1
-    npm install -g npm@latest
+    npm install -g npm@8.19.2
     cd Languages/JavaScript/pidigits/
     npm install mpzjs
     cd ../../
@@ -180,6 +180,16 @@ sudo apt install cmake
     sudo make install
     cd ..
     rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 
+    wget https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz
+    tar zxpf luarocks-3.9.2.tar.gz
+    cd luarocks-3.9.2/
+    ./configure --lua-version=5.4 --versioned-rocks-dir
+    make build
+    sudo make install
+    cd ..
+    sudo luarocks install lrexlib-pcre2
+    export LUA_CPATH="/home/diguest/Energy-Languages-PowerCap/Languages/Lua/regex-redux/luarocks-3.9.2/lua_modules/lib/lua/5.4/?.so;;$LUA_CPATH"
+    sudo cp /home/diguest/Energy-Languages-PowerCap/Languages/Lua/regex-redux/luarocks-3.9.2/lua_modules/lib/lua/5.4/rex_pcre2.so /usr/lib/x86_64-linux-gnu/lua/5.4/
 
     #Ocaml - v5.0.0
     sudo apt install opam
@@ -209,10 +219,14 @@ sudo apt install cmake
     sudo rm -r pasmp
 
     #Perl - v5.36.0
-    \curl -L https://install.perlbrew.pl | bash
-    source ~/perl5/perlbrew/etc/bashrc
-    perlbrew install 5.36.0
-    cpan Math::BigInt::GMP
+    wget https://www.cpan.org/src/5.0/perl-5.36.0.tar.gz
+    tar -xzf perl-5.36.0.tar.gz
+    cd perl-5.36.0
+    ./Configure -Dusethreads
+    make
+    make test
+    sudo make install
+
 
     #PHP - v8.2.1
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
@@ -243,7 +257,8 @@ sudo apt install cmake
     pip3.11 install gmpy2
 
     #Racket - v8.7
-    sudo apt-get install racket
+    wget https://download.racket-lang.org/releases/8.7/installers/racket-8.7-x86_64-linux-cs.sh
+    export PATH=~/bin:$PATH
     
     #Ruby - v3.2.0
     sudo apt update
