@@ -125,13 +125,13 @@ sudo apt install cmake
 
 
     #Java - v20.0.2 - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
-    wget https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb
-    sudo dpkg -i jdk-20_linux-x64_bin.deb
+    wget https://download.oracle.com/java/20/archive/jdk-20.0.2_linux-x64_bin.deb
+    sudo dpkg -i jdk-20.0.2_linux-x64_bin.deb
     sudo apt-get install -f
     sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-20/bin/java 1
     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-20/bin/javac 1
     sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-20/bin/jar 1
-    rm jdk-20_linux-x64_bin.deb
+    rm jdk-20.0.2_linux-x64_bin.deb
     #-----------------Download .jar from https://jar-download.com/artifacts/it.unimi.dsi/fastutil/8.3.1/source-code
     cd Languages/Java
     unzip jar_files.zip
