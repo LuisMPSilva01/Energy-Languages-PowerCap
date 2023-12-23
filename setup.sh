@@ -144,7 +144,7 @@ sudo apt install cmake
     source ~/.bashrc
     nvm install 19.0.1
     nvm use 19.0.1
-    npm install -g npm@latest
+    npm install -g npm@8.19.2
     cd Languages/JavaScript/pidigits/
     npm install mpzjs
     cd ../../
