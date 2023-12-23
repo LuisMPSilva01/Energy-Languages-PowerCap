@@ -12,13 +12,35 @@
 #include <math.h>
 #include "rapl.h"
 #include "sensors.h"
+#include <pthread.h>
+#include <unistd.h>
+#include <signal.h>
 
-#define TEMPERATURETHRESHOLD 31.75
+#define TEMPERATURETHRESHOLD 47.75
 #define VARIANCE 30
 #define WHATTSCAP -1
 #define MAX_STRING_LENGTH 500
 #define MAX_COMMAND_LENGTH 500
 #define MEASUREMENTS_FILE "measurements.csv"
+#define TIME_OUT_LIMIT 60*15
+
+
+// Structure to hold function return value and timeout flag
+struct ThreadData {
+    int returnValue;
+    int timeoutFlag;
+};
+
+// Global structure to communicate between threads
+struct ThreadData threadData;
+
+// Signal handler for SIGALRM
+void timeoutHandler(int signo) {
+    if (signo == SIGALRM) {
+        threadData.timeoutFlag = 1;
+    }
+}
+
 
 long fib(int n) 
 {
@@ -35,7 +57,7 @@ int initializeRapl(raplcap *rc){
 
     // initialize
     if (raplcap_init(rc))
-    {
+    {// Signal handler for SIGALRM
         perror("raplcap_init");
         return -1;
     }
@@ -91,7 +113,7 @@ int initializeRapl(raplcap *rc){
 }
 
 // Function to measure memory usage of a command and return the result
-int measureMemoryUsage(const char *command) {
+int runCommand(const char *command) {
     char cmd[1024];
     int mem;
     sprintf(cmd, "{ /usr/bin/time -v %s > /dev/null; } 2>&1 | grep 'Maximum resident' | sed 's/[^0-9]\\+\\([0-9]\\+\\).*/\\1/'", command);
@@ -111,13 +133,13 @@ int measureMemoryUsage(const char *command) {
     return mem;
 }
 
-int programWorks(const char *command){
+void* programWorks(const char *command){
     FILE *fp2 = popen(command, "r");
     if (fp2 == NULL) {
         fprintf(stderr, "Error running program verification\n");
         return 0;
     }
-
+    
     char buf[1024];
     while (fgets(buf, sizeof(buf), fp2) != NULL) {
     }
@@ -127,16 +149,46 @@ int programWorks(const char *command){
         int exit_status = WEXITSTATUS(status);
         if (exit_status == 0) {
             printf("Command executed successfully\n");
-            return 1;
+            return threadData.returnValue = 1;
         } else {
             printf("Command exited with an error status: %d\n", exit_status);
-            return 0;
+            return threadData.returnValue = 0;
         }
     } else {
         printf("Command did not exit normally\n");
-        return 0;
+        return threadData.returnValue = 0;
     }
+    pthread_exit(NULL);
 };
+
+void runTesting(int ntimes, int core, const char *command, const char *language, const char *program){
+    // Set up the signal handler for SIGALRM
+    signal(SIGALRM, timeoutHandler);
+
+    // Set the alarm to send SIGALRM after the specified timeout
+    alarm(TIME_OUT_LIMIT);
+
+    // Create a thread to execute the function
+    pthread_t thread;
+    pthread_create(&thread, NULL, programWorks, command);
+
+    // Join the thread to ensure its completion and get the return value
+    pthread_join(thread, NULL);
+
+    if (threadData.timeoutFlag) {
+        // Handle timeout: Function execution interrupted
+        writeErrorMessage(language,program,"TimeOut");
+        printf("Timeout: Function execution interrupted after %d seconds\n", TIME_OUT_LIMIT);
+    } else {
+        // Function executed within the specified timeout
+        if(threadData.returnValue==1){ //Program works
+            performMeasurements(command,language,program,ntimes,core);
+        }
+        else{
+            writeErrorMessage(language,program,"ProgramError");
+        }
+    }
+}
 
 // Function to perform the measurements and write to the measurements file
 void performMeasurements(const char *command, const char *language, const char *program, int ntimes, int core) {
@@ -172,7 +224,7 @@ void performMeasurements(const char *command, const char *language, const char *
         begin = clock();
         gettimeofday(&tvb, 0);
         
-        int mem = measureMemoryUsage(command);
+        int mem = runCommand(command);
         
         end = clock();
         gettimeofday(&tva, 0);
@@ -186,7 +238,7 @@ void performMeasurements(const char *command, const char *language, const char *
     fclose(fp);
 }
 
-void writeErrorMessage(const char *language, const char *program){
+void writeErrorMessage(const char *language, const char *program, const char *errorMsg){
     FILE *fp;
     fp = fopen(MEASUREMENTS_FILE, "w");
     if (fp == NULL) {
@@ -195,7 +247,8 @@ void writeErrorMessage(const char *language, const char *program){
     }
 
     fprintf(fp, "Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory\n");
-    fprintf(fp, "%s, %s, %d, error, error, error, error, error, error, error\n", language, program, WHATTSCAP);
+    fprintf(fp, "%s, %s, %d, %s, %s, %s, %s, %s, %s, %s\n", language, program, WHATTSCAP,
+                        errorMsg,errorMsg,errorMsg,errorMsg,errorMsg,errorMsg,errorMsg);
     fclose(fp);
 }
 
@@ -226,12 +279,7 @@ int main(int argc, char **argv) {
         if(initializeRapl(&rc))
             return -1;
     }
-    
-    if(programWorks(command)){
-        performMeasurements(command, language, program, ntimes, core);
-    } else {
-        writeErrorMessage(language,program);
-    }
+    runTesting(ntimes,core, command, language, program);
     printf("\n\n END of PARAMETRIZED PROGRAM: \n");
 
     if (WHATTSCAP != -1) {
