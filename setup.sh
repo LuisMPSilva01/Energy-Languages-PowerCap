@@ -219,10 +219,14 @@ sudo apt install cmake
     sudo rm -r pasmp
 
     #Perl - v5.36.0
-    \curl -L https://install.perlbrew.pl | bash
-    source ~/perl5/perlbrew/etc/bashrc
-    perlbrew install 5.36.0
-    cpan Math::BigInt::GMP
+    wget https://www.cpan.org/src/5.0/perl-5.36.0.tar.gz
+    tar -xzf perl-5.36.0.tar.gz
+    cd perl-5.36.0
+    ./Configure -Dusethreads
+    make
+    make test
+    sudo make install
+
 
     #PHP - v8.2.1
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
