@@ -243,7 +243,8 @@ sudo apt install cmake
     pip3.11 install gmpy2
 
     #Racket - v8.7
-    sudo apt-get install racket
+    wget https://download.racket-lang.org/releases/8.7/installers/racket-8.7-x86_64-linux-cs.sh
+    export PATH=~/bin:$PATH
     
     #Ruby - v3.2.0
     sudo apt update
