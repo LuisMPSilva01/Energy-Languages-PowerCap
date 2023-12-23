@@ -180,6 +180,16 @@ sudo apt install cmake
     sudo make install
     cd ..
     rm -rf lua-5.4.4/ lua-5.4.4.tar.gz 
+    wget https://luarocks.github.io/luarocks/releases/luarocks-3.9.2.tar.gz
+    tar zxpf luarocks-3.9.2.tar.gz
+    cd luarocks-3.9.2/
+    ./configure --lua-version=5.4 --versioned-rocks-dir
+    make build
+    sudo make install
+    cd ..
+    sudo luarocks install lrexlib-pcre2
+    export LUA_CPATH="/home/diguest/Energy-Languages-PowerCap/Languages/Lua/regex-redux/luarocks-3.9.2/lua_modules/lib/lua/5.4/?.so;;$LUA_CPATH"
+    sudo cp /home/diguest/Energy-Languages-PowerCap/Languages/Lua/regex-redux/luarocks-3.9.2/lua_modules/lib/lua/5.4/rex_pcre2.so /usr/lib/x86_64-linux-gnu/lua/5.4/
 
     #Ocaml - v5.0.0
     sudo apt install opam
