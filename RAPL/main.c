@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define TEMPERATURETHRESHOLD 47.75
+#define TEMPERATURETHRESHOLD 88.0
 #define VARIANCE 30
 #define WHATTSCAP -1
 #define MAX_STRING_LENGTH 500
@@ -28,18 +28,10 @@
 // Structure to hold function return value and timeout flag
 struct ThreadData {
     int returnValue;
-    int timeoutFlag;
 };
 
 // Global structure to communicate between threads
 struct ThreadData threadData;
-
-// Signal handler for SIGALRM
-void timeoutHandler(int signo) {
-    if (signo == SIGALRM) {
-        threadData.timeoutFlag = 1;
-    }
-}
 
 
 long fib(int n) 
@@ -162,20 +154,23 @@ void* programWorks(const char *command){
 };
 
 void runTesting(int ntimes, int core, const char *command, const char *language, const char *program){
-    // Set up the signal handler for SIGALRM
-    signal(SIGALRM, timeoutHandler);
+    struct timespec ts;
+    if (clock_gettime(CLOCK_REALTIME, &ts) == -1)
+    {
+        printf("unnespected behaviour\n");
+        return;
+    }
 
-    // Set the alarm to send SIGALRM after the specified timeout
-    alarm(TIME_OUT_LIMIT);
+    ts.tv_sec += TIME_OUT_LIMIT;
 
     // Create a thread to execute the function
     pthread_t thread;
     pthread_create(&thread, NULL, programWorks, command);
-
+    
     // Join the thread to ensure its completion and get the return value
-    pthread_join(thread, NULL);
+    int state = pthread_timedjoin_np(thread, NULL, &ts);
 
-    if (threadData.timeoutFlag) {
+    if (state!=0) {
         // Handle timeout: Function execution interrupted
         writeErrorMessage(language,program,"TimeOut");
         printf("Timeout: Function execution interrupted after %d seconds\n", TIME_OUT_LIMIT);
