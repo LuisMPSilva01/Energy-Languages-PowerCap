@@ -63,7 +63,9 @@ for limit in -1
         done
     done
 <<comment
+
     for program in "Languages/C"/*; do
+        if [ -d "$program" ]; then
         cd $program
         make compile
         make measure 
@@ -73,18 +75,7 @@ for limit in -1
         tail -n +2 "$file" >> ../../../measurements.csv;
         make clean
         cd ../../..
-    done
-
-    for program in "Languages/Ada"/*; do
-        cd $program
-        make compile
-        make measure 
-
-        # Specify the input file name
-        file="measurements.csv"
-        tail -n +2 "$file" >> ../../../measurements.csv;
-        make clean
-        cd ../../..
+        fi
     done
 comment
 done
@@ -93,4 +84,4 @@ cd RAPL/
 make clean
 cd ..
 
-sudo reboot
+#sudo reboot

@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define TEMPERATURETHRESHOLD 88.0
+#define TEMPERATURETHRESHOLD 88.5
 #define VARIANCE 30
 #define WHATTSCAP -1
 #define MAX_STRING_LENGTH 500
@@ -141,17 +141,31 @@ void* programWorks(const char *command){
         int exit_status = WEXITSTATUS(status);
         if (exit_status == 0) {
             printf("Command executed successfully\n");
-            return threadData.returnValue = 1;
+            threadData.returnValue = 1;
         } else {
             printf("Command exited with an error status: %d\n", exit_status);
-            return threadData.returnValue = 0;
+            threadData.returnValue = 0;
         }
     } else {
         printf("Command did not exit normally\n");
-        return threadData.returnValue = 0;
+        threadData.returnValue = 0;
     }
     pthread_exit(NULL);
 };
+
+void writeErrorMessage(const char *language, const char *program, const char *errorMsg){
+    FILE *fp;
+    fp = fopen(MEASUREMENTS_FILE, "w");
+    if (fp == NULL) {
+        perror("Error opening measurements file");
+        exit(-1);
+    }
+
+    fprintf(fp, "Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory\n");
+    fprintf(fp, "%s, %s, %d, %s, %s, %s, %s, %s, %s, %s\n", language, program, WHATTSCAP,
+                        errorMsg,errorMsg,errorMsg,errorMsg,errorMsg,errorMsg,errorMsg);
+    fclose(fp);
+}
 
 void runTesting(int ntimes, int core, const char *command, const char *language, const char *program){
     struct timespec ts;
@@ -165,7 +179,7 @@ void runTesting(int ntimes, int core, const char *command, const char *language,
 
     // Create a thread to execute the function
     pthread_t thread;
-    pthread_create(&thread, NULL, programWorks, command);
+    pthread_create(&thread, NULL, programWorks, (void *)command);
     
     // Join the thread to ensure its completion and get the return value
     int state = pthread_timedjoin_np(thread, NULL, &ts);
@@ -185,14 +199,41 @@ void runTesting(int ntimes, int core, const char *command, const char *language,
     }
 }
 
-// Function to perform the measurements and write to the measurements file
-void performMeasurements(const char *command, const char *language, const char *program, int ntimes, int core) {
+struct MeasureArgs {
+    FILE *fp;
+    int core;
+    const char *command;
+};
+
+void* measure(struct MeasureArgs* args){
     clock_t begin, end;
     double time_spent;
     struct timeval tvb, tva;
+    char str_temp[20];
+
+    rapl_before(args->fp, args->core);
+        
+    begin = clock();
+    gettimeofday(&tvb, 0);
+        
+    int mem = runCommand(args->command);
+        
+    end = clock();
+    gettimeofday(&tva, 0);
+    time_spent = ((tva.tv_sec - tvb.tv_sec) * 1000000 + tva.tv_usec - tvb.tv_usec) / 1000;
+        
+    rapl_after(args->fp, args->core);
+    sprintf(str_temp, "%.1f", getTemperature());
+    fprintf(args->fp, "%G, %s, %d\n", time_spent, str_temp, mem);
+    fflush(args->fp);
+}
+
+// Function to perform the measurements and write to the measurements file
+void performMeasurements(const char *command, const char *language, const char *program, int ntimes, int core) {
+    struct timespec ts;
+
     FILE *fp;
     float temperature;
-    char str_temp[20];
 
     rapl_init(core);
 
@@ -214,38 +255,32 @@ void performMeasurements(const char *command, const char *language, const char *
             temperature = getTemperature();
         }
 
-        rapl_before(fp, core);
-        
-        begin = clock();
-        gettimeofday(&tvb, 0);
-        
-        int mem = runCommand(command);
-        
-        end = clock();
-        gettimeofday(&tva, 0);
-        time_spent = ((tva.tv_sec - tvb.tv_sec) * 1000000 + tva.tv_usec - tvb.tv_usec) / 1000;
-        
-        rapl_after(fp, core);
-        sprintf(str_temp, "%.1f", getTemperature());
-        fprintf(fp, "%G, %s, %d\n", time_spent, str_temp, mem);
-        fflush(fp);
+        if (clock_gettime(CLOCK_REALTIME, &ts) == -1){
+            printf("unnespected behaviour\n");
+            return;
+        }
+
+        ts.tv_sec += TIME_OUT_LIMIT;
+
+        pthread_t thread;
+        struct MeasureArgs* myArgs = (struct MeasureArgs*)malloc(sizeof(struct MeasureArgs));
+        myArgs->command=command;
+        myArgs->core=core;
+        myArgs->fp=fp;
+        pthread_create(&thread, NULL, measure, (void *)myArgs);
+            
+        // Join the thread to ensure its completion and get the return value
+        int state = pthread_timedjoin_np(thread, NULL, &ts);
+        if (state!=0) {
+            // Handle timeout: Function execution interrupted
+            writeErrorMessage(language,program,"TimeOut");
+            printf("Timeout: Function execution interrupted after %d seconds\n", TIME_OUT_LIMIT);
+            return;
+        }
     }
     fclose(fp);
 }
 
-void writeErrorMessage(const char *language, const char *program, const char *errorMsg){
-    FILE *fp;
-    fp = fopen(MEASUREMENTS_FILE, "w");
-    if (fp == NULL) {
-        perror("Error opening measurements file");
-        exit(-1);
-    }
-
-    fprintf(fp, "Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory\n");
-    fprintf(fp, "%s, %s, %d, %s, %s, %s, %s, %s, %s, %s\n", language, program, WHATTSCAP,
-                        errorMsg,errorMsg,errorMsg,errorMsg,errorMsg,errorMsg,errorMsg);
-    fclose(fp);
-}
 
 
 int main(int argc, char **argv) {
