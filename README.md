@@ -11,13 +11,11 @@
   </tr>
 
   
-
-| Documents         |                                                                                                     |
+### Documents
+| Documents         | Links                                                                                               |
 |-------------------|-----------------------------------------------------------------------------------------------------|
 | Presentation      | [here](https://github.com/simaocunha71/EnergyMeasurement/blob/main/docs/presentation.pdf)          |
 | Poster            | [here](https://github.com/simaocunha71/EnergyMeasurement/blob/main/docs/poster.pdf)                |
-
-
 
 ### Authors
 | Authors       | Links                               |
