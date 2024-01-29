@@ -14,8 +14,8 @@
 ### Documents
 | Documents         | Links                                                                                               |
 |-------------------|-----------------------------------------------------------------------------------------------------|
-| Presentation      | [here](https://github.com/simaocunha71/EnergyMeasurement/blob/main/docs/presentation.pdf)          |
-| Poster            | [here](https://github.com/simaocunha71/EnergyMeasurement/blob/main/docs/poster.pdf)                |
+| Presentation      | TBD         |
+| Poster            | [here](https://github.com/LuisMPSilva01/Energy-Languages-PowerCap/blob/master/docs/poster.pdf)                |
 
 ### Authors
 | Authors       | Links                               |
