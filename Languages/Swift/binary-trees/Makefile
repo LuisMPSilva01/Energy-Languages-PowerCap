@@ -3,7 +3,7 @@ NTIMES=1
 export NTIMES
 
 compile:
-	swiftc binarytrees.swift-9.swift -Ounchecked -whole-module-optimization -I Include/swift/apr -o binarytrees.swift-9.swift_run
+	/opt/swift/usr/bin/swiftc binarytrees.swift-9.swift -Ounchecked -whole-module-optimization -I Include/swift/apr -o binarytrees.swift-9.swift_run
 
 measure:
 	sudo modprobe msr

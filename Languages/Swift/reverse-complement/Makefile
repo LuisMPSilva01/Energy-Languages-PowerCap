@@ -3,7 +3,7 @@ NTIMES=1
 export NTIMES
 
 compile:
-	swiftc revcomp.swift -Ounchecked -whole-module-optimization  -o revcomp.swift_run
+	/opt/swift/usr/bin/swiftc revcomp.swift -Ounchecked -whole-module-optimization  -o revcomp.swift_run
 
 measure:
 	sudo modprobe msr

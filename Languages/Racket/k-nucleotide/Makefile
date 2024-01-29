@@ -3,11 +3,11 @@ NTIMES=1
 export NTIMES
 
 compile:
-	raco make knucleotide.racket-4.racket
+	/home/diguest/bin/raco make knucleotide.racket-4.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "racket ./compiled/knucleotide.racket-4_racket.zo 0 < ../../../inputs/knucleotide-input25000000.txt" Racket k-nucleotide $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/bin/racket ./compiled/knucleotide.racket-4_racket.zo 0 < ../../../inputs/knucleotide-input25000000.txt" Racket k-nucleotide $(NTIMES)
 
 run:
 	racket ./compiled/knucleotide.racket-4_racket.zo 0 < ../../../inputs/knucleotide-input25000000.txt

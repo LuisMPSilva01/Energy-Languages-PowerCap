@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "6c9RSPGBuwxaHDBqAcifaTCLIzxg1DxIOhLk/xRsoZLGtzXPj7/mucl7AaCM0TM+cMccPhwEeZ8Umt49puokqg==",
+  "success": true,
+  "projectFilePath": "/home/diguest/Energy-Languages-PowerCap/Languages/FSharp/reverse-complement/reverse-complement.fsproj",
+  "expectedPackageFiles": [
+    "/root/.nuget/packages/fsharp.core/7.0.200/fsharp.core.7.0.200.nupkg.sha512"
+  ],
+  "logs": []
+}

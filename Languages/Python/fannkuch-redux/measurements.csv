@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Python, fannkuch-redux, 25,10698.771301269531250000, 7060.306396484375000000, 0.009887695312500000, 1037.547119140625000000, 429460, 38.0, 14708

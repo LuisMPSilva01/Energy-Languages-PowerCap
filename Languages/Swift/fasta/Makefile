@@ -3,7 +3,7 @@ NTIMES=1
 export NTIMES
 
 compile:
-	swiftc fasta.swift-3.swift -Ounchecked -whole-module-optimization  -o fasta.swift-3.swift_run
+	/opt/swift/usr/bin/swiftc fasta.swift-3.swift -Ounchecked -whole-module-optimization  -o fasta.swift-3.swift_run
 
 measure:
 	sudo modprobe msr

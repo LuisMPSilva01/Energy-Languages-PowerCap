@@ -3,14 +3,14 @@ NTIMES=1
 export NTIMES
 
 compile:
-	cargo build
+	/home/diguest/.cargo/bin/cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./fasta.rust-2.rust_run 25000000" Rust fasta $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.cargo/bin/cargo run -- 25000000" Rust fasta $(NTIMES)
 
 run:
-	cargo run -- 25000000
+	/home/diguest/.cargo/bin/cargo run -- 25000000
 
 clean:
 	rm -r target

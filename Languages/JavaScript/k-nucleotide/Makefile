@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node knucleotide.node-2.js 0 < ../../../inputs/knucleotide-input25000000.txt" JavaScript k-nucleotide $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node knucleotide.node-2.js 0 < ../../../inputs/knucleotide-input25000000.txt" JavaScript k-nucleotide $(NTIMES)
 
 run:
 	node knucleotide.node-2.js 0 < ../../../inputs/knucleotide-input25000000.txt

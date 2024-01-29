@@ -3,7 +3,7 @@ NTIMES=1
 export NTIMES
 
 compile:
-	swiftc nbody.swift-5.swift -Ounchecked -whole-module-optimization  -o nbody.swift-5.swift_run
+	/opt/swift/usr/bin/swiftc nbody.swift-5.swift -Ounchecked -whole-module-optimization  -o nbody.swift-5.swift_run
 
 measure:
 	sudo modprobe msr

@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Perl, mandelbrot, 25,13123.755493164062500000, 8516.217041015625000000, 0.012268066406250000, 1272.289611816406250000, 526636, 39.8, 76888

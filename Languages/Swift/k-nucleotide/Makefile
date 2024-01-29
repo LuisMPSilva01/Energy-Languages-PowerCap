@@ -3,7 +3,7 @@ NTIMES=1
 export NTIMES
 
 compile:
-	swiftc knucleotide.swift-2.swift -Ounchecked -whole-module-optimization  -o knucleotide.swift-2.swift_run
+	/opt/swift/usr/bin/swiftc knucleotide.swift-2.swift -Ounchecked -whole-module-optimization  -o knucleotide.swift-2.swift_run
 
 measure:
 	sudo modprobe msr

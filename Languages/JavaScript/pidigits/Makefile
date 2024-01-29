@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node pidigits.js 10000" JavaScript pidigits $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node pidigits.js 10000" JavaScript pidigits $(NTIMES)
 
 run:
 	node pidigits.js 10000

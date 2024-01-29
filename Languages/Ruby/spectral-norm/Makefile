@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "ruby -W0 spectralnorm.yarv-5.yarv 5500" Ruby spectral-norm $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.rbenv/shims/ruby -W0 spectralnorm.yarv-5.yarv 5500" Ruby spectral-norm $(NTIMES)
 
 run:
 	ruby -W0 spectralnorm.yarv-5.yarv 5500

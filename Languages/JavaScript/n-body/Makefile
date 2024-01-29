@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node nbody.js 50000000" JavaScript n-body $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node nbody.js 50000000" JavaScript n-body $(NTIMES)
 
 run:
 	node nbody.js 50000000

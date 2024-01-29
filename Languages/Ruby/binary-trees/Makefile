@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "ruby -W0 binarytrees.yarv-5.yarv 21" Ruby binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.rbenv/shims/ruby -W0 binarytrees.yarv-5.yarv 21" Ruby binary-trees $(NTIMES)
 
 run:
 	ruby -W0 binarytrees.yarv-5.yarv 21

@@ -3,14 +3,14 @@ NTIMES=1
 export NTIMES
 
 compile:
-	cargo build
+	/home/diguest/.cargo/bin/cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./revcomp.rust-2.rust_run 0 < ../../../inputs/revcomp-input25000000.txt" Rust reverse-complement $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.cargo/bin/cargo run -- 0 < ../../../inputs/revcomp-input25000000.txt" Rust reverse-complement $(NTIMES)
 
 run:
-	cargo run -- 0 < ../../../inputs/revcomp-input25000000.txt
+	/home/diguest/.cargo/bin/cargo run -- 0 < ../../../inputs/revcomp-input25000000.txt
 
 mem:
 	/usr/bin/time -v ./revcomp.rust-2.rust_run 0 < ../../../inputs/revcomp-input25000000.txt

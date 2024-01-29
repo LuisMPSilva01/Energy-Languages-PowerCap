@@ -3,14 +3,14 @@ NTIMES=1
 export NTIMES
 
 compile:
-	cargo build	
+	/home/diguest/.cargo/bin/cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./nbody.rust-2.rust_run 50000000" Rust n-body $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.cargo/bin/cargo run -- 50000000" Rust n-body $(NTIMES)
 
 run:
-	cargo run -- 50000000
+	/home/diguest/.cargo/bin/cargo run -- 50000000
 
 clean:
 	rm -r target

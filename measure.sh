@@ -1,6 +1,6 @@
 #!/bin/bash
-#NTIMES=20
-NTIMES=1
+NTIMES=20
+#NTIMES=1
 
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL
@@ -25,12 +25,13 @@ for language in "../Languages"/*; do
     done
 done
 cd ..
-      
+
+
 echo "Language,Program,PowerLimit,Package,Core,GPU,DRAM,Time,Temperature,Memory" > measurements.csv
 
 # Loop over power limit values
-#for limit in -1 2 10 15 25
-for limit in -1
+for limit in -1 2 10 15 25
+#for limit in 25
     do
     cd Utils/
     python3 raplCapUpdate.py $limit ../RAPL/main.c
@@ -40,8 +41,6 @@ for limit in -1
     rm sensors.so
     make
     cd ..
-
-
     for language in "Languages"/*; do
         for program in "$language"/*; do
             if [ -d "$program" ]; then
@@ -62,26 +61,10 @@ for limit in -1
             fi
         done
     done
-<<comment
-
-    for program in "Languages/C"/*; do
-        if [ -d "$program" ]; then
-        cd $program
-        make compile
-        make measure 
-
-        # Specify the input file name
-        file="measurements.csv"
-        tail -n +2 "$file" >> ../../../measurements.csv;
-        make clean
-        cd ../../..
-        fi
-    done
-comment
 done
 
 cd RAPL/
 make clean
 cd ..
 
-#sudo reboot
+sudo reboot

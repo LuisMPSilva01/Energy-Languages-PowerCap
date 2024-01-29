@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node mandelbrot.js 16000" JavaScript mandelbrot $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node mandelbrot.js 16000" JavaScript mandelbrot $(NTIMES)
 
 run:
 	node mandelbrot.js 16000

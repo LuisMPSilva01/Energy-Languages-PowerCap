@@ -3,14 +3,14 @@ NTIMES=1
 export NTIMES
 
 compile:
-	cargo build
+	/home/diguest/.cargo/bin/cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./fannkuchredux.rust-3.rust_run 12" Rust fannkuch-redux $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.cargo/bin/cargo run -- 12" Rust fannkuch-redux $(NTIMES)
 
 run:
-	cargo run -- 12
+	/home/diguest/.cargo/bin/cargo run -- 12
 
 clean:
 	rm -r target

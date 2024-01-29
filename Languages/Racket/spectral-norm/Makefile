@@ -3,11 +3,11 @@ NTIMES=1
 export NTIMES
 
 compile:
-	raco make spectralnorm.racket-3.racket
+	/home/diguest/bin/raco make spectralnorm.racket-3.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "racket ./compiled/spectralnorm.racket-3_racket.zo 5500" Racket spectral-norm $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/bin/racket ./compiled/spectralnorm.racket-3_racket.zo 5500" Racket spectral-norm $(NTIMES)
 
 run:
 	racket ./compiled/spectralnorm.racket-3_racket.zo 5500

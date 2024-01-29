@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Fortran, fannkuch-redux, -1, ProgramError, ProgramError, ProgramError, ProgramError, ProgramError, ProgramError, ProgramError

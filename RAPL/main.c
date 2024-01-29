@@ -16,13 +16,13 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define TEMPERATURETHRESHOLD 88.5
-#define VARIANCE 30
-#define WHATTSCAP -1
+#define TEMPERATURETHRESHOLD 25.5
+#define VARIANCE 5
+#define WHATTSCAP 25
 #define MAX_STRING_LENGTH 500
 #define MAX_COMMAND_LENGTH 500
 #define MEASUREMENTS_FILE "measurements.csv"
-#define TIME_OUT_LIMIT 60*15
+#define TIME_OUT_LIMIT 60*1500
 
 
 // Structure to hold function return value and timeout flag

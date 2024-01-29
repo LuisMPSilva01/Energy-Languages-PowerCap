@@ -3,11 +3,11 @@ NTIMES=1
 export NTIMES
 
 compile:
-	raco make fasta.racket-3.racket
+	/home/diguest/bin/raco make fasta.racket-3.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "racket ./compiled/fasta.racket-3_racket.zo 25000000" Racket fasta $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/bin/racket ./compiled/fasta.racket-3_racket.zo 25000000" Racket fasta $(NTIMES)
 
 run:
 	racket ./compiled/fasta.racket-3_racket.zo 25000000

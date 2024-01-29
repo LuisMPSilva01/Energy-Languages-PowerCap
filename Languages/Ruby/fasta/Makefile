@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "ruby -W0 fasta.yarv-3.yarv 25000000" Ruby fasta $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.rbenv/shims/ruby -W0 fasta.yarv-3.yarv 25000000" Ruby fasta $(NTIMES)
 
 run:
 	ruby -W0 fasta.yarv-3.yarv 25000000

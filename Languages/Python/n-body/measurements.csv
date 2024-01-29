@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Python, n-body, 25,6068.707519531250000000, 3337.753479003906250000, 0.007385253906250000, 681.553649902343750000, 282093, 36.8, 9772

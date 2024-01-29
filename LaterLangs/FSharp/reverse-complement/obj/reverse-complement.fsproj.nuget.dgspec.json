@@ -1,0 +1,65 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/diguest/Energy-Languages-PowerCap/Languages/FSharp/reverse-complement/reverse-complement.fsproj": {}
+  },
+  "projects": {
+    "/home/diguest/Energy-Languages-PowerCap/Languages/FSharp/reverse-complement/reverse-complement.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/diguest/Energy-Languages-PowerCap/Languages/FSharp/reverse-complement/reverse-complement.fsproj",
+        "projectName": "reverse-complement",
+        "projectPath": "/home/diguest/Energy-Languages-PowerCap/Languages/FSharp/reverse-complement/reverse-complement.fsproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/home/diguest/Energy-Languages-PowerCap/Languages/FSharp/reverse-complement/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/root/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "/root/.dotnet/sdk/7.0.200/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[7.0.200, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/root/.dotnet/sdk/7.0.200/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

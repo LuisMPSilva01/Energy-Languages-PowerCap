@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Ruby, mandelbrot, 25,8881.603637695312500000, 5635.372741699218750000, 0.008605957031250000, 861.825683593750000000, 356420, 39.0, 80196

@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node binarytrees.js 21" JavaScript binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node binarytrees.js 21" JavaScript binary-trees $(NTIMES)
 
 run:
 	node binarytrees.js 21

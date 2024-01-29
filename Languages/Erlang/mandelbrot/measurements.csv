@@ -1,0 +1,2 @@
+Language, Program, PowerLimit, Package, Core(s), GPU, DRAM, Time (ms), Temperature, Memory
+Erlang, mandelbrot, 25,1717.542541503906250000, 1090.990844726562500000, 0.001953125000000000, 167.677124023437500000, 68930, 37.8, 63504

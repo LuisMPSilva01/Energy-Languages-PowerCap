@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node fannkuchredux.node-4.js 12" JavaScript fannkuch-redux $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node fannkuchredux.node-4.js 12" JavaScript fannkuch-redux $(NTIMES)
 
 run:
 	node fannkuchredux.node-4.js 12

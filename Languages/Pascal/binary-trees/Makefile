@@ -3,10 +3,10 @@ NTIMES=1
 export NTIMES
 
 compile:
-	cp binarytrees.fpascal binarytrees.pas
-	fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Mdelphi -oFPASCAL_RUN binarytrees.pas
-	mv FPASCAL_RUN binarytrees.fpascal_run
-	rm binarytrees.pas
+	sudo cp binarytrees.fpascal binarytrees.pas
+	sudo fpc -FuInclude/fpascal -XXs -O3 -Ci- -Cr- -g- -CpCOREAVX -CfAVX -Tlinux -Mdelphi -oFPASCAL_RUN binarytrees.pas
+	sudo mv FPASCAL_RUN binarytrees.fpascal_run
+	sudo rm binarytrees.pas
 	
 measure:
 	sudo modprobe msr

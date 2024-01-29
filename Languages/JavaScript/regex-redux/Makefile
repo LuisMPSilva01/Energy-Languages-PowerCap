@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node regexredux.node-2.js 0 < ../../../inputs/regexredux-input5000000.txt" JavaScript regex-redux $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node regexredux.node-2.js 0 < ../../../inputs/regexredux-input5000000.txt" JavaScript regex-redux $(NTIMES)
 
 run:
 	node regexredux.node-2.js 0 < ../../../inputs/regexredux-input5000000.txt

@@ -6,7 +6,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "node revcomp.node-7.js 0 < ../../../inputs/revcomp-input25000000.txt" JavaScript reverse-complement $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node revcomp.node-7.js 0 < ../../../inputs/revcomp-input25000000.txt" JavaScript reverse-complement $(NTIMES)
 
 run:
 	node revcomp.node-7.js 0 < ../../../inputs/revcomp-input25000000.txt

@@ -10,7 +10,7 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll.dll 16000" CSharp mandelbrot $(NTIMES)
+	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000" CSharp mandelbrot $(NTIMES)
 
 run:
 	~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000

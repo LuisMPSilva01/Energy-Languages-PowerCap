@@ -9,7 +9,7 @@ compile:
 	rm regexredux.fpascal-2.pas
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./regexredux.fpascal-2.fpascal_run 0 < r../../../inputs/egexredux-input5000000.txt" Pascal regex-redux $(NTIMES)
+	sudo ../../../RAPL/main "./regexredux.fpascal-2.fpascal_run 0 < ../../../inputs/regexredux-input5000000.txt" Pascal regex-redux $(NTIMES)
 
 run:
 	./regexredux.fpascal-2.fpascal_run 0 < ../../../inputs/regexredux-input5000000.txt

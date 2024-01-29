@@ -3,14 +3,14 @@ NTIMES=1
 export NTIMES
 
 compile:
-	cargo build
+	/home/diguest/.cargo/bin/cargo build
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "./knucleotide.rust-4.rust_run 0 < ../../../inputs/knucleotide-input25000000.txt" Rust k-nucleotide $(NTIMES)
+	sudo ../../../RAPL/main "/home/diguest/.cargo/bin/cargo run -- 0 < ../../../inputs/knucleotide-input25000000.txt" Rust k-nucleotide $(NTIMES)
 
 run:
-	cargo run -- 0 < ../../../inputs/knucleotide-input25000000.txt
+	/home/diguest/.cargo/bin/cargo run -- 0 < ../../../inputs/knucleotide-input25000000.txt
 
 clean:
 	rm -r target
