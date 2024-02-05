@@ -3,21 +3,15 @@ NTIMES=1
 export NTIMES
 
 compile:
-	/home/diguest/.cargo/bin/cargo build
+	/home/diguest/.cargo/bin/cargo build --release
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/.cargo/bin/cargo run -- 21" Rust binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "target/release/binary-trees 21" Rust binary-trees $(NTIMES)
 
 run:
-	/home/diguest/.cargo/bin/cargo run -- 21
-
-mem:
-	/usr/bin/time -v ./binarytrees.rust-2.rust_run 21
+	target/release/binary-trees 21
 
 clean:
-	rm -r target
-	rm -r Cargo.lock
-	
-valgrind:
-	valgrind --tool=massif --stacks=yes ./binarytrees.rust-2.rust_run 21 
+	rm -f -r target
+	rm -f -r Cargo.lock
