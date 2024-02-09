@@ -11,8 +11,5 @@ measure:
 run:
 	./revcomp.gcc-7.gcc_run 0 < ../../../inputs/revcomp-input25000000.txt
 
-mem:
-	/usr/bin/time -v ./revcomp.gcc-7.gcc_run 0 < ../../../inputs/revcomp-input25000000.txt
-
 clean:
 	rm -f *.gcc_run

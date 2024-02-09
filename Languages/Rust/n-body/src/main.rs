@@ -1,240 +1,338 @@
 /// The Computer Language Benchmarks Game
 /// https://salsa.debian.org/benchmarksgame-team/benchmarksgame/
 ///
-/// contributed by Miles
-/// converted from C to Rust, by Henry Jayakusuma
+/// contributed by Mark C. Lewis
+/// modified slightly by Chad Whipkey
+/// converted from java to c++,added sse support, by Branimir Maksimovic
+/// converted from c++ to c, by Alexey Medvedchikov
+/// converted from c to Rust by Frank Rehberger
 ///
-/// As the code of `gcc #9` this code requires hardware supporting
-/// the CPU feature SSE, AVX, implementing SIMD operations.
+/// As the code of `gcc #4` this code requires hardware supporting
+/// the CPU feature SSE2, implementing SIMD operations.
 ///
+/// As for `gcc` the operation symbols `*` and `+` etc. are overloaded
+/// for SIMD data type _m128f (2x double float SIMD data type); the 
+/// compiler `gcc` will map the symbols `+`, `*`, `-`, `/` onto 
+/// corresponding SIMD instructions, namely `_mm_mul_pd`, `_mm_div_pd`,
+/// `_mm_add_pd`, and `_mm_sub_pd`. In Rust these SIMD-operations are 
+/// invoked explicitly.
+///
+/// The following Rust code contains comments, in case the Rust code 
+/// requires a different layout; the comment is referring to the 
+/// corresponding expression in `gcc #4`
 
-const N: usize = 5;
 const PI: f64 = 3.141592653589793;
 const SOLAR_MASS: f64 = 4.0 * PI * PI;
-const DAYS_PER_YEAR: f64 = 365.24;
-const PAIRS: usize = N * (N - 1) / 2;
+const YEAR: f64 = 365.24;
+const N_BODIES: usize = 5;
 
 use std::arch::x86_64::*;
-use std::mem::{MaybeUninit, transmute};
 
-#[repr(align(32))]
-struct AlignedW([f64; PAIRS + 6]);
-
-#[inline(always)]
-unsafe fn _mm256_rsqrt_pd(
-    s: __m256d
-) -> __m256d {
-    let q = _mm256_cvtpd_ps(s);
-    let q = _mm_rsqrt_ps(q);
-    let x = _mm256_cvtps_pd(q);
-    let y = _mm256_mul_pd(_mm256_mul_pd(s, x), x);
-    let a = _mm256_mul_pd(y, _mm256_set1_pd(0.375));
-    let a = _mm256_mul_pd(a, y);
-    let b = _mm256_mul_pd(y, _mm256_set1_pd(1.25));
-    let b = _mm256_sub_pd(b, _mm256_set1_pd(1.875));
-    let y = _mm256_sub_pd(a, b);
-    _mm256_mul_pd(x, y)
+/// Datatype respresenting a Planet
+///
+/// The annotation `repr(C)` prevents the Rust-compiler from any
+/// re-ordering of members.
+///
+/// Corresponding to `gcc #4`
+/// ```
+/// struct body {
+///    double x[3], fill, v[3], mass;
+/// };
+/// ```
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct Body {
+    x: [f64; 3],
+    fill: f64,
+    v: [f64; 3],
+    mass: f64,
 }
 
-// The type for w is [f64; PAIRS + 6] here because rust complains about
-// transmuting to struct of different size.
-#[inline(always)]
-unsafe fn kernel(
-    r: &mut [__m256d; PAIRS + 3],
-    w: &mut [f64; PAIRS + 6],
-    p: &[__m256d; N],
-) {
-    let mut k: usize = 0;
-    for i in 1..N {
-        for j in 0..i {
-            r[k] = _mm256_sub_pd(p[i], p[j]);
-            k = k + 1;
+static BODIES: [Body; N_BODIES] = [
+    // Sun
+    Body {
+        x: [0.0, 0.0, 0.0],
+        fill: 0.0,
+        v: [0.0, 0.0, 0.0],
+        mass: SOLAR_MASS,
+    },
+    // Jupiter
+    Body {
+        x: [
+            4.84143144246472090e+00,
+            -1.16032004402742839e+00,
+            -1.03622044471123109e-01,
+        ],
+        fill: 0.0,
+        v: [
+            1.66007664274403694e-03 * YEAR,
+            7.69901118419740425e-03 * YEAR,
+            -6.90460016972063023e-05 * YEAR,
+        ],
+        mass: 9.54791938424326609e-04 * SOLAR_MASS,
+    },
+    // Saturn
+    Body {
+        x: [
+            8.34336671824457987e+00,
+            4.12479856412430479e+00,
+            -4.03523417114321381e-01,
+        ],
+        fill: 0.0,
+        v: [
+            -2.76742510726862411e-03 * YEAR,
+            4.99852801234917238e-03 * YEAR,
+            2.30417297573763929e-05 * YEAR,
+        ],
+        mass: 2.85885980666130812e-04 * SOLAR_MASS,
+    },
+    // Uranus
+    Body {
+        x: [
+            1.28943695621391310e+01,
+            -1.51111514016986312e+01,
+            -2.23307578892655734e-01,
+        ],
+        fill: 0.0,
+        v: [
+            2.96460137564761618e-03 * YEAR,
+            2.37847173959480950e-03 * YEAR,
+            -2.96589568540237556e-05 * YEAR,
+        ],
+        mass: 4.36624404335156298e-05 * SOLAR_MASS,
+    },
+    // Neptune
+    Body {
+        x: [
+            1.53796971148509165e+01,
+            -2.59193146099879641e+01,
+            1.79258772950371181e-01,
+        ],
+        fill: 0.0,
+        v: [
+            2.68067772490389322e-03 * YEAR,
+            1.62824170038242295e-03 * YEAR,
+            -9.51592254519715870e-05 * YEAR,
+        ],
+        mass: 5.15138902046611451e-05 * SOLAR_MASS,
+    },
+];
+
+/// A named type declaration corresponding to the anonymous type declaration in `gcc #4`:
+/// ```
+/// static struct {
+///   double dx[3], fill;
+/// } ...
+/// ```
+/// The annotation `repr(C)` prevents the Rust-compiler from any
+/// re-ordering of members.
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct Delta {
+    dx: [f64; 3],
+    fill: f64,
+}
+
+/// Default constructor of Delta
+impl Default for Delta {
+    fn default() -> Delta {
+        Delta {
+            dx: [0.0, 0.0, 0.0],
+            fill: 0.0,
         }
     }
+}
 
-    for k in (0..PAIRS).step_by(4) {
-        let x0 = _mm256_mul_pd(r[k], r[k]);
-        let x1 = _mm256_mul_pd(r[k + 1], r[k + 1]);
-        let x2 = _mm256_mul_pd(r[k + 2], r[k + 2]);
-        let x3 = _mm256_mul_pd(r[k + 3], r[k + 3]);
-
-        let t0 = _mm256_hadd_pd(x0, x1);
-        let t1 = _mm256_hadd_pd(x2, x3);
-        let y0 = _mm256_permute2f128_pd::<0x21>(t0, t1);
-        let y1 = _mm256_blend_pd::<0b1100>(t0, t1);
-
-        let z = _mm256_add_pd(y0, y1);
-        let z = _mm256_rsqrt_pd(z);
-        _mm256_store_pd(w.as_mut_ptr().offset(k as isize), z);
+/// Calculating the offset momentum
+fn offset_momentum(bodies: &mut [Body; N_BODIES]) {
+    for i in 0..bodies.len() {
+        for k in 0..3 {
+            bodies[0].v[k] -= bodies[i].v[k] * bodies[i].mass / SOLAR_MASS;
+        }
     }
 }
 
-unsafe fn energy(
-    m: &[f64; N],
-    p: &[__m256d; N],
-    v: &[__m256d; N],
-) -> f64 {
-    let mut e: f64 = 0.0;
-    let mut r: [__m256d; PAIRS + 3] = MaybeUninit::uninit().assume_init();
-    let w: AlignedW = MaybeUninit::uninit().assume_init();
-    let mut w = transmute::<AlignedW, [f64; PAIRS + 6]>(w);
+/// Calculating the energy of the N body system
+fn bodies_energy(bodies: &[Body; N_BODIES]) -> f64 {
+    let mut dx: [f64; 3] = [0.0; 3];
+    let mut e = 0.0;
 
-    r[N] = _mm256_set1_pd(0.0);
-    r[N + 1] = _mm256_set1_pd(0.0);
-    r[N + 2] = _mm256_set1_pd(0.0);
+    for i in 0..bodies.len() {
+        e += bodies[i].mass
+            * ((bodies[i].v[0] * bodies[i].v[0])
+                + (bodies[i].v[1] * bodies[i].v[1])
+                + (bodies[i].v[2] * bodies[i].v[2]))
+            / 2.0;
 
-    for k in 0..N { r[k] = _mm256_mul_pd(v[k], v[k]); }
-
-    for k in (0..N).step_by(4) {
-        let t0 = _mm256_hadd_pd(r[k], r[k + 1]);
-        let t1 = _mm256_hadd_pd(r[k + 2], r[k + 3]);
-        let y0 = _mm256_permute2f128_pd::<0x21>(t0, t1);
-        let y1 = _mm256_blend_pd::<0b1100>(t0, t1);
-
-        let z = _mm256_add_pd(y0, y1);
-        _mm256_store_pd(w.as_mut_ptr().offset(k as isize), z);
-    }
-
-    for k in 0..N { e += 0.5 * m[k] * w[k] }
-
-    r[PAIRS] = _mm256_set1_pd(1.0);
-    r[PAIRS + 1] = _mm256_set1_pd(1.0);
-    r[PAIRS + 2] = _mm256_set1_pd(1.0);
-
-    kernel(&mut r, &mut w, &p);
-
-    let mut k = 0;
-    for i in 1..N {
-        for j in 0..i {
-            e -= m[i] * m[j] * w[k];
-            k = k + 1;
+        for j in (i + 1)..bodies.len() {
+            for k in 0..3 {
+                dx[k] = bodies[i].x[k] - bodies[j].x[k];
+            }
+            let distance = ((dx[0] * dx[0]) + (dx[1] * dx[1]) + (dx[2] * dx[2])).sqrt();
+            e -= (bodies[i].mass * bodies[j].mass) / distance;
         }
     }
 
     e
 }
 
-unsafe fn advance(
-    n: i32,
-    dt: f64,
-    m: &[f64; N],
-    p: &mut [__m256d; N],
-    v: &mut [__m256d; N],
-) {
-    let mut r: [__m256d; PAIRS + 3] = MaybeUninit::uninit().assume_init();
-    let w: AlignedW = MaybeUninit::uninit().assume_init();
-    let mut w = transmute::<AlignedW, [f64; PAIRS + 6]>(w);
-    r[PAIRS] = _mm256_set1_pd(1.0);
-    r[PAIRS + 1] = _mm256_set1_pd(1.0);
-    r[PAIRS + 2] = _mm256_set1_pd(1.0);
+/// Declaring an array of f64, starting at memory address, being aligned by 16
+///
+/// This is corresponding to the anonymous type-declaration being used in `gcc #4`
+/// ```
+/// static __attribute__((aligned(16))) double mag[1000];
+/// ```
+/// The annotation `repr(C)` prevents the Rust-compiler from any
+/// re-ordering of members.
+#[repr(C)]
+#[repr(align(16))]
+#[derive(Clone, Copy)]
+struct AlignedF64Array([f64; 1000]);
 
-    let rt = _mm256_set1_pd(dt);
+/// Representing the arrays `r` and `mag`, being re-used every iteration
+///
+/// This is corresponding to the following code in `gcc #4`
+/// ```
+/// static struct {
+///   double dx[3], fill;
+/// } r[1000];
+/// static __attribute__((aligned(16))) double mag[1000];
+/// ```
+struct BodiesAdvance {
+    r: [Delta; 1000],
+    mag: AlignedF64Array,
+}
 
-    let mut rm: [__m256d; N] = MaybeUninit::uninit().assume_init();
-    for i in 0..N { rm[i] = _mm256_set1_pd(m[i]); }
-    for _s in 0..n {
-        kernel(&mut r, &mut w, &p);
-
-        for k in (0..PAIRS).step_by(4) {
-            let x = _mm256_load_pd(w.as_mut_ptr().offset(k as isize));
-            let y = _mm256_mul_pd(x, x);
-            let z = _mm256_mul_pd(x, rt);
-            let x = _mm256_mul_pd(y, z);
-            _mm256_store_pd(w.as_mut_ptr().offset(k as isize), x);
+/// Implementation of instanciating the buffers and function bodies_advance()
+impl BodiesAdvance {
+    // Constructor, instanciating the buffers `r` and `mag`
+    pub fn new() -> BodiesAdvance {
+        BodiesAdvance {
+            r: [Delta::default(); 1000],
+            mag: AlignedF64Array([0.0; 1000]),
         }
+    }
 
-        let mut k: usize = 0;
-        for i in 1..N {
-            for j in 0..i {
-                let t = _mm256_set1_pd(w[k]);
-                let t = _mm256_mul_pd(r[k], t);
-                let x = _mm256_mul_pd(t, rm[j]);
-                let y = _mm256_mul_pd(t, rm[i]);
+    /// Calculating advance of bodies within time dt, using the buffers `r` and `mag`
+    #[inline]
+    pub fn bodies_advance(&mut self, bodies: &mut [Body; N_BODIES], dt: f64) {
+        #[allow(non_snake_case)]
+        let N = ((bodies.len() - 1) * bodies.len()) / 2;
 
-                v[i] = _mm256_sub_pd(v[i], x);
-                v[j] = _mm256_add_pd(v[j], y);
-                k = k + 1;
+        // In `gcc #4` corresponding to local variable declaration dx
+        // inititalizing 2x64byte floats with zeros
+        // ```
+        //  __m128d dx[3];
+        // ```
+        let mut dx: [__m128d; 3] = unsafe { [_mm_setzero_pd(); 3] };
+
+        let mut k = 0;
+        for i in 0..(bodies.len() - 1) {
+            for j in (i + 1)..bodies.len() {
+                for m in 0..3 {
+                    self.r[k].dx[m] = bodies[i].x[m] - bodies[j].x[m];
+                }
+                k += 1;
             }
         }
 
-        for i in 0..N {
-            let t = _mm256_mul_pd(v[i], rt);
-            p[i] = _mm256_add_pd(p[i], t);
+        // enumerate in +2 steps
+        for i_2 in 0..(N / 2) {
+            let i = i_2 * 2;
+
+            for m in 0..3 {
+                dx[m] = unsafe { _mm_loadl_pd(dx[m], &self.r[i].dx[m]) };
+                dx[m] = unsafe { _mm_loadh_pd(dx[m], &self.r[i + 1].dx[m]) };
+            }
+
+            // In `gcc #4` corresponding to implicit call of _m128f operations
+            // ```
+            //  dsquared = dx[0] * dx[0] + dx[1] * dx[1] + dx[2] * dx[2];
+            // ```
+            let dsquared: __m128d = unsafe {
+                _mm_add_pd(
+                    _mm_add_pd(_mm_mul_pd(dx[0], dx[0]), _mm_mul_pd(dx[1], dx[1])),
+                    _mm_mul_pd(dx[2], dx[2]),
+                )
+            };
+            // In `gcc #4` corresponding to call of _m128f operations
+            // ```
+            //  distance = _mm_cvtps_pd(_mm_rsqrt_ps(_mm_cvtpd_ps(dsquared)))
+            // ```
+            let mut distance = unsafe { _mm_cvtps_pd(_mm_rsqrt_ps(_mm_cvtpd_ps(dsquared))) };
+
+            // repeat 2 times
+            for _ in 0..2 {
+                // In `gcc #4` corresponding to implicit call of _m128f operations
+                // ```
+                // distance = distance * _mm_set1_pd(1.5)
+                //            - ((_mm_set1_pd(0.5) * dsquared) * distance)
+                //            * (distance * distance);
+                // ```
+                distance = unsafe {
+                    _mm_sub_pd(
+                        _mm_mul_pd(distance, _mm_set1_pd(1.5)),
+                        _mm_mul_pd(
+                            _mm_mul_pd(_mm_mul_pd(_mm_set1_pd(0.5), dsquared), distance),
+                            _mm_mul_pd(distance, distance),
+                        ),
+                    )
+                };
+            }
+
+            // In `gcc #4` corresponding to implicit call of _m128f operations
+            // ```
+            // dmag = _mm_set1_pd(dt) / (dsquared) * distance;
+            // ```
+            let dmag: __m128d =
+                unsafe { _mm_mul_pd(_mm_div_pd(_mm_set1_pd(dt), dsquared), distance) };
+
+            // In `gcc #4` corresponding to call of _m128f operations
+            // ```
+            // _mm_store_pd(&mag[i], dmag);
+            // ```
+            unsafe {
+                _mm_store_pd(&mut (self.mag.0)[i], dmag);
+            }
+        }
+
+        let mut k = 0;
+        for i in 0..(bodies.len() - 1) {
+            for j in (i + 1)..bodies.len() {
+                for m in 0..3 {
+                    bodies[i].v[m] -= (self.r[k].dx[m] * bodies[j].mass) * (self.mag.0)[k];
+
+                    bodies[j].v[m] += (self.r[k].dx[m] * bodies[i].mass) * (self.mag.0)[k];
+                }
+                k += 1;
+            }
+        }
+
+        for i in 0..bodies.len() {
+            for m in 0..3 {
+                bodies[i].x[m] += dt * bodies[i].v[m];
+            }
         }
     }
 }
 
 fn main() {
-    let n = std::env::args_os()
+    let ncycles = std::env::args_os()
         .nth(1)
         .and_then(|s| s.into_string().ok())
         .and_then(|n| n.parse().ok())
         .unwrap_or(1000);
 
-    unsafe {
-        let mut m: [f64; N] = MaybeUninit::uninit().assume_init();
-        let mut p: [__m256d; N] = MaybeUninit::uninit().assume_init();
-        let mut v: [__m256d; N] = MaybeUninit::uninit().assume_init();
+    let mut bodies = BODIES;
+    let mut sim = BodiesAdvance::new();
 
-        // sun
-        m[0] = SOLAR_MASS;
-        p[0] = _mm256_set1_pd(0.0);
-        v[0] = _mm256_set1_pd(0.0);
+    offset_momentum(&mut bodies);
 
-        // jupiter
-        m[1] = 9.54791938424326609e-04 * SOLAR_MASS;
-        p[1] = _mm256_setr_pd(0.0,
-                              4.84143144246472090e+00,
-                              -1.16032004402742839e+00,
-                              -1.03622044471123109e-01);
-        v[1] = _mm256_setr_pd(0.0,
-                              1.66007664274403694e-03 * DAYS_PER_YEAR,
-                              7.69901118419740425e-03 * DAYS_PER_YEAR,
-                              -6.90460016972063023e-05 * DAYS_PER_YEAR);
+    println!("{:.9}", bodies_energy(&bodies));
 
-        // saturn
-        m[2] = 2.85885980666130812e-04 * SOLAR_MASS;
-        p[2] = _mm256_setr_pd(0.0,
-                              8.34336671824457987e+00,
-                              4.12479856412430479e+00,
-                              -4.03523417114321381e-01);
-        v[2] = _mm256_setr_pd(0.0,
-                              -2.76742510726862411e-03 * DAYS_PER_YEAR,
-                              4.99852801234917238e-03 * DAYS_PER_YEAR,
-                              2.30417297573763929e-05 * DAYS_PER_YEAR);
-
-        // uranus
-        m[3] = 4.36624404335156298e-05 * SOLAR_MASS;
-        p[3] = _mm256_setr_pd(0.0,
-                              1.28943695621391310e+01,
-                              -1.51111514016986312e+01,
-                              -2.23307578892655734e-01);
-        v[3] = _mm256_setr_pd(0.0,
-                              2.96460137564761618e-03 * DAYS_PER_YEAR,
-                              2.37847173959480950e-03 * DAYS_PER_YEAR,
-                              -2.96589568540237556e-05 * DAYS_PER_YEAR);
-
-        // neptune
-        m[4] = 5.15138902046611451e-05 * SOLAR_MASS;
-        p[4] = _mm256_setr_pd(0.0,
-                              1.53796971148509165e+01,
-                              -2.59193146099879641e+01,
-                              1.79258772950371181e-01);
-        v[4] = _mm256_setr_pd(0.0,
-                              2.68067772490389322e-03 * DAYS_PER_YEAR,
-                              1.62824170038242295e-03 * DAYS_PER_YEAR,
-                              -9.51592254519715870e-05 * DAYS_PER_YEAR);
-
-        // offset momentum
-        let mut o = _mm256_set1_pd(0.0);
-        for i in 0..N {
-            let t = _mm256_mul_pd(_mm256_set1_pd(m[i]), v[i]);
-            o = _mm256_add_pd(o, t);
-        }
-
-        v[0] = _mm256_mul_pd(o, _mm256_set1_pd(-1.0 / SOLAR_MASS));
-        println!("{:.9}", energy(&m, &p, &v));
-        advance(n, 0.01, &mut m, &mut p, &mut v);
-        println!("{:.9}", energy(&m, &p, &v));
+    for _ in 0..ncycles {
+        sim.bodies_advance(&mut bodies, 0.01);
     }
+
+    println!("{:.9}", bodies_energy(&bodies));
 }

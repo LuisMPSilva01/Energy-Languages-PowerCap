@@ -11,8 +11,5 @@ measure:
 run:
 	./nbody.gcc-9.gcc_run 50000000
 
-mem:
-	/usr/bin/time -v ./nbody.gcc-9.gcc_run 50000000
-
 clean:
 	rm -f *.gcc_run
