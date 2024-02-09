@@ -63,22 +63,19 @@ for limit in -1 2 10 15 25
     #    done
     #done
 
-    for program in "Languages/Rust"/*; do
-        if [ -d "$program" ]; then
-            makefile_path="$program/Makefile"
-            if [ -f "$makefile_path" ]; then
-                cd $program
-                make compile
-                make measure 
-
-                # Specify the input file name
-                file="measurements.csv"
-                tail -n +2 "$file" >> ../../../measurements.csv;
-                make clean
-                cd ../../..
-            else
-                echo "Makefile not found: $makefile_path"
-            fi
+    for program in "Languages/Rust/fannkuch-redux"/*; do
+        if [ -f "$makefile_path" ]; then
+            cd $program
+            make compile
+            make measure 
+            
+            # Specify the input file name
+            file="measurements.csv"
+            tail -n +2 "$file" >> ../../../measurements.csv;
+            make clean
+            cd ../../..
+        else
+            echo "Makefile not found: $makefile_path"
         fi
     done
 done
