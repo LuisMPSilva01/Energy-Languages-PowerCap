@@ -3,7 +3,7 @@ NTIMES=1
 export NTIMES
 
 compile:
-	/home/diguest/.cargo/bin/cargo build
+	/home/diguest/.cargo/bin/cargo build --release
 
 measure:
 	sudo modprobe msr
