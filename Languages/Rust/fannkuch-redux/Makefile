@@ -7,10 +7,10 @@ compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "target/release/fannkuch-redux -- 12" Rust fannkuch-redux $(NTIMES)
+	sudo ../../../RAPL/main "target/release/fannkuch-redux 12" Rust fannkuch-redux $(NTIMES)
 
 run:
-	target/release/fannkuch-redux -- 12
+	target/release/fannkuch-redux 12
 
 clean:
 	rm -f -r target
