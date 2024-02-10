@@ -7,7 +7,7 @@ compile:
 measure:
 	rm -f -r temp_images
 	cp -r original_images temp_images
-	sudo ../../../RAPL/main "optimize-images temp_images"  Python Optimize-images $(NTIMES)
+	sudo ../../RAPL/main "optimize-images temp_images"  Python Optimize-images $(NTIMES)
 run:
 	rm -f -r temp_images
 	cp -r original_images temp_images
