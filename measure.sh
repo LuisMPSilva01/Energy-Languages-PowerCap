@@ -63,16 +63,21 @@ for limit in -1 2 10 15 25
     #    done
     #done
 
+    cd validation_tools/graphviz
+    make measure
+    # Specify the input file name
+    file="measurements.csv"
+    tail -n +2 "$file" >> ../../../measurements.csv;
+    make clean
+    cd ../..
 
-            cd Languages/Rust/fannkuch-redux
-            make compile
-            make measure 
-
-            # Specify the input file name
-            file="measurements.csv"
-            tail -n +2 "$file" >> ../../../measurements.csv;
-            make clean
-            cd ../../..
+    cd validation_tools/optimize-images
+    make measure
+    # Specify the input file name
+    file="measurements.csv"
+    tail -n +2 "$file" >> ../../../measurements.csv;
+    make clean
+    cd ../..
 done
 
 cd RAPL/
