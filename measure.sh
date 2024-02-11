@@ -67,11 +67,11 @@ for limit in -1 2 10 15 25
     make measure
     # Specify the input file name
     file="measurements.csv"
-    tail -n +2 "$file" >> ../../../measurements.csv;
+    tail -n +2 "$file" >> ../../measurements.csv;
     make clean
     cd ../..
 
-    for i in {1..$NTIMES}
+    for i in $(seq 1 $NTIMES)
     do
         cd validation_tools/optimize-images
         make measure

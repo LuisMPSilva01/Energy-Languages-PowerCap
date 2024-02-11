@@ -5,10 +5,10 @@ export NTIMES
 compile:
 
 measure:
-	sudo ../../RAPL/main "dot -Ksfdp -output.png -Tpng file.dot"  C Graphviz $(NTIMES)
+	sudo ../../RAPL/main "dot -Ksfdp -o output.png -Tpng file.dot"  C Graphviz $(NTIMES)
 
 run:
-	dot -Ksfdp -output.png -Tpng file.dot
+	dot -Ksfdp -o output.png -Tpng file.dot
 
 clean:
 	rm output.png
