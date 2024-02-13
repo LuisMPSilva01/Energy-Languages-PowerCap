@@ -64,6 +64,7 @@ for limit in -1 2 10 15 25
     #done
 
     cd validation_tools/graphviz
+    make compile
     make measure
     # Specify the input file name
     file="measurements.csv"
