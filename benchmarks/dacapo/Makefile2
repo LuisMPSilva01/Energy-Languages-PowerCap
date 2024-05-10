@@ -1,0 +1,14 @@
+NTIMES=20
+export NTIMES
+
+problems ?= avrora batik biojava cassandra eclipse fop graphchi h2 h2o jme jython kafka luindex lusearch pmd spring sunflow tomcat tradebeans tradesoap xalan zxing
+
+measure:
+    sudo ../../RAPL/main "sudo /usr/lib/jvm/jdk-20/bin/java -jar dacapo-23.11-chopin.jar $(problems)" dacapo $(problems) $(NTIMES)
+
+run:
+    sudo /usr/lib/jvm/jdk-20/bin/java -jar dacapo-23.11-chopin.jar $(problems)
+
+clean:
+    echo "Cleaning..."
+
