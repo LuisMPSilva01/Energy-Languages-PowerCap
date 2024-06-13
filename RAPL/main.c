@@ -16,8 +16,8 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define TEMPERATURETHRESHOLD 25.5
-#define VARIANCE 5
+#define TEMPERATURETHRESHOLD 24.75
+#define VARIANCE 10
 #define WHATTSCAP 25
 #define MAX_STRING_LENGTH 500
 #define MAX_COMMAND_LENGTH 500

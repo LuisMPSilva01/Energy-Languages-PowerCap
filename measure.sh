@@ -1,6 +1,5 @@
 #!/bin/bash
 NTIMES=20
-#NTIMES=1
 
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL
@@ -42,55 +41,26 @@ for limit in -1 2 10 15 25
     make
     cd ..
 
-    #for language in "Languages"/*; do
-    #    for program in "$language"/*; do
-    #        if [ -d "$program" ]; then
-    #            makefile_path="$program/Makefile"
-    #            if [ -f "$makefile_path" ]; then
-    #                cd $program
-    #                make compile
-    #                make measure 
-    #
-    #                # Specify the input file name
-    #                file="measurements.csv"
-    #                tail -n +2 "$file" >> ../../../measurements.csv;
-    #                make clean
-    #                cd ../../..
-    #            else
-    #                echo "Makefile not found: $makefile_path"
-    #            fi
-    #        fi
-    #    done
-    #done
-
-    cd Languages/Rust/reverse-complement
-    make compile
-    make measure
-    # Specify the input file name
-    file="measurements.csv"
-    tail -n +2 "$file" >> ../../../measurements.csv;
-    make clean
-    cd ../../..
-
-    #cd validation_tools/graphviz
-    #make compile
-    #make measure
-    ## Specify the input file name
-    #file="measurements.csv"
-    #tail -n +2 "$file" >> ../../measurements.csv;
-    #make clean
-    #cd ../..
-    #
-    #for i in $(seq 1 $NTIMES)
-    #do
-    #    cd validation_tools/optimize-images
-    #    make measure
-    #    # Specify the input file name
-    #    file="measurements.csv"
-    #    tail -n +2 "$file" >> ../../measurements.csv;
-    #    make clean
-    #    cd ../..
-    #done
+    for language in "Languages"/*; do
+        for program in "$language"/*; do
+            if [ -d "$program" ]; then
+                makefile_path="$program/Makefile"
+                if [ -f "$makefile_path" ]; then
+                    cd $program
+                    make compile
+                    make measure
+    
+                    # Specify the input file name
+                    file="measurements.csv"
+                    tail -n +2 "$file" >> ../../../measurements.csv;
+                    make clean
+                    cd ../../..
+                else
+                    echo "Makefile not found: $makefile_path"
+                fi
+           fi
+        done
+    done
 done
 
 cd RAPL/
