@@ -18,7 +18,7 @@ sudo apt install cmake
     export PATH=/usr/local/gcc-fsf-gnat/bin:$PATH
     rm -rf gnat-11.3.0-base gnat-11.3.0-base.tar 
 
-    #C - v12.2.0 [NOTA: vai demorar perto de 3h a dar build]
+    #C - v12.2.0 [NOTE: this will take about 3h to install]
     sudo apt install build-essential htop gcc-multilib zlib1g-dev 
     sudo apt-get install libgmp-dev libmpfr-dev libmpc-dev 
     sudo apt-get install libapr1-dev
@@ -36,27 +36,8 @@ sudo apt install cmake
     #C++ - v12.2.0
     sudo apt-get install libboost-all-dev
     sudo apt-get install libtbb-dev
-
-    #Chapel - v1.29.0 [NOTA: Isto vai demorar +- 4h a instalar]
-    sudo apt-get install -y gcc g++ m4 perl python3 python3-dev bash make mawk git pkg-config cmake
-    sudo apt-get install -y llvm-dev llvm clang libclang-dev libclang-cpp-dev libedit-dev
-    wget https://github.com/chapel-lang/chapel/releases/download/1.29.0/chapel-1.29.0.tar.gz
-    tar -xvzf chapel-1.29.0.tar.gz
-    sudo rm -r chapel-1.29.0.tar.gz
-    cd chapel-1.29.0/
-    export CHPL_LLVM=bundled
-    ./configure --with-gmp
-    make
-    sudo make install
-    export PATH=/usr/local/bin:$PATH
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-    cd ..
-    sudo cp -r chapel-1.29.0 /opt/src/
-    rm -rf chapel-1.29.0/
-    export PATH=/opt/src/chapel-1.29.0/bin:$PATH
-    source ~/.bashrc
     
-    #Csharp (.net) - v7.0.200
+    #C# (.net) - v7.0.200
     wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
     chmod +x ./dotnet-install.sh
     ./dotnet-install.sh --version 7.0.200
@@ -82,19 +63,7 @@ sudo apt install cmake
     sudo rm -r otp_src_25.2.1
     sudo rm -r otp_src_25.2.1.tar.gz 
 
-    #Intel license
-    sudo apt install net-tools
-
-    #Fortran o login nao funciona de momento [TODO]
-
-    #FSharp - v7.0.102
-    wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
-    chmod +x ./dotnet-install.sh
-    ./dotnet-install.sh --version 7.0.102
-    rm dotnet-install.sh
-    sudo apt install aspnetcore-runtime-7.0
-
-    #GO - v1.20
+    #Go - v1.20
     wget https://go.dev/dl/go1.20.linux-amd64.tar.gz  
     sudo mkdir /opt/src/go1.20
     sudo rm -rf /opt/src/go1.20/go && sudo tar -C /opt/src/go1.20 -xzf go1.20.linux-amd64.tar.gz
@@ -104,7 +73,6 @@ sudo apt install cmake
     /opt/src/go1.20/go/bin/go mod init regex-redux
     /opt/src/go1.20/go/bin/go get github.com/GRbit/go-pcre@v1.0.0
     cd ../../..
-
 
     #Haskell -v9.4.4
     wget https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-x86_64-deb11-linux.tar.xz
@@ -124,7 +92,7 @@ sudo apt install cmake
     rm -r llvm-13.0.1.src.tar.xz
 
 
-    #Java - v20.0.2 - o pidigits não está a dar (não consigo instalar o gmp) [TODO]
+    #Java - v20.0.2
     wget https://download.oracle.com/java/20/archive/jdk-20.0.2_linux-x64_bin.deb
     sudo dpkg -i jdk-20.0.2_linux-x64_bin.deb
     sudo apt-get install -f
@@ -155,21 +123,6 @@ sudo apt install cmake
     sudo cp -r julia-1.8.5 /opt/
     sudo ln -s /opt/julia-1.8.5/bin/julia /usr/local/bin/julia
     rm -rf julia-1.8.5/ julia-1.8.5-linux-x86_64.tar.gz 
-    
-    #Lisp - v2.3.0
-    wget "https://downloads.sourceforge.net/project/sbcl/sbcl/2.3.0/sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-linux-binary.tar.bz2%2Fdownload"
-    mv "sbcl-2.3.0-x86-64-linux-binary.tar.bz2?ts=gAAAAABlEBakeknsJ6oJ_B5zxomXLHjCGBWYJw8S8luWp_qXTv0nvC6ESEUzgL4Io0fT3tw18PCSlBpl3hqUfz0ZWzcY-JWF2g==&r=https:%2F%2Fsourceforge.net%2Fprojects%2Fsbcl%2Ffiles%2Fsbcl%2F2.3.0%2Fsbcl-2.3.0-x86-64-li" sbcl-2.3.0-x86-64-linux-binary.tar.bz2
-    rm wget-log 
-    tar -xvjf sbcl-2.3.0-x86-64-linux-binary.tar.bz2
-    cd sbcl-2.3.0-x86-64-linux
-    sudo sh install.sh
-    cd ..
-    rm -rf sbcl-2.3.0-x86-64-linux/ sbcl-2.3.0-x86-64-linux-binary.tar.bz2 
-    curl -o /tmp/ql.lisp http://beta.quicklisp.org/quicklisp.lisp
-    sbcl --no-sysinit --no-userinit --load /tmp/ql.lisp \
-         --eval '(quicklisp-quickstart:install :path "~/.quicklisp")' \
-         --eval '(ql:add-to-init-file)' \
-         --quit
 
     #Lua - v5.4.4
     sudo apt-get install libpcre2-dev
@@ -191,7 +144,7 @@ sudo apt install cmake
     export LUA_CPATH="/home/diguest/Energy-Languages-PowerCap/Languages/Lua/regex-redux/luarocks-3.9.2/lua_modules/lib/lua/5.4/?.so;;$LUA_CPATH"
     sudo cp /home/diguest/Energy-Languages-PowerCap/Languages/Lua/regex-redux/luarocks-3.9.2/lua_modules/lib/lua/5.4/rex_pcre2.so /usr/lib/x86_64-linux-gnu/lua/5.4/
 
-    #Ocaml - v5.0.0
+    #OCaml - v5.0.0
     sudo apt install opam
     opam init --disable-sandboxing --bare
     eval $(opam env)
@@ -203,21 +156,6 @@ sudo apt install cmake
     opam install ocamlfind
     opam install zarith
 
-    #Pascal - v3.2.2
-    sudo apt install fpc
-    sudo apt-get install libpcre3-dev
-    git clone https://github.com/BeRo1985/pasmp
-    cp pasmp/src/PasMP.pas Languages/Pascal/binary-trees/
-    cd pasmp/src/
-    fpc PasMP.pas
-    ./PasMP
-    cd ../../
-    #git clone https://github.com/alrieckert/lazarus.git
-    #cp lazarus/components/multithreadprocs/mtprocs.pas Languages/Pascal/mandelbrot/
-    #cp lazarus/components/multithreadprocs/mtpcpu.pas Languages/Pascal/mandelbrot/
-    #sudo rm -r lazarus/
-    sudo rm -r pasmp
-
     #Perl - v5.36.0
     wget https://www.cpan.org/src/5.0/perl-5.36.0.tar.gz
     tar -xzf perl-5.36.0.tar.gz
@@ -226,7 +164,6 @@ sudo apt install cmake
     make
     make test
     sudo make install
-
 
     #PHP - v8.2.1
     wget https://www.php.net/distributions/php-8.2.1.tar.gz
@@ -274,14 +211,14 @@ sudo apt install cmake
     cp $(dirname $(gem which gmp))/gmp.so .
     cd ../../..
 
-    #Rust
+    #Rust - v1.67.0
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     source ~/.bashrc
     rustup toolchain install 1.67.0
     rustup default 1.67.0
     
 
-    #Swift - só o pi-digits não funciona por causa da biblioteca GMP [TODO]
+    #Swift - v5.8dev
     sudo apt-get install swift
     sudo apt install clang libicu-dev libxml2 git libgmp-dev
     sudo apt install binutils gnupg2 libc6-dev libcurl4 libedit2 libgcc-9-dev libsqlite3-0 libstdc++-9-dev libxml2 libz3-dev pkg-config tzdata zlib1g-dev

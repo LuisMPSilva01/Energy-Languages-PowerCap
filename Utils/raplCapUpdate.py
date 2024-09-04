@@ -1,5 +1,4 @@
-import re
-import sys
+import re, sys
 
 
 # Iterate over the input files

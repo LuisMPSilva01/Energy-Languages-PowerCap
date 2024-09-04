@@ -1,6 +1,4 @@
-import re
-import sys
-
+import re, sys
 
 # Iterate over the input files
 for input_file in sys.argv[2:]:

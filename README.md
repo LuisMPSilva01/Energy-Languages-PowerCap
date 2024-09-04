@@ -1,5 +1,12 @@
 ## Folklore Revisited: Compiling for Speed vs. Compiling for Energy: Using Power Caps to Trade Runtime for Energy Efficiency
 
+| Authors               | Contacts                            |
+|-----------------------|-------------------------------------|
+| Simão Cunha           | a93262@alunos.uminho.pt             |
+| Luís Silva            | pg50564@alunos.uminho.pt            |
+| João Saraiva          | saraiva@di.uminho.pt                |
+| João Paulo Fernandes  | jpf9731@nyu.edu                     |
+
 ### Required Libraries
 1. RAPL
 2. lm-sensors

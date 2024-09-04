@@ -1,6 +1,4 @@
-import re
-import random
-import sys
+import re, random, sys
 
 def generate_random_array(size):
     if size <= 0:
