@@ -7,6 +7,26 @@
 | João Saraiva          | saraiva@di.uminho.pt                |
 | João Paulo Fernandes  | jpf9731@nyu.edu                     |
 
+### Directory Structure
+- **`benchmarks/`**  
+  Contains benchmark tests, including:
+  - Dacapo
+  - Nofib
+  - PyPerformance
+
+- **`inputs/`**  
+  Required input files for specific problem executions.
+
+- **`Languages/`**  
+  Folder with all the languages and problems used for evaluations.
+
+- **`NoteBooks/`**  
+  Jupyter notebooks with graphs and calculations used in the paper.
+
+- **`RAPL/`**  
+  C program for measuring and limiting CPU power.
+
+
 ### Required Libraries
 1. RAPL
 2. lm-sensors
@@ -26,7 +46,7 @@ sudo sh measuresSetup.sh
 sudo sh setup.sh
 ```
 
-Note that this setup requires manual interaction. Follow the guide in afterSetup.txt to complete the setup. This issue will be addressed in a future version.
+Note: This setup was not fully tested and my require manual interaction (such as accepting permitions).
 
 2. Generate the input files:
 
@@ -34,11 +54,13 @@ Note that this setup requires manual interaction. Follow the guide in afterSetup
 sudo sh gen-input.sh
 ```
 
-3. Execute the script to generate the CSV file:
+3. Execute the script to generate the CSV file (this script iterates all the Languages and all of the programs):
 
 ```bash
-sh measurements.sh
+sh measure.sh
 ```
+
+Note: You might need to update some of the compilers path since we did not change some of the default installation paths from our machine.
 
 ### Meaning of the CSV file columns
 
@@ -55,3 +77,8 @@ sh measurements.sh
 | **Temperature**  | Mean temperature in all cores (in Celsius degrees)                                                 |
 |    **Memory**    | Total physical memory assigned to the algorithm execution (in KBytes)                              |
 |  **PowerLimit**  | Power cap of the cores (in Watts)                                                                  |
+
+
+#### Side note
+
+The setup could not be provided as a docker or virtual machine because the instructions that limit the CPU don't work on that environment.

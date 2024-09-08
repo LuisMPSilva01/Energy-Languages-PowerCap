@@ -32,6 +32,17 @@ sudo apt install cmake
     git clone https://github.com/attractivechaos/klib 
     cd ../..
     rm -rf gcc-12.2.0 gcc-12.2.0.tar.gz
+        # K-nucl
+        cd ./Languages/C/k-nucleotide || { echo "Directory not found"; exit 1; }
+    
+        # Clone the klib repository if not already cloned
+        if [ ! -d "klib" ]; then
+            git clone https://github.com/attractivechaos/klib.git
+            echo "klib repository cloned."
+        else
+            echo "klib repository already exists."
+        fi
+        cd ../../../ 
 
     #C++ - v12.2.0
     sudo apt-get install libboost-all-dev
@@ -90,6 +101,27 @@ sudo apt install cmake
     (cd /opt/src/llvm13.0.1/ && sudo make)
     (cd /opt/src/ && sudo rm -r llvm-13.0.1.src)
     rm -r llvm-13.0.1.src.tar.xz
+        # Check if the line already exists in .bashrc
+        if ! grep -q 'export PATH=/opt/src/ghc9.4.4/bin:$PATH' ~/.bashrc; then
+            # Add the line to .bashrc if not present
+            echo 'export PATH=/opt/src/ghc9.4.4/bin:$PATH' >> ~/.bashrc
+            echo "Line added to ~/.bashrc"
+        else
+            echo "Line already exists in ~/.bashrc"
+        fi
+
+        # Source the updated .bashrc
+        source ~/.bashrc
+    sudo apt install cabal-install
+    cabal update
+    cabal install --lib parallel
+    cabal install --lib parallel-io
+    cabal install --lib vector
+    cabal install --lib massiv
+    cabal install --lib hashable
+    cabal install --lib unordered-containers
+    cabal install --lib vector-algorithms
+    cabal install --lib text-builder
 
 
     #Java - v20.0.2

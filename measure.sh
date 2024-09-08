@@ -30,7 +30,6 @@ echo "Language,Program,PowerLimit,Package,Core,GPU,DRAM,Time,Temperature,Memory"
 
 # Loop over power limit values
 for limit in -1 2 10 15 25
-#for limit in 25
     do
     cd Utils/
     python3 raplCapUpdate.py $limit ../RAPL/main.c
