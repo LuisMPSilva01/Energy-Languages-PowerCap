@@ -1,7 +1,7 @@
 ## Trading Runtime for Energy Efficiency: Leveraging Power Caps to Save Energy Across Programming Languages
 
 | Authors               | Contacts                            |
-|-----------------------|-------------------------------------|
+|:---------------------:|:-----------------------------------:|
 | Simão Cunha           | a93262@alunos.uminho.pt             |
 | Luís Silva            | pg50564@alunos.uminho.pt            |
 | João Saraiva          | saraiva@di.uminho.pt                |

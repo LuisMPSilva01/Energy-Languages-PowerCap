@@ -11,10 +11,11 @@ In addition to benchmarks from the **Computer Language Benchmarks Game (CLBG)**,
 ### Benchmarks and Versions
 
 | Language              | Benchmark     | Version                                               |
-|-----------------------|---------------|-------------------------------------------------------|
+|:----------------------:|:-------------:|:-----------------------------------------------------:|
 | Python                | pyperformance | 1.11.0                                                |
 | Java                  | Dacapo        | 23.11-chopin                                          |
 | Haskell               | nofib         | 7ffecc8115865fea9995a951091e6ff23cf8ca3a (last commit SHA) |
+
 
 ## Setup Instructions
 
@@ -32,16 +33,16 @@ bash setup_benchmarks.sh
 
 ```
 benchmarks/
-    dacapo/
-        dacapo-23.11-chopin.zip
-        dacapo-23.11-chopin/
-        (dacapo-23.11-chopin repository files)
-    nofib_repo/
-        nofib-7ffecc8115865fea9995a951091e6ff23cf8ca3a.zip
-        nofib/
-        (nofib repository files)
-    pyperformance/
-        (no files in this folder yet)
+├── dacapo/
+│   ├── dacapo-23.11-chopin.zip
+│   └── dacapo-23.11-chopin/
+│       └── (dacapo-23.11-chopin repository files)
+├── nofib_repo/
+│   ├── nofib-7ffecc8115865fea9995a951091e6ff23cf8ca3a.zip
+│   └── nofib/
+│       └── (nofib repository files)
+└── pyperformance/
+    └── (no files in this folder yet)
 ```
 
 3. **Run Benchmarks**
