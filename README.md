@@ -1,4 +1,4 @@
-## Folklore Revisited: Compiling for Speed vs. Compiling for Energy: Using Power Caps to Trade Runtime for Energy Efficiency
+## Trading Runtime for Energy Efficiency: Leveraging Power Caps to Save Energy Across Programming Languages
 
 | Authors               | Contacts                            |
 |-----------------------|-------------------------------------|
@@ -9,7 +9,7 @@
 
 ### Directory Structure
 - **`benchmarks/`**  
-  Contains benchmark tests, including:
+  Contains benchmark tests (see benchmarks/README.md for more details), including:
   - Dacapo
   - Nofib
   - PyPerformance
@@ -81,4 +81,4 @@ Note: You might need to update some of the compilers path since we did not chang
 
 #### Side note
 
-The setup could not be provided as a docker or virtual machine because the instructions that limit the CPU don't work on that environment.
+The setup could not be provided as a Docker or virtual machine because the instructions that limit the CPU don't work on that environment.
