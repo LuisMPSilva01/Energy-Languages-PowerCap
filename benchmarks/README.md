@@ -10,11 +10,11 @@ In addition to benchmarks from the **Computer Language Benchmarks Game (CLBG)**,
 
 ### Benchmarks and Versions
 
-| Language              | Benchmark     | Version                                               |
-|:----------------------:|:-------------:|:-----------------------------------------------------:|
-| Python                | pyperformance | 1.11.0                                                |
-| Java                  | Dacapo        | 23.11-chopin                                          |
-| Haskell               | nofib         | 7ffecc8115865fea9995a951091e6ff23cf8ca3a (last commit SHA) |
+| Language              | Benchmark                                                                                           | Version                                               |
+|:----------------------:|:----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------:|
+| Python                | [pyperformance](https://pyperformance.readthedocs.io)                                    | 1.11.0                                                |
+| Java                  | [Dacapo](https://www.dacapobench.org/)                                                               | 23.11-chopin                                          |
+| Haskell               | [nofib](https://gitlab.haskell.org/ghc/nofib/-/tree/7ffecc8115865fea9995a951091e6ff23cf8ca3a)       | 7ffecc8115865fea9995a951091e6ff23cf8ca3a (last commit SHA) |
 
 
 ## Setup Instructions
