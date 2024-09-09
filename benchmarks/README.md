@@ -50,7 +50,7 @@ benchmarks/
     To configure the benchmarks and execute them, use:
 
 ```bash
-bash measure.sh
+sh measure.sh
 ```
 
 4. **Results**
