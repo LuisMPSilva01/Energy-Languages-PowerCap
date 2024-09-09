@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GO_PATH
+$(error GO_PATH is not set.)
+endif
+
 compile:
-	/opt/src/go1.20/go/bin/go build -o nbody.go-3.go_run nbody.go-3.go
+	$(GO_PATH) build -o nbody.go-3.go_run nbody.go-3.go
 
 measure:
 	sudo modprobe msr

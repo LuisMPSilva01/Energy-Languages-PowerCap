@@ -2,24 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef DOTNET_PATH
+$(error DOTNET_PATH is not set.)
+endif
+
 compile:
-	~/.dotnet/dotnet new console --force
+	$(DOTNET_PATH) new console --force
 	sed -i '/<\/PropertyGroup>/i \    <AllowUnsafeBlocks>true<\/AllowUnsafeBlocks>' obj/regex-redux.csproj.nuget.g.props
 	cp regexredux.csharpcore-8.csharpcore Program.cs
-	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
+	$(DOTNET_PATH) build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt" CSharp regex-redux $(NTIMES)
+	sudo ../../../RAPL/main "$(DOTNET_PATH) ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt" CSharp regex-redux $(NTIMES)
 
 run:
-	~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
+	$(DOTNET_PATH) ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
 
 mem:
-	/usr/bin/time -v ~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
+	/usr/bin/time -v $(DOTNET_PATH) ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ~/.dotnet/dotnet ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
+	valgrind --tool=massif --stacks=yes $(DOTNET_PATH) ./bin/Release/net7.0/regex-redux.dll 0 < ../../../inputs/regexredux-input5000000.txt
 
 clean:
 	rm -f -r bin

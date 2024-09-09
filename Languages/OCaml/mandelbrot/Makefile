@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef OCAMLOP_PATH
+$(error OCAMLOP_PATH is not set.)
+endif
+
 compile:
 	cp mandelbrot.ocaml mandelbrot.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa mandelbrot.ml -o mandelbrot.ocaml_run
+	$(OCAMLOP_PATH) -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa mandelbrot.ml -o mandelbrot.ocaml_run
 	rm mandelbrot.ml
 
 measure:

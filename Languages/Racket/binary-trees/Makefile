@@ -2,21 +2,31 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef RACO_PATH
+$(error RACO_PATH is not set.)
+endif
+
+ifndef RACKET_PATH
+$(error RACKET_PATH is not set.)
+endif
+
 compile:
-	/home/diguest/bin/raco make binarytrees.racket-3.racket
+	$(RACO_PATH) make binarytrees.racket-3.racket
 	
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/bin/racket ./compiled/binarytrees.racket-3_racket.zo 21" Racket binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "$(RACKET_PATH) ./compiled/binarytrees.racket-3_racket.zo 21" Racket binary-trees $(NTIMES)
 
 run:
-	racket ./compiled/binarytrees.racket-3_racket.zo 21
+	$(RACKET_PATH) ./compiled/binarytrees.racket-3_racket.zo 21
 
 mem:
-	/usr/bin/time -v  racket ./compiled/binarytrees.racket-3_racket.zo 21
+	/usr/bin/time -v  $(RACKET_PATH) ./compiled/binarytrees.racket-3_racket.zo 21
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  racket ./compiled/binarytrees.racket-3_racket.zo 21
+	valgrind --tool=massif --stacks=yes  $(RACKET_PATH) ./compiled/binarytrees.racket-3_racket.zo 21
 
 clean:
 	rm -rf compiled/

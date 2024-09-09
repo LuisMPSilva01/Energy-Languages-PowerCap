@@ -2,14 +2,20 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PYTHON_PATH
+$(error PYTHON_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/local/bin/python3.11 -OO mandelbrot.python3-7.py 16000" Python mandelbrot $(NTIMES)
+	sudo ../../../RAPL/main "$(PYTHON_PATH) -OO mandelbrot.python3-7.py 16000" Python mandelbrot $(NTIMES)
 
 run:
-	/usr/local/bin/python3.11 -OO mandelbrot.python3-7.py 16000
+	$(PYTHON_PATH) -OO mandelbrot.python3-7.py 16000
 
 mem:
-	/usr/bin/time -v /usr/local/bin/python3.11 -OO mandelbrot.python3-7.py 16000
+	/usr/bin/time -v $(PYTHON_PATH) -OO mandelbrot.python3-7.py 16000

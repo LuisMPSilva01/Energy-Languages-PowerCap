@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GHC_PATH
+$(error GHC_PATH is not set.)
+endif
+
 compile:
-	/opt/src/ghc9.4.4/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -XScopedTypeVariables -package vector fannkuchredux.ghc-5.hs -v -o fannkuchredux.ghc-5.ghc_run 
+	$(GHC_PATH) --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -XScopedTypeVariables -package vector fannkuchredux.ghc-5.hs -v -o fannkuchredux.ghc-5.ghc_run 
 measure:
 	sudo modprobe msr
 	sudo ../../../RAPL/main "./fannkuchredux.ghc-5.ghc_run +RTS -N4 -RTS 12" Haskell fannkuch-redux $(NTIMES)

@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GPP_PATH
+$(error GPP_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 fasta.gpp-8.c++ -o fasta.gpp-8.c++.o && /usr/bin/g++ fasta.gpp-8.c++.o -o fasta.gpp-8.gpp_run -lpthread 
+	$(GPP_PATH) -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 fasta.gpp-8.c++ -o fasta.gpp-8.c++.o && $(GPP_PATH) fasta.gpp-8.c++.o -o fasta.gpp-8.gpp_run -lpthread 
 
 measure:
 	sudo modprobe msr

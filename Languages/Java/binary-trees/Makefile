@@ -2,20 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef JAVAC_PATH
+$(error JAVAC_PATH is not set.)
+endif
+
+ifndef JAVA_PATH
+$(error JAVA_PATH is not set.)
+endif
+
 compile:
-	/usr/lib/jvm/jdk-20/bin/javac -d .  binarytrees.java
+	$(JAVAC_PATH) -d .  binarytrees.java
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java binarytrees 21" Java binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "$(JAVA_PATH) binarytrees 21" Java binary-trees $(NTIMES)
 
 run:
-	/usr/lib/jvm/jdk-20/bin/java binarytrees 21
+	$(JAVA_PATH) binarytrees 21
 
 mem:
-	/usr/bin/time -v /usr/lib/jvm/jdk-20/bin/java binarytrees 21
+	/usr/bin/time -v $(JAVA_PATH) binarytrees 21
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java binarytrees 21
+	valgrind --tool=massif --stacks=yes $(JAVA_PATH) binarytrees 21
 
 clean:
 	rm -f *.class

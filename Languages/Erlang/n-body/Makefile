@@ -2,21 +2,32 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef ERLANG_PATH
+$(error ERLANG_PATH is not set.)
+endif
+
+ifndef ERLANG_C_PATH
+$(error ERLANG_C_PATH is not set.)
+endif
+
+
 compile:
 	cp nbody.erlang-3.erlang nbody.erl
-	/opt/erlang/25.2.1/bin/erlc nbody.erl
+	$(ERLANG_C_PATH) nbody.erl
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  nbody main 50000000" Erlang n-body $(NTIMES)
+	sudo ../../../RAPL/main "$(ERLANG_PATH) -smp enable -noshell -run  nbody main 50000000" Erlang n-body $(NTIMES)
 
 run:
-	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  nbody main 50000000
+	$(ERLANG_PATH) -smp enable -noshell -run  nbody main 50000000
 
 mem:
-	/usr/bin/time -v  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  nbody main 50000000
+	/usr/bin/time -v  $(ERLANG_PATH) -smp enable -noshell -run  nbody main 50000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  nbody main 50000000
+	valgrind --tool=massif --stacks=yes  $(ERLANG_PATH) -smp enable -noshell -run  nbody main 50000000
 
 clean:
 	rm -f *.beam

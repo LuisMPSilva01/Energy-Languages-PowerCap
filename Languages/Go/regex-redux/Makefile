@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GO_PATH
+$(error GO_PATH is not set.)
+endif
+
 compile:
-	/opt/src/go1.20/go/bin/go build -o regexredux.go-5.go_run regexredux.go-5.go
+	$(GO_PATH) build -o regexredux.go-5.go_run regexredux.go-5.go
 
 measure:
 	sudo modprobe msr

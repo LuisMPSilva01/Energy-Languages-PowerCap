@@ -2,11 +2,18 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef NODE_PATH
+$(error NODE_PATH is not set.)
+endif
+
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node fasta.node-4.js 25000000" JavaScript fasta $(NTIMES)
+	sudo ../../../RAPL/main "$(NODE_PATH) fasta.node-4.js 25000000" JavaScript fasta $(NTIMES)
 
 run:
 	node fasta.node-4.js 25000000

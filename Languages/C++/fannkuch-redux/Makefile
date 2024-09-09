@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GPP_PATH
+$(error GPP_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 -fopenmp fannkuchredux.gpp-6.c++ -o fannkuchredux.gpp-6.c++.o && /usr/bin/g++ fannkuchredux.gpp-6.c++.o -o fannkuchredux.gpp-6.gpp_run -fopenmp 
+	$(GPP_PATH) -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 -fopenmp fannkuchredux.gpp-6.c++ -o fannkuchredux.gpp-6.c++.o && $(GPP_PATH) fannkuchredux.gpp-6.c++.o -o fannkuchredux.gpp-6.gpp_run -fopenmp 
 measure:
 	sudo modprobe msr
 	sudo ../../../RAPL/main "./fannkuchredux.gpp-6.gpp_run 12" C++ fannkuch-redux $(NTIMES)

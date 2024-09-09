@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GPP_PATH
+$(error GPP_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -DSIMD -std=c++11 revcomp.gpp-2.c++ -o revcomp.gpp-2.c++.o && /usr/bin/g++ revcomp.gpp-2.c++.o -o revcomp.gpp-2.gpp_run
+	$(GPP_PATH) -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -DSIMD -std=c++11 revcomp.gpp-2.c++ -o revcomp.gpp-2.c++.o && $(GPP_PATH) revcomp.gpp-2.c++.o -o revcomp.gpp-2.gpp_run
 
 measure:
 	sudo modprobe msr

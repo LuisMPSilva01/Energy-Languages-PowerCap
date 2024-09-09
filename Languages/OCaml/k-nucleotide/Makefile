@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef OCAMLOP_PATH
+$(error OCAMLOP_PATH is not set.)
+endif
+
 compile:
 	cp knucleotide.ocaml-3.ocaml knucleotide.ocaml-3.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa knucleotide.ocaml-3.ml -o knucleotide.ocaml-3.ocaml_run
+	$(OCAMLOP_PATH) -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa knucleotide.ocaml-3.ml -o knucleotide.ocaml-3.ocaml_run
 	rm knucleotide.ocaml-3.ml
 
 measure:

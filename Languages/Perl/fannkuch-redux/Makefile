@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PERL_PATH
+$(error PERL_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "perl fannkuchredux.perl-2.perl 12" Perl fannkuch-redux $(NTIMES)
+	sudo ../../../RAPL/main "$(PERL_PATH) fannkuchredux.perl-2.perl 12" Perl fannkuch-redux $(NTIMES)
 
 run:
-	perl fannkuchredux.perl-2.perl 12
+	$(PERL_PATH) fannkuchredux.perl-2.perl 12
 
 mem:
-	/usr/bin/time -v perl fannkuchredux.perl-2.perl 12
+	/usr/bin/time -v $(PERL_PATH) fannkuchredux.perl-2.perl 12
 
 valgrind:
-	valgrind --tool=massif --stacks=yes perl fannkuchredux.perl-2.perl 12
+	valgrind --tool=massif --stacks=yes $(PERL_PATH) fannkuchredux.perl-2.perl 12

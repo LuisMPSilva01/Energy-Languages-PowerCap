@@ -2,23 +2,29 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef DOTNET_PATH
+$(error DOTNET_PATH is not set.)
+endif
+
 compile:
-	~/.dotnet/dotnet new console --force
+	$(DOTNET_PATH) new console --force
 	cp fasta.csharpcore-5.csharpcore Program.cs
-	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
+	$(DOTNET_PATH) build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000" CSharp fasta $(NTIMES)
+	sudo ../../../RAPL/main "$(DOTNET_PATH) ./bin/Release/net7.0/fasta.dll 25000000" CSharp fasta $(NTIMES)
 
 run:
-	~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000
+	$(DOTNET_PATH) ./bin/Release/net7.0/fasta.dll 25000000
 
 mem:
-	/usr/bin/time -v  ~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000
+	/usr/bin/time -v  $(DOTNET_PATH) ./bin/Release/net7.0/fasta.dll 25000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  ~/.dotnet/dotnet ./bin/Release/net7.0/fasta.dll 25000000
+	valgrind --tool=massif --stacks=yes  $(DOTNET_PATH) ./bin/Release/net7.0/fasta.dll 25000000
 
 clean:
 	rm -f -r bin

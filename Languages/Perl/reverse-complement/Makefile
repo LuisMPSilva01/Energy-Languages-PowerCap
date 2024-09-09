@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PERL_PATH
+$(error PERL_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt" Perl reverse-complement $(NTIMES)
+	sudo ../../../RAPL/main "$(PERL_PATH) revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt" Perl reverse-complement $(NTIMES)
 
 run:
-	perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt
+	$(PERL_PATH) revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt
+	/usr/bin/time -v $(PERL_PATH) revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes perl revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes $(PERL_PATH) revcomp.perl-3.perl 0 < ../../../inputs/revcomp-input25000000.txt

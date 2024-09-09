@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PERL_PATH
+$(error PERL_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "perl fasta.perl 25000000" Perl fasta $(NTIMES)
+	sudo ../../../RAPL/main "$(PERL_PATH) fasta.perl 25000000" Perl fasta $(NTIMES)
 
 run:
-	perl fasta.perl 25000000
+	$(PERL_PATH) fasta.perl 25000000
 mem:
-	/usr/bin/time -v perl fasta.perl 25000000
+	/usr/bin/time -v $(PERL_PATH) fasta.perl 25000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes perl fasta.perl 25000000
+	valgrind --tool=massif --stacks=yes $(PERL_PATH) fasta.perl 25000000
 

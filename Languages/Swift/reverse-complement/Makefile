@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef SWIFTC_PATH
+$(error SWIFTC_PATH is not set.)
+endif
+
 compile:
-	/opt/swift/usr/bin/swiftc revcomp.swift -Ounchecked -whole-module-optimization  -o revcomp.swift_run
+	$(SWIFTC_PATH) revcomp.swift -Ounchecked -whole-module-optimization  -o revcomp.swift_run
 
 measure:
 	sudo modprobe msr

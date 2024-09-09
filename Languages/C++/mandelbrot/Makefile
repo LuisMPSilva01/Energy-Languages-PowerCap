@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GPP_PATH
+$(error GPP_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -fopenmp mandelbrot.c++ -o mandelbrot.c++.o &&  /usr/bin/g++ mandelbrot.c++.o -o mandelbrot.gpp_run -fopenmp 
+	$(GPP_PATH) -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -fopenmp mandelbrot.c++ -o mandelbrot.c++.o &&  $(GPP_PATH) mandelbrot.c++.o -o mandelbrot.gpp_run -fopenmp 
 measure:
 	sudo modprobe msr
 	sudo ../../../RAPL/main "./mandelbrot.gpp_run 16000" C++ mandelbrot $(NTIMES)

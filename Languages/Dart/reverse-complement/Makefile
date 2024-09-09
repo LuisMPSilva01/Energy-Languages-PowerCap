@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef DART_PATH
+$(error DART_PATH is not set.)
+endif
+
 compile:
-	/opt/src/dart-sdk/bin/dart analyze 
-	/opt/src/dart-sdk/bin/dart compile exe revcomp.dart-5.dart -o revcomp.dart-5.dart_run
+	$(DART_PATH) analyze 
+	$(DART_PATH) compile exe revcomp.dart-5.dart -o revcomp.dart-5.dart_run
 
 measure:
 	sudo modprobe msr

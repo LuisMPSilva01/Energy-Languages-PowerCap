@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GO_PATH
+$(error GO_PATH is not set.)
+endif
+
 compile:
-	/opt/src/go1.20/go/bin/go build -o pidigits.go-4.go_run pidigits.go-4.go
+	$(GO_PATH) build -o pidigits.go-4.go_run pidigits.go-4.go
 
 measure:
 	sudo modprobe msr

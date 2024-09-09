@@ -2,20 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef JAVAC_PATH
+$(error JAVAC_PATH is not set.)
+endif
+
+ifndef JAVA_PATH
+$(error JAVA_PATH is not set.)
+endif
+
 compile:
-	/usr/lib/jvm/jdk-20/bin/javac -d .  fasta.java
+	$(JAVAC_PATH) -d .  fasta.java
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   fasta 25000000" Java fasta $(NTIMES)
+	sudo ../../../RAPL/main "$(JAVA_PATH)   fasta 25000000" Java fasta $(NTIMES)
 
 run:
-	/usr/lib/jvm/jdk-20/bin/java   fasta 25000000
+	$(JAVA_PATH)   fasta 25000000
 
 mem:
-	/usr/bin/time -v /usr/lib/jvm/jdk-20/bin/java   fasta 25000000
+	/usr/bin/time -v $(JAVA_PATH)   fasta 25000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java   fasta 25000000
+	valgrind --tool=massif --stacks=yes $(JAVA_PATH)   fasta 25000000
 
 clean:
 	rm -f *.class

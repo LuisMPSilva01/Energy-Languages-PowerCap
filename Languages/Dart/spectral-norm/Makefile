@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef DART_PATH
+$(error DART_PATH is not set.)
+endif
+
 compile:
-	/opt/src/dart-sdk/bin/dart analyze 
-	/opt/src/dart-sdk/bin/dart compile exe spectralnorm.dart-6.dart -o spectralnorm.dart-6.dart_run
+	$(DART_PATH) analyze 
+	$(DART_PATH) compile exe spectralnorm.dart-6.dart -o spectralnorm.dart-6.dart_run
 
 measure:
 	sudo modprobe msr

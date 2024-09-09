@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef RUBY_PATH
+$(error RUBY_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/.rbenv/shims/ruby -W0 binarytrees.yarv-5.yarv 21" Ruby binary-trees $(NTIMES)
+	sudo ../../../RAPL/main "$(RUBY_PATH) -W0 binarytrees.yarv-5.yarv 21" Ruby binary-trees $(NTIMES)
 
 run:
-	ruby -W0 binarytrees.yarv-5.yarv 21
+	$(RUBY_PATH) -W0 binarytrees.yarv-5.yarv 21
 
 mem:
-	/usr/bin/time -v ruby -W0 binarytrees.yarv-5.yarv 21
+	/usr/bin/time -v $(RUBY_PATH) -W0 binarytrees.yarv-5.yarv 21
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ruby -W0 binarytrees.yarv-5.yarv 21
+	valgrind --tool=massif --stacks=yes $(RUBY_PATH) -W0 binarytrees.yarv-5.yarv 21

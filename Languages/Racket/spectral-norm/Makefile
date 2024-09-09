@@ -2,21 +2,31 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef RACO_PATH
+$(error RACO_PATH is not set.)
+endif
+
+ifndef RACKET_PATH
+$(error RACKET_PATH is not set.)
+endif
+
 compile:
-	/home/diguest/bin/raco make spectralnorm.racket-3.racket
+	$(RACO_PATH) make spectralnorm.racket-3.racket
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/bin/racket ./compiled/spectralnorm.racket-3_racket.zo 5500" Racket spectral-norm $(NTIMES)
+	sudo ../../../RAPL/main "$(RACKET_PATH) ./compiled/spectralnorm.racket-3_racket.zo 5500" Racket spectral-norm $(NTIMES)
 
 run:
-	racket ./compiled/spectralnorm.racket-3_racket.zo 5500
+	$(RACKET_PATH) ./compiled/spectralnorm.racket-3_racket.zo 5500
 
 mem:
-	/usr/bin/time -v racket ./compiled/spectralnorm.racket-3_racket.zo 5500
+	/usr/bin/time -v $(RACKET_PATH) ./compiled/spectralnorm.racket-3_racket.zo 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes racket ./compiled/spectralnorm.racket-3_racket.zo 5500
+	valgrind --tool=massif --stacks=yes $(RACKET_PATH) ./compiled/spectralnorm.racket-3_racket.zo 5500
 
 clean:
 	rm -rf compiled/

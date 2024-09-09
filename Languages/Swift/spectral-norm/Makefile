@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef SWIFTC_PATH
+$(error SWIFTC_PATH is not set.)
+endif
+
 compile:
-	/opt/swift/usr/bin/swiftc spectralnorm.swift-3.swift -Ounchecked -whole-module-optimization  -o spectralnorm.swift-3.swift_run
+	$(SWIFTC_PATH) spectralnorm.swift-3.swift -Ounchecked -whole-module-optimization  -o spectralnorm.swift-3.swift_run
 
 measure:
 	sudo modprobe msr
