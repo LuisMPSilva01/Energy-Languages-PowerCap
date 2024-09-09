@@ -24,7 +24,7 @@ In addition to benchmarks from the **Computer Language Benchmarks Game (CLBG)**,
     First, download the language-specific benchmarks and set up the `benchmarks/` folder by running:
 
 ```bash
-bash setup_benchmarks.sh
+sh setup_benchmarks.sh
 ```
 
 2. **Verify File Structure**
