@@ -1,6 +1,7 @@
 #!/bin/bash
 NTIMES=20
 
+#This code was tested on Linux Ubuntu Server 22.04.3 LTS
 #Compile sensors wich will be used to calculate cool temperature
 cd RAPL
 gcc -shared -o sensors.so sensors.c
