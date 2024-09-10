@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef OCAMLOP_PATH
+$(error OCAMLOP_PATH is not set.)
+endif
+
 compile:
 	cp regexredux.ocaml-3.ocaml regexredux.ocaml-3.ml
-	~/.opam/5.0.0/bin/ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 -O3 -I ~/.opam/5.0.0/lib/re unix.cmxa re.cmxa -ccopt -march=ivybridge regexredux.ocaml-3.ml -o regexredux.ocaml-3.ocaml_run 
+	$(OCAMLOP_PATH) -noassert -unsafe -fPIC -nodynlink -inline 100 -O3 -I ~/.opam/5.0.0/lib/re unix.cmxa re.cmxa -ccopt -march=ivybridge regexredux.ocaml-3.ml -o regexredux.ocaml-3.ocaml_run 
 	rm regexredux.ocaml-2.ml
 measure:
 	sudo modprobe msr

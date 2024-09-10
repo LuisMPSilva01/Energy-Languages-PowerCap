@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef LUA_PATH
+$(error LUA_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "lua  spectralnorm.lua 5500" Lua spectral-norm $(NTIMES)
+	sudo ../../../RAPL/main "$(LUA_PATH)  spectralnorm.lua 5500" Lua spectral-norm $(NTIMES)
 
 run:
-	lua  spectralnorm.lua 5500
+	$(LUA_PATH)  spectralnorm.lua 5500
 
 mem:
-	/usr/bin/time -v lua  spectralnorm.lua 5500
+	/usr/bin/time -v $(LUA_PATH)  spectralnorm.lua 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes lua  spectralnorm.lua 5500
+	valgrind --tool=massif --stacks=yes $(LUA_PATH)  spectralnorm.lua 5500

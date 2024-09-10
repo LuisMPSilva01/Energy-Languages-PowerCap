@@ -2,13 +2,19 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PYTHON_PATH
+$(error PYTHON_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/local/bin/python3.11 -OO fannkuchredux.python3-4.py 12" Python fannkuch-redux $(NTIMES)
+	sudo ../../../RAPL/main "$(PYTHON_PATH) -OO fannkuchredux.python3-4.py 12" Python fannkuch-redux $(NTIMES)
 
 run:
-	/usr/local/bin/python3.11 -OO fannkuchredux.python3-4.py 12
+	$(PYTHON_PATH) -OO fannkuchredux.python3-4.py 12
 mem:
-	/usr/bin/time -v /usr/local/bin/python3.11 -OO fannkuchredux.python3-4.py 12
+	/usr/bin/time -v $(PYTHON_PATH) -OO fannkuchredux.python3-4.py 12

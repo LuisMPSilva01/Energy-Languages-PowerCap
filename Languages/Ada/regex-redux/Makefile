@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GNATCHOP_PATH
+$(error GNATCHOP_PATH is not set.)
+endif
+
 compile:
-	gnatchop -r -w regexredux.gnat-5.gnat
+	$(GNATCHOP_PATH) -r -w regexredux.gnat-5.gnat
 	PATH=/usr/local/gcc-fsf-gnat/bin:$$PATH && \
 	export PATH && \
 	LD_LIBRARY_PATH=/usr/local/gcc-fsf-gnat/lib:$$LD_LIBRARY_PATH && \

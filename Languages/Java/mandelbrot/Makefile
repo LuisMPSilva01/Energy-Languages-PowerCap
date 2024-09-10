@@ -2,20 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef JAVAC_PATH
+$(error JAVAC_PATH is not set.)
+endif
+
+ifndef JAVA_PATH
+$(error JAVA_PATH is not set.)
+endif
+
 compile:
-	/usr/lib/jvm/jdk-20/bin/javac -d .  mandelbrot.java
+	$(JAVAC_PATH) -d .  mandelbrot.java
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000" Java mandelbrot $(NTIMES)
+	sudo ../../../RAPL/main "$(JAVA_PATH)   mandelbrot 16000" Java mandelbrot $(NTIMES)
 
 run:
-	/usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000
+	$(JAVA_PATH)   mandelbrot 16000
 
 mem:
-	/usr/bin/time -v /usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000
+	/usr/bin/time -v $(JAVA_PATH)   mandelbrot 16000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java   mandelbrot 16000
+	valgrind --tool=massif --stacks=yes $(JAVA_PATH)   mandelbrot 16000
 
 clean:
 	rm -f *.class

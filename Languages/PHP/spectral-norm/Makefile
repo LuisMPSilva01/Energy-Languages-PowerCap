@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PHP_PATH
+$(error PHP_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "php -n  spectralnorm.php 5500" PHP spectral-norm $(NTIMES)
+	sudo ../../../RAPL/main "$(PHP_PATH) -n  spectralnorm.php 5500" PHP spectral-norm $(NTIMES)
 
 run:
-	php -n  spectralnorm.php 5500
+	$(PHP_PATH) -n  spectralnorm.php 5500
 
 mem:
-	/usr/bin/time -v php -n  spectralnorm.php 5500
+	/usr/bin/time -v $(PHP_PATH) -n  spectralnorm.php 5500
 
 valgrind:
-	valgrind --tool=massif --stacks=yes php -n  spectralnorm.php 5500
+	valgrind --tool=massif --stacks=yes $(PHP_PATH) -n  spectralnorm.php 5500

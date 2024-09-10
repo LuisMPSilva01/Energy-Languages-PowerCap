@@ -2,20 +2,31 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef ERLANG_PATH
+$(error ERLANG_PATH is not set.)
+endif
+
+ifndef ERLANG_C_PATH
+$(error ERLANG_C_PATH is not set.)
+endif
+
+
 compile:
 	cp knucleotide.erlang-3.erlang knucleotide.erl
-	/opt/erlang/25.2.1/bin/erlc knucleotide.erl
+	$(ERLANG_C_PATH) knucleotide.erl
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt" Erlang k-nucleotide $(NTIMES)
+	sudo ../../../RAPL/main "$(ERLANG_PATH) -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt" Erlang k-nucleotide $(NTIMES)
 run:
-	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
+	$(ERLANG_PATH) -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
 
 mem:
-	/usr/bin/time -v /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
+	/usr/bin/time -v $(ERLANG_PATH) -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes $(ERLANG_PATH) -smp enable -noshell -run  knucleotide main 0 < ../../../inputs/knucleotide-input25000000.txt
 
 clean:
 	rm -f *.beam

@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef OCAMLOP_PATH
+$(error OCAMLOP_PATH is not set.)
+endif
+
 compile:
 	cp spectralnorm.ocaml-3.ocaml spectralnorm.ocaml-3.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -I +unix -inline 100 unix.cmxa spectralnorm.ocaml-3.ml -o spectralnorm.ocaml-3.ocaml_run
+	$(OCAMLOP_PATH) -noassert -unsafe -fPIC -nodynlink -I +unix -inline 100 unix.cmxa spectralnorm.ocaml-3.ml -o spectralnorm.ocaml-3.ocaml_run
 	rm spectralnorm.ocaml-3.ml
 
 

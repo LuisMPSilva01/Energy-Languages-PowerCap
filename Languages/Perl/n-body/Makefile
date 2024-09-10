@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef PERL_PATH
+$(error PERL_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "perl nbody.perl-2.perl 50000000" Perl n-body $(NTIMES)
+	sudo ../../../RAPL/main "$(PERL_PATH) nbody.perl-2.perl 50000000" Perl n-body $(NTIMES)
 
 run:
-	perl nbody.perl-2.perl 50000000
+	$(PERL_PATH) nbody.perl-2.perl 50000000
 
 mem:
-	/usr/bin/time -v perl nbody.perl-2.perl 50000000
+	/usr/bin/time -v $(PERL_PATH) nbody.perl-2.perl 50000000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes perl nbody.perl-2.perl 50000000
+	valgrind --tool=massif --stacks=yes $(PERL_PATH) nbody.perl-2.perl 50000000

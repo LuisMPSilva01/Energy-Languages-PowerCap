@@ -2,17 +2,23 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef RUBY_PATH
+$(error RUBY_PATH is not set.)
+endif
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/.rbenv/shims/ruby -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt" Ruby k-nucleotide $(NTIMES)
+	sudo ../../../RAPL/main "$(RUBY_PATH) -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt" Ruby k-nucleotide $(NTIMES)
 
 run:
-	ruby -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt
+	$(RUBY_PATH) -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt
 
 mem:
-	/usr/bin/time -v ruby -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt
+	/usr/bin/time -v $(RUBY_PATH) -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ruby -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes $(RUBY_PATH) -W0 knucleotide.yarv-7.yarv 0 < ../../../inputs/knucleotide-input25000000.txt

@@ -60,7 +60,7 @@ sudo sh gen-input.sh
 sh measure.sh
 ```
 
-Note: You might need to update some of the compilers path since we did not change some of the default installation paths from our machine.
+Note: You might need to update some of the compilers path since we did not change some of the default installation paths from our machine (the paths are defined on config.env).
 
 ### Meaning of the CSV file columns
 

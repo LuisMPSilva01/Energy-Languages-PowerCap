@@ -2,11 +2,18 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef NODE_PATH
+$(error NODE_PATH is not set.)
+endif
+
+
 compile:
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/home/diguest/.nvm/versions/node/v19.4.0/bin/node spectralnorm.node-2.js 5500" JavaScript spectral-norm $(NTIMES)
+	sudo ../../../RAPL/main "$(NODE_PATH) spectralnorm.node-2.js 5500" JavaScript spectral-norm $(NTIMES)
 
 run:
 	node spectralnorm.node-2.js 5500

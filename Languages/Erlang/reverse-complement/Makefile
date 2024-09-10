@@ -2,21 +2,32 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef ERLANG_PATH
+$(error ERLANG_PATH is not set.)
+endif
+
+ifndef ERLANG_C_PATH
+$(error ERLANG_C_PATH is not set.)
+endif
+
+
 compile:
 	cp revcomp.erlang revcomp.erl
-	/opt/erlang/25.2.1/bin/erlc revcomp.erl
+	$(ERLANG_C_PATH) revcomp.erl
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt" Erlang reverse-complement $(NTIMES)
+	sudo ../../../RAPL/main "$(ERLANG_PATH) -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt" Erlang reverse-complement $(NTIMES)
 
 run:
-	/opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt
+	$(ERLANG_PATH) -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt
+	/usr/bin/time -v $(ERLANG_PATH) -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /opt/erlang/25.2.1/bin/erl -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes $(ERLANG_PATH) -smp enable -noshell -run  revcomp main 0 < ../../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm -f *.beam

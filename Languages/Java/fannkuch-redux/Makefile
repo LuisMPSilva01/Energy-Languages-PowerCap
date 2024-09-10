@@ -2,20 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef JAVAC_PATH
+$(error JAVAC_PATH is not set.)
+endif
+
+ifndef JAVA_PATH
+$(error JAVA_PATH is not set.)
+endif
+
 compile:
-	/usr/lib/jvm/jdk-20/bin/javac -d .  fannkuchredux.java
+	$(JAVAC_PATH) -d .  fannkuchredux.java
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12" Java fannkuch-redux $(NTIMES)
+	sudo ../../../RAPL/main "$(JAVA_PATH)   fannkuchredux 12" Java fannkuch-redux $(NTIMES)
 
 run:
-	/usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12
+	$(JAVA_PATH)   fannkuchredux 12
 
 mem:
-	/usr/bin/time -v  /usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12
+	/usr/bin/time -v  $(JAVA_PATH)   fannkuchredux 12
 
 valgrind:
-	valgrind --tool=massif --stacks=yes  /usr/lib/jvm/jdk-20/bin/java   fannkuchredux 12
+	valgrind --tool=massif --stacks=yes  $(JAVA_PATH)   fannkuchredux 12
 
 clean:
 	rm -f *.class

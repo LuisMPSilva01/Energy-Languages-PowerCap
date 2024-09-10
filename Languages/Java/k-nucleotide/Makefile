@@ -2,20 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef JAVAC_PATH
+$(error JAVAC_PATH is not set.)
+endif
+
+ifndef JAVA_PATH
+$(error JAVA_PATH is not set.)
+endif
+
 compile:
-	/usr/lib/jvm/jdk-20/bin/javac -d . -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide.java
+	$(JAVAC_PATH) -d . -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide.java
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt" Java k-nucleotide $(NTIMES)
+	sudo ../../../RAPL/main "$(JAVA_PATH)  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt" Java k-nucleotide $(NTIMES)
 
 run:
-	/usr/lib/jvm/jdk-20/bin/java  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt
+	$(JAVA_PATH)  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt
 
 mem:
-	/usr/bin/time -v /usr/lib/jvm/jdk-20/bin/java  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt
+	/usr/bin/time -v $(JAVA_PATH)  -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java   -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt
+	valgrind --tool=massif --stacks=yes $(JAVA_PATH)   -cp .:/opt/src/java-libs/fastutil-8.3.1.jar knucleotide 0 < ../../../inputs/knucleotide-input25000000.txt
 
 clean:
 	rm -f *.class

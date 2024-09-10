@@ -2,20 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef JAVAC_PATH
+$(error JAVAC_PATH is not set.)
+endif
+
+ifndef JAVA_PATH
+$(error JAVA_PATH is not set.)
+endif
+
 compile:
-	/usr/lib/jvm/jdk-20/bin/javac -d .  revcomp.java
+	$(JAVAC_PATH) -d .  revcomp.java
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "/usr/lib/jvm/jdk-20/bin/java   revcomp 0 < ../../../inputs/revcomp-input25000000.txt" Java reverse-complement $(NTIMES)
+	sudo ../../../RAPL/main "$(JAVA_PATH)   revcomp 0 < ../../../inputs/revcomp-input25000000.txt" Java reverse-complement $(NTIMES)
 
 run:
-	/usr/lib/jvm/jdk-20/bin/java   revcomp 0 < ../../../inputs/revcomp-input25000000.txt
+	$(JAVA_PATH)   revcomp 0 < ../../../inputs/revcomp-input25000000.txt
 
 mem:
-	/usr/bin/time -v /usr/lib/jvm/jdk-20/bin/java   revcomp 0 < ../../../inputs/revcomp-input25000000.txt
+	/usr/bin/time -v $(JAVA_PATH)   revcomp 0 < ../../../inputs/revcomp-input25000000.txt
 
 valgrind:
-	valgrind --tool=massif --stacks=yes /usr/lib/jvm/jdk-20/bin/java   revcomp 0 < ../../../inputs/revcomp-input25000000.txt
+	valgrind --tool=massif --stacks=yes $(JAVA_PATH)   revcomp 0 < ../../../inputs/revcomp-input25000000.txt
 
 clean:
 	rm -f *.class

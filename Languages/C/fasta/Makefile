@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GCC_PATH
+$(error GCC_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/gcc -pipe -Wall -O3 -fomit-frame-pointer -march=ivybridge -fopenmp fasta.gcc-9.c -o fasta.gcc-9.gcc_run 
+	$(GCC_PATH) -pipe -Wall -O3 -fomit-frame-pointer -march=ivybridge -fopenmp fasta.gcc-9.c -o fasta.gcc-9.gcc_run 
 	
 measure:
 	sudo modprobe msr

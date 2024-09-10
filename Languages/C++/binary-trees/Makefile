@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GPP_PATH
+$(error GPP_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=gnu++17 binarytrees.gpp-7.c++ -o binarytrees.gpp-7.c++.o && /usr/bin/g++ binarytrees.gpp-7.c++.o -o binarytrees.gpp-7.gpp_run -ltbb 
+	$(GPP_PATH) -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=gnu++17 binarytrees.gpp-7.c++ -o binarytrees.gpp-7.c++.o && $(GPP_PATH) binarytrees.gpp-7.c++.o -o binarytrees.gpp-7.gpp_run -ltbb 
 measure:
 	sudo modprobe msr
 	sudo ../../../RAPL/main "./binarytrees.gpp-7.gpp_run 21" C++ binary-trees $(NTIMES)

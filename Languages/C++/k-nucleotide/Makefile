@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GPP_PATH
+$(error GPP_PATH is not set.)
+endif
+
 compile:
-	/usr/bin/g++ -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 knucleotide.gpp-2.c++ -o knucleotide.gpp-2.c++.o &&  /usr/bin/g++ knucleotide.gpp-2.c++.o -o knucleotide.gpp-2.gpp_run -lpthread 
+	$(GPP_PATH) -c -pipe -O3 -fomit-frame-pointer -march=ivybridge  -std=c++17 knucleotide.gpp-2.c++ -o knucleotide.gpp-2.c++.o &&  $(GPP_PATH) knucleotide.gpp-2.c++.o -o knucleotide.gpp-2.gpp_run -lpthread 
 
 measure:
 	sudo modprobe msr

@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef OCAMLOP_PATH
+$(error OCAMLOP_PATH is not set.)
+endif
+
 compile:
 	cp nbody.ocaml nbody.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100  nbody.ml -o nbody.ocaml_run
+	$(OCAMLOP_PATH) -noassert -unsafe -fPIC -nodynlink -inline 100  nbody.ml -o nbody.ocaml_run
 	rm nbody.ml
 measure:
 	sudo modprobe msr

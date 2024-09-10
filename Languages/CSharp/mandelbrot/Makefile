@@ -2,24 +2,30 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef DOTNET_PATH
+$(error DOTNET_PATH is not set.)
+endif
+
 compile:
-	~/.dotnet/dotnet new console --force
+	$(DOTNET_PATH) new console --force
 	sed -i '/<\/PropertyGroup>/i \    <AllowUnsafeBlocks>true<\/AllowUnsafeBlocks>' obj/mandelbrot.csproj.nuget.g.props
 	cp mandelbrot.csharpcore Program.cs
-	~/.dotnet/dotnet build -c Release --no-restore --no-self-contained
+	$(DOTNET_PATH) build -c Release --no-restore --no-self-contained
 
 measure:
 	sudo modprobe msr
-	sudo ../../../RAPL/main "~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000" CSharp mandelbrot $(NTIMES)
+	sudo ../../../RAPL/main "$(DOTNET_PATH) ./bin/Release/net7.0/mandelbrot.dll 16000" CSharp mandelbrot $(NTIMES)
 
 run:
-	~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000
+	$(DOTNET_PATH) ./bin/Release/net7.0/mandelbrot.dll 16000
 
 mem:
-	/usr/bin/time -v ~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000
+	/usr/bin/time -v $(DOTNET_PATH) ./bin/Release/net7.0/mandelbrot.dll 16000
 
 valgrind:
-	valgrind --tool=massif --stacks=yes ~/.dotnet/dotnet ./bin/Release/net7.0/mandelbrot.dll 16000
+	valgrind --tool=massif --stacks=yes $(DOTNET_PATH) ./bin/Release/net7.0/mandelbrot.dll 16000
 
 clean:
 	rm -f -r bin

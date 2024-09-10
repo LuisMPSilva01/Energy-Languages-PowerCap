@@ -2,9 +2,15 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef OCAMLOP_PATH
+$(error OCAMLOP_PATH is not set.)
+endif
+
 compile:
 	cp fannkuchredux.ocaml-4.ocaml fannkuchredux.ocaml-4.ml
-	ocamlopt -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa fannkuchredux.ocaml-4.ml -o fannkuchredux.ocaml-4.ocaml_run
+	$(OCAMLOP_PATH) -noassert -unsafe -fPIC -nodynlink -inline 100 unix.cmxa fannkuchredux.ocaml-4.ml -o fannkuchredux.ocaml-4.ocaml_run
 	rm fannkuchredux.ocaml-4.ml
 
 measure:

@@ -2,8 +2,14 @@ NTIMES=20
 
 export NTIMES
 
+include ../../../config.env
+
+ifndef GHC_PATH
+$(error GHC_PATH is not set.)
+endif
+
 compile:
-	/opt/src/ghc9.4.4/bin/ghc --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -fno-cse -package ghc-compact binarytrees.ghc-8.hs -o binarytrees.ghc-8.ghc_run
+	$(GHC_PATH) --make -fllvm -O2 -XBangPatterns -threaded -rtsopts -fno-cse -package ghc-compact binarytrees.ghc-8.hs -o binarytrees.ghc-8.ghc_run
 
 measure:
 	sudo modprobe msr
