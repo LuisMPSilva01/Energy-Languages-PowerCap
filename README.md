@@ -82,3 +82,9 @@ Note: You might need to update some of the compilers path since we did not chang
 #### Side note
 
 The setup could not be provided as a Docker or virtual machine because the instructions that limit the CPU don't work on that environment.
+
+#### ACM Reference Format
+
+```
+Simão Cunha, Luís Silva, João Saraiva, and João Paulo Fernandes. 2024. Trading Runtime for Energy Efficiency: Leveraging Power Caps to Save Energy Across Programming Languages. In Proceedings of the 17th ACM SIGPLAN International Conference on Software Language Engineering (SLE '24), October 20–21, 2024, Pasadena, CA, USA. ACM, New York, NY, USA, 13 pages. https://doi.org/10.1145/3687997.3695638
+```
