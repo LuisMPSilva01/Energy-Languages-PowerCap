@@ -7,6 +7,11 @@
 | João Saraiva          | saraiva@di.uminho.pt                |
 | João Paulo Fernandes  | jpf9731@nyu.edu                     |
 
+### Requirements
+- Debian-based Linux distributions (needs to work with RAPLCap)
+- Intel processor
+- Non containerized environment
+
 ### Directory Structure
 - **`benchmarks/`**  
   Contains benchmark tests (see benchmarks/README.md for more details), including:
@@ -36,14 +41,14 @@
 These libraries can be installed with the following command:
 
 ```bash
-sudo sh measuresSetup.sh
+sudo sh raplLibrariesSetup.sh
 ```
 
 ### Setup
-1. To install all the required libraries, execute the script:
+1. To install all the required language compilers, interpreters and libraries, execute the script:
 
 ```bash
-sudo sh setup.sh
+sudo sh languagesSetup.sh
 ```
 
 Note: This setup was not fully tested and my require manual interaction (such as accepting permitions).
@@ -77,11 +82,6 @@ Note: You might need to update some of the compilers path since we did not chang
 | **Temperature**  | Mean temperature in all cores (in Celsius degrees)                                                 |
 |    **Memory**    | Total physical memory assigned to the algorithm execution (in KBytes)                              |
 |  **PowerLimit**  | Power cap of the cores (in Watts)                                                                  |
-
-
-#### Side note
-
-The setup could not be provided as a Docker or virtual machine because the instructions that limit the CPU don't work on that environment.
 
 #### ACM Reference Format
 

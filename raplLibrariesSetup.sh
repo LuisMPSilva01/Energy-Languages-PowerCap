@@ -20,9 +20,8 @@ cd _build
 cmake ..
 make
 make install
+cd ../..
 
-cd ..
-cd ..
 
 echo "#### Installing package config"
 sudo apt install pkg-config
@@ -36,5 +35,4 @@ cmake ..
 make
 make install
 
-cd ..
-cd ..
+cd ../../
