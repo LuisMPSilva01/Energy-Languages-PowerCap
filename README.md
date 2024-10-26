@@ -1,4 +1,6 @@
 ## Trading Runtime for Energy Efficiency: Leveraging Power Caps to Save Energy Across Programming Languages
+In Proceedings of the 17th ACM SIGPLAN International Conference on Software Language Engineering (SLE '24).
+https://doi.org/10.1145/3687997.3695638
 
 | Authors               | Contacts                            |
 |:---------------------:|:-----------------------------------:|
@@ -83,8 +85,27 @@ Note: You might need to update some of the compilers path since we did not chang
 |    **Memory**    | Total physical memory assigned to the algorithm execution (in KBytes)                              |
 |  **PowerLimit**  | Power cap of the cores (in Watts)                                                                  |
 
-#### ACM Reference Format
+#### Cite Us
 
 ```
-Simão Cunha, Luís Silva, João Saraiva, and João Paulo Fernandes. 2024. Trading Runtime for Energy Efficiency: Leveraging Power Caps to Save Energy Across Programming Languages. In Proceedings of the 17th ACM SIGPLAN International Conference on Software Language Engineering (SLE '24), October 20–21, 2024, Pasadena, CA, USA. ACM, New York, NY, USA, 13 pages. https://doi.org/10.1145/3687997.3695638
+@inproceedings{10.1145/3687997.3695638,
+author = {Cunha, Sim\~{a}o and Silva, Lu\'{\i}s and Saraiva, Jo\~{a}o and Fernandes, Jo\~{a}o Paulo},
+title = {Trading Runtime for Energy Efficiency: Leveraging Power Caps to Save Energy across Programming Languages},
+year = {2024},
+isbn = {9798400711800},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3687997.3695638},
+doi = {10.1145/3687997.3695638},
+abstract = {Energy efficiency of software is crucial in minimizing environmental impact and reducing operational costs of ICT systems. Energy efficiency is therefore a key area of contemporary software language engineering research. A recurrent discussion that excites our community is whether runtime performance is always a proxy for energy efficiency. While a generalized intuition seems to suggest this is the case, this intuition does not align with the fact that energy is the accumulation of power over time; hence, time is only one of the factors in this accumulation. We focus on the other factor, power, and the impact that capping it has on the energy efficiency of running software.
+We conduct an extensive investigation comparing regular and power-capped executions of 9 benchmark programs obtained from The Computer Language Benchmarks Game, across 20 distinct programming languages. Our results show that employing power caps can be used to trade running time, which is degraded, for energy efficiency, which is improved, in all the programming languages and in all benchmarks that were considered. We observe overall energy savings of almost 14\% across the 20 programming languages, with notable savings of 27\% in Haskell. This saving, however, comes at the cost of an overall increase of the program's execution time of 91\% in average.
+We are also able to draw similar observations using language specific benchmarks for programming languages of different paradigms and with different execution models. This is achieved analyzing a wide range of benchmark programs from the nofib Benchmark Suite of Haskell Programs, DaCapo Benchmark Suite for Java, and the Python Performance Benchmark Suite. We observe energy savings of approximately 8\% to 21\% across the test suites, with execution time increases ranging from 21\% to 46\%. Notably, the DaCapo suite exhibits the most significant values, with 20.84\% energy savings and a 45.58\% increase in execution time.
+Our results have the potential to drive significant energy savings in the context of computational tasks for which runtime is not critical, including Batch Processing Systems, Background Data Processing and Automated Backups.},
+booktitle = {Proceedings of the 17th ACM SIGPLAN International Conference on Software Language Engineering},
+pages = {130–142},
+numpages = {13},
+keywords = {Energy Efficiency, Green Software, Language Benchmarking, Power Cap, Programming Languages},
+location = {Pasadena, CA, USA},
+series = {SLE '24}
+}
 ```
